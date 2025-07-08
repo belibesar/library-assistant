@@ -4,6 +4,7 @@ import "./globals.css";
 import Navbar from "@/components/Navbar";
 import { BookOpen } from "lucide-react";
 import Footer from "@/sections/Footer";
+import ConditionalFooter from "@/components/ConditionalFooter";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -32,7 +33,7 @@ export default function RootLayout({
       >
         <Navbar />
         {children}
-        <Footer />
+        <ConditionalFooter />
       </body>
     </html>
   );
