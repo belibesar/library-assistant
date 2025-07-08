@@ -1,39 +1,27 @@
 import Hero from "@/components/Hero";
+import CardsGroupFeature from "@/sections/CardGroupOnboarding";
+import Divider from "@/sections/Divider";
+import StatsSection from "@/sections/StatsSection";
+import React from "react";
 
 // Onboarding Page
 export default function OnboardingPage() {
   return (
     <div className="">
-      <Hero />
+      <Hero
+        heroTitle="Asisten Perpustakaan "
+        span="AI"
+        heroDescription="Sistem perpustakaan cerdas dengan teknologi AI untuk membantu Anda menemukan buku, mendapatkan rekomendasi,
+            dan mengelola koleksi dengan mudah."
+        buttonPrimary="Mulai Sekarang"
+        buttonSecondary="Pelajari Lebih Lanjut"
+      />
       <Divider
         headerTitle="Fitur Unggulan"
         paragraph="Teknologi AI terdepan untuk pengalaman perpustakaan yang lebih baik"
       />
-      <CardsGroup />
+      <CardsGroupFeature />
+      <StatsSection />
     </div>
-  );
-}
-type DividerElements = {
-  headerTitle: string;
-  paragraph: string;
-};
-function Divider({ headerTitle, paragraph }: DividerElements) {
-  return (
-    <section className="bg-white py-20">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="mb-16 text-center">
-          <h2 className="mb-4 text-3xl font-bold text-gray-900">
-            {headerTitle}
-          </h2>
-          <p className="text-lg text-gray-600">{paragraph}</p>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function CardsGroup() {
-  return (
-    <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3"></div>
   );
 }
