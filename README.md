@@ -18,5 +18,24 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-##Database##
-Use docker to set up your database locally
+## Database
+
+This app use mongodb as the databse, you can use docker to set up your database locally
+
+Just run this command on your terminal to start the database locally:
+
+```
+docker run -d \
+  --name mongodb-dev \
+  -p 27017:27017 \
+  -v mongo-libdata:/data/db \
+  mongo:latest
+```
+
+And paste this into your .env file, use your .env example as reference
+
+```
+MONGODB_URI="mongodb://localhost:27017/library-usd"
+```
+
+You can connect your local database running on docker with Mongo Compass, just use `localhost:27017` to connect with your compass
