@@ -22,7 +22,12 @@ export async function POST(request: Request) {
         if (!isValid) {
             throw {message: "Invalid email/password", status: 401}
         }
-        const access_token = signToken({_id: user._id.toString(), email: user.email});
+        const access_token = signToken({
+            _id: user._id.toString(), 
+            email: user.email,
+            name: user.name,
+            username: user.username
+        });
         const cookieStore = await cookies();
         cookieStore.set("Authorization", `Bearer ${access_token}`);
         return Response.json({access_token})

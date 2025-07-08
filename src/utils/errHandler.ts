@@ -1,4 +1,4 @@
-import { CustomError } from "@/types";
+import { CustomError } from "@/libs/types";
 import { ZodError } from "zod";
 
 export default function errHandler(err: unknown) {

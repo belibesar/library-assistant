@@ -2,6 +2,8 @@
 import { ChangeEvent, FormEvent, useState } from "react";
 import Swal from "sweetalert2";
 import Link from "next/link";
+import { useAuth } from "@/contexts/AuthContext";
+import { useRouter } from "next/navigation";
 
 export default function Login() {
   const [input, setInput] = useState({
@@ -10,6 +12,8 @@ export default function Login() {
   });
 
   const [loading, setLoading] = useState(false);
+  const { login } = useAuth();
+  const router = useRouter();
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -29,12 +33,27 @@ export default function Login() {
       const resJson = await res.json();
       if (!res.ok) throw resJson;
 
+      // Simpan token ke localStorage
+      localStorage.setItem("token", resJson.access_token);
+
+      // Decode token untuk mendapatkan user data
+      const tokenPayload = JSON.parse(atob(resJson.access_token.split('.')[1]));
+      
+      // Update auth context dengan user data
+      login({
+        id: tokenPayload._id,
+        email: tokenPayload.email,
+        name: tokenPayload.name || tokenPayload.email,
+        username: tokenPayload.username || tokenPayload.email
+      });
+
       Swal.fire({
         title: "Login Berhasil",
         text: "Selamat datang di aplikasi kami!",
         icon: "success",
       });
-      window.location.href = "/";
+      
+      router.push("/");
     } catch (error) {
       Swal.fire({
         title: "Error",

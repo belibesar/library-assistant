@@ -2,7 +2,7 @@ import {sign, verify} from 'jsonwebtoken';
 import { jwtVerify } from 'jose';
 const secret = process.env.JWT_SECRET as string;
 
-export const signToken = (payload: {_id: string, email:string}) => sign(payload, secret)
+export const signToken = (payload: {_id: string, email:string, name?: string, username?: string}) => sign(payload, secret)
 
 export const verifyToken = (token: string) => verify(token, secret)
 

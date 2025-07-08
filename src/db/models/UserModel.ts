@@ -1,4 +1,4 @@
-import { NewUser, userType } from "@/types";
+import { NewUser, userType } from "@/libs/types";
 import connectToDatabase from "../config/mongodb";
 import { z } from "zod";
 import { hashPassword } from "@/utils/hashPassword";

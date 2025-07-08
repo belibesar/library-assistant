@@ -5,6 +5,7 @@ import Navbar from "@/components/Navbar";
 import { BookOpen } from "lucide-react";
 import Footer from "@/sections/Footer";
 import ConditionalFooter from "@/components/ConditionalFooter";
+import { AuthProvider } from "@/contexts/AuthContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -31,9 +32,11 @@ export default function RootLayout({
       <body
         className={`min-h-screen ${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <Navbar />
-        {children}
-        <ConditionalFooter />
+        <AuthProvider>
+          <Navbar />
+          {children}
+          <ConditionalFooter />
+        </AuthProvider>
       </body>
     </html>
   );
