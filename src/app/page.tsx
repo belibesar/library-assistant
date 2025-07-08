@@ -7,7 +7,7 @@ import React from "react";
 // Onboarding Page
 export default function OnboardingPage() {
   return (
-    <div className="">
+    <div>
       <Hero
         heroTitle="Asisten Perpustakaan "
         span="AI"
