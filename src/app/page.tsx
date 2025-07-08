@@ -1,24 +1,27 @@
-export default function Page() {
+import Hero from "@/components/Hero";
+import CardsGroupFeature from "@/sections/CardGroupOnboarding";
+import Divider from "@/sections/Divider";
+import StatsSection from "@/sections/StatsSection";
+import React from "react";
+
+// Onboarding Page
+export default function OnboardingPage() {
   return (
-    <div className="card bg-base-100 w-96 shadow-sm">
-      <figure>
-        <img
-          src="https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp"
-          alt="Shoes"
-        />
-      </figure>
-      <div className="card-body">
-        <h2 className="card-title">Card Title</h2>
-        <p>
-          A card component has a figure, a body part, and inside body there are
-          title and actions parts
-        </p>
-        <div className="card-actions justify-end">
-          <button className="btn btn-primary">Buy Now</button>
-        </div>
-      </div>
-      <button className="btn btn-soft btn-accent">Accent</button>
-      <button className="btn btn-soft btn-warning">Warning</button>
+    <div>
+      <Hero
+        heroTitle="Asisten Perpustakaan "
+        span="AI"
+        heroDescription="Sistem perpustakaan cerdas dengan teknologi AI untuk membantu Anda menemukan buku, mendapatkan rekomendasi,
+            dan mengelola koleksi dengan mudah."
+        buttonPrimary="Mulai Sekarang"
+        buttonSecondary="Pelajari Lebih Lanjut"
+      />
+      <Divider
+        headerTitle="Fitur Unggulan"
+        paragraph="Teknologi AI terdepan untuk pengalaman perpustakaan yang lebih baik"
+      />
+      <CardsGroupFeature />
+      <StatsSection />
     </div>
   );
 }
