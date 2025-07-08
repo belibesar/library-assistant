@@ -18,6 +18,7 @@ export default function Page() {
         </div>
       </div>
       <button className="btn btn-soft btn-accent">Accent</button>
+      <button className="btn btn-soft btn-warning">Warning</button>
     </div>
   );
 }
