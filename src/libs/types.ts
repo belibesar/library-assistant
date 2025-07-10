@@ -24,6 +24,27 @@ export type HeroSectionProps = {
   buttonSecondary: string;
 };
 
+// Chat related types
+export interface ChatMessage {
+  id: number;
+  sender: 'user' | 'bot';
+  message: string;
+  timestamp: string;
+}
+
+export interface ChatbotMessagesCardProps {
+  messages: ChatMessage[];
+  inputMessage: string;
+  setInputMessage: React.Dispatch<React.SetStateAction<string>>;
+  agreePrivacy: boolean;
+  setAgreePrivacy: React.Dispatch<React.SetStateAction<boolean>>;
+  sendMessage: () => void;
+}
+
+export interface ChatbotHeaderCardProps {
+  onTagClick: (tagText: string) => void;
+}
+
 export type userType = {
     email:string, username:string, name:string, password:string
 }

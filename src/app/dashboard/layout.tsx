@@ -17,7 +17,7 @@ export default function DashboardLayout({
 
   return (
     <ProtectedRoute>
-      <div className="flex h-screen bg-base-200 overflow-hidden">
+      <div className="flex h-screen bg-base-100 overflow-hidden">
         {/* Hamburger menu for mobile */}
         <div className="lg:hidden fixed top-4 left-4 z-50">
           <button className="btn btn-ghost btn-circle" onClick={toggleSidebar} aria-label="Open sidebar">
@@ -33,10 +33,16 @@ export default function DashboardLayout({
           </button>
         </div>
 
-        <Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
+        {/* Sidebar - Fixed height */}
+        <div className="flex-shrink-0">
+          <Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
+        </div>
 
-        <main className="flex-1 p-4 lg:p-8 pt-16 lg:pt-8 overflow-y-auto">
-          {children}
+        {/* Main content area */}
+        <main className="flex-1 flex flex-col min-w-0 overflow-hidden">
+          <div className="flex-1 p-4 lg:p-8 pt-16 lg:pt-8 overflow-y-auto">
+            {children}
+          </div>
         </main>
       </div>
     </ProtectedRoute>

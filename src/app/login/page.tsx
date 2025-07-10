@@ -72,8 +72,8 @@ export default function Login() {
     <PublicRoute>
       <div className="min-h-screen bg-gray-100 py-6 flex flex-col justify-center sm:py-12">
       <div className="relative py-3 sm:max-w-xl sm:mx-auto">
-        <div className="absolute inset-0 bg-gradient-to-r from-cyan-400 to-sky-500 shadow-lg transform -skew-y-6 sm:skew-y-0 sm:-rotate-6 sm:rounded-3xl"></div>
-        <div className="relative px-4 py-10 bg-white shadow-lg sm:rounded-3xl sm:p-20">
+        <div className="absolute inset-0 bg-gradient-to-r from-cyan-400 to-sky-500 transform -skew-y-6 sm:skew-y-0 sm:-rotate-6 sm:rounded-3xl"></div>
+        <div className="relative px-4 py-10 bg-white border border-gray-200 sm:rounded-3xl sm:p-20">
           <form onSubmit={handleSubmit}>
             <div className="max-w-md mx-auto">
               <h1 className="text-2xl font-semibold text-center mb-6">Login</h1>
@@ -133,7 +133,7 @@ export default function Login() {
                   <div className="flex justify-center pt-4">
                     <button
                       type="button"
-                      className="flex items-center bg-white border border-gray-300 rounded-lg shadow px-6 py-2 text-sm font-medium text-gray-800 hover:bg-gray-200"
+                      className="flex items-center bg-white border border-gray-300 rounded-lg px-6 py-2 text-sm font-medium text-gray-800 hover:bg-gray-200"
                     >
                       <svg
                         className="h-6 w-6 mr-2"

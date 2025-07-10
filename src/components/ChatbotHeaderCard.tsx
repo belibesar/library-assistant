@@ -1,15 +1,12 @@
-// components/ChatbotHeaderCard.tsx
 'use client';
 
 import React from 'react';
 import { BookOpen, MessageSquare, FileCheck } from 'lucide-react';
-interface ChatbotHeaderCardProps {
-  onTagClick: (tagText: string) => void;
-}
+import { ChatbotHeaderCardProps } from '@/libs/types';
 
 const ChatbotHeaderCard: React.FC<ChatbotHeaderCardProps> = ({ onTagClick }) => {
   return (
-    <div className="bg-base-100 p-6 rounded-lg shadow-lg mb-6"> {/* Card styling */}
+    <div className="bg-white p-6 rounded-lg border border-gray-200 mb-6"> {/* Card styling */}
       <div className="flex items-center gap-2">
         <BookOpen size={25} color="#113FF7" />
         <h2 className="text-xl font-bold mb-2">Asisten Perpustakaan USD</h2>

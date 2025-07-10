@@ -2,21 +2,7 @@
 
 import React, { useRef, useEffect } from 'react';
 import { Bot } from 'lucide-react';
-interface ChatMessage {
-  id: number;
-  sender: 'user' | 'bot';
-  message: string;
-  timestamp: string;
-}
-
-interface ChatbotMessagesCardProps {
-  messages: ChatMessage[];
-  inputMessage: string;
-  setInputMessage: React.Dispatch<React.SetStateAction<string>>;
-  agreePrivacy: boolean;
-  setAgreePrivacy: React.Dispatch<React.SetStateAction<boolean>>;
-  sendMessage: () => void;
-}
+import { ChatMessage, ChatbotMessagesCardProps } from '@/libs/types';
 
 const ChatbotMessagesCard: React.FC<ChatbotMessagesCardProps> = ({
   messages,
@@ -35,7 +21,7 @@ const ChatbotMessagesCard: React.FC<ChatbotMessagesCardProps> = ({
   }, [messages]);
 
   return (
-    <div className="bg-base-100 text-sm p-6 rounded-lg shadow-lg flex flex-col flex-grow">
+    <div className="bg-white text-sm p-6 rounded-lg border border-gray-200 flex flex-col flex-grow">
       <div ref={chatAreaRef} className="p-4 rounded-lg mb-4 space-y-4">
         {messages.map((msg) => (
 <div
@@ -87,29 +73,31 @@ const ChatbotMessagesCard: React.FC<ChatbotMessagesCardProps> = ({
 <hr className="my-4 -mx-6 border-t border-gray-300" />
 {/* hr atas dijadikan full */}
       <div className="form-control mb-4">
-        <label className="label cursor-pointer justify-start">
-          <input
-            type="checkbox"
-            checked={agreePrivacy}
-            onChange={(e) => setAgreePrivacy(e.target.checked)}
-            className="checkbox text-white mr-2 border-gray-300 checked:bg-blue-500 checked:border-blue-500"
-          />
-          <span className="label-text text-sm">💡Setuju kebijakan privasi untuk menggunakan fitur chat</span>
-        </label>
-      </div>
+  <label className="label cursor-pointer justify-start items-start flex-wrap">
+    <input
+      type="checkbox"
+      checked={agreePrivacy}
+      onChange={(e) => setAgreePrivacy(e.target.checked)}
+      className="checkbox checkbox-sm sm:checkbox-md text-white mr-2 mt-1 border-gray-300 checked:bg-blue-500 checked:border-blue-500 flex-shrink-0"
+    />
+    <span className="label-text text-xs sm:text-sm leading-tight break-words flex-1">
+      💡Setuju kebijakan privasi untuk menggunakan fitur chat
+    </span>
+  </label>
+</div>
 
-      <div className="flex gap-2">
+      <div className="flex gap-2 flex-col sm:flex-row">
         <input
           type="text"
           placeholder="Tanya tentang buku, cari di rak, atau minta saran..."
-          className="input input-bordered border-blue-500 flex-grow rounded-sm"
+          className="input input-bordered border-blue-500 flex-grow rounded-sm text-xs sm:text-sm"
           value={inputMessage}
           onChange={(e) => setInputMessage(e.target.value)}
           onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
           disabled={!agreePrivacy}
         />
         <button
-          className="btn bg-blue-500 text-white rounded-[10%]"
+          className="btn btn-sm sm:btn-md bg-blue-500 text-white rounded-[10%] px-3 sm:px-4"
           onClick={sendMessage}
           disabled={!agreePrivacy || inputMessage.trim() === ''}
         >
@@ -119,7 +107,7 @@ const ChatbotMessagesCard: React.FC<ChatbotMessagesCardProps> = ({
             viewBox="0 0 24 24"
             strokeWidth={1.5}
             stroke="currentColor"
-            className="w-6 h-6"
+            className="w-4 h-4 sm:w-6 sm:h-6"
           >
             <path
               strokeLinecap="round"
