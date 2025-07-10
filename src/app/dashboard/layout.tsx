@@ -17,7 +17,7 @@ export default function DashboardLayout({
 
   return (
     <ProtectedRoute>
-      <div className="flex min-h-screen bg-base-200">
+      <div className="flex h-screen bg-base-200 overflow-hidden">
         {/* Hamburger menu for mobile */}
         <div className="lg:hidden fixed top-4 left-4 z-50">
           <button className="btn btn-ghost btn-circle" onClick={toggleSidebar} aria-label="Open sidebar">
@@ -35,7 +35,7 @@ export default function DashboardLayout({
 
         <Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
 
-        <main className="flex-1 p-4 lg:p-8 pt-16 lg:pt-8 overflow-auto">
+        <main className="flex-1 p-4 lg:p-8 pt-16 lg:pt-8 overflow-y-auto">
           {children}
         </main>
       </div>
