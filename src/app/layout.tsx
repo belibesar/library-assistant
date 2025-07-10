@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import Navbar from "@/components/Navbar";
+import ConditionalNavbar from "@/components/ConditionalNavbar";
 import { BookOpen } from "lucide-react";
 import Footer from "@/sections/Footer";
 import ConditionalFooter from "@/components/ConditionalFooter";
@@ -33,7 +33,7 @@ export default function RootLayout({
         className={`min-h-screen ${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <AuthProvider>
-          <Navbar />
+          <ConditionalNavbar />
           {children}
           <ConditionalFooter />
         </AuthProvider>

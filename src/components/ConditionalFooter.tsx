@@ -6,11 +6,9 @@ import Footer from "@/sections/Footer";
 const ConditionalFooter = () => {
   const pathname = usePathname();
   
-  // Daftar halaman yang tidak menampilkan footer
-  const hiddenFooterPages = ['/login', '/register', '/forgot-password'];
+  const hiddenFooterPages = ['/login', '/register', '/forgot-password', '/dashboard'];
   
-  // Jika halaman saat ini ada dalam daftar hiddenFooterPages, jangan render footer
-  if (hiddenFooterPages.includes(pathname)) {
+  if (hiddenFooterPages.includes(pathname) || pathname.startsWith('/dashboard')) {
     return null;
   }
   
