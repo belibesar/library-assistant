@@ -4,6 +4,7 @@ import Swal from "sweetalert2";
 import Link from "next/link";
 import { useAuth } from "@/contexts/AuthContext";
 import { useRouter } from "next/navigation";
+import PublicRoute from "@/components/PublicRoute";
 
 export default function Login() {
   const [input, setInput] = useState({
@@ -51,9 +52,11 @@ export default function Login() {
         title: "Login Berhasil",
         text: "Selamat datang di aplikasi kami!",
         icon: "success",
+        timer: 1500,
+        showConfirmButton: false
       });
       
-      router.push("/");
+      router.push("/dashboard");
     } catch (error) {
       Swal.fire({
         title: "Error",
@@ -66,7 +69,8 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 py-6 flex flex-col justify-center sm:py-12">
+    <PublicRoute>
+      <div className="min-h-screen bg-gray-100 py-6 flex flex-col justify-center sm:py-12">
       <div className="relative py-3 sm:max-w-xl sm:mx-auto">
         <div className="absolute inset-0 bg-gradient-to-r from-cyan-400 to-sky-500 shadow-lg transform -skew-y-6 sm:skew-y-0 sm:-rotate-6 sm:rounded-3xl"></div>
         <div className="relative px-4 py-10 bg-white shadow-lg sm:rounded-3xl sm:p-20">
@@ -166,5 +170,6 @@ export default function Login() {
         </div>
       </div>
     </div>
+    </PublicRoute>
   );
 }

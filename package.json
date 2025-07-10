@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@flaticon/flaticon-uicons": "^3.3.1",
     "bcryptjs": "^3.0.2",
     "daisyui": "^5.0.46",
     "jose": "^6.0.11",
