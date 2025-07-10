@@ -12,17 +12,22 @@ interface SidebarProps {
 
 const Sidebar: React.FC<SidebarProps> = ({ isOpen, toggleSidebar }) => {
   const { user, logout } = useAuth();
+  const [activeItem, setActiveItem] = useState('Obrolan'); // State untuk menu aktif
 
   const handleLogout = () => {
     logout();
     window.location.href = '/';
   };
 
+  const handleMenuClick = (menuName: string) => {
+    setActiveItem(menuName);
+  };
+
   return (
     <>
       {isOpen && (
         <div
-          className="fixed inset-0 bg-black opacity-50 z-40 lg:hidden"
+          className="fixed inset-0 bg-grey opacity-50 z-40 lg:hidden"
           onClick={toggleSidebar}
         ></div>
       )}
@@ -31,7 +36,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, toggleSidebar }) => {
         className={`fixed inset-y-0 left-0 transform ${
           isOpen ? 'translate-x-0' : '-translate-x-full'
         } lg:translate-x-0 transition-transform duration-300 ease-in-out
-                   w-64 bg-base-100 shadow-xl flex flex-col p-4 z-50 lg:relative lg:flex-shrink-0`}
+                   w-64 bg-base-100 shadow-xl flex flex-col p-4 z-50 lg:relative lg:flex-shrink-0 h-screen lg:h-full`}
       >
         <div className="flex items-center justify-between lg:justify-start mb-8">
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
@@ -58,31 +63,31 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, toggleSidebar }) => {
         <nav className="menu p-0 text-base-content w-full flex-grow">
           <ul>
             <li>
-              <Link href="#" className="flex items-center gap-2 px-3 py-2 hover:bg-black-70 hover:text-black-600 transition-colors duration-200">
+              <Link href="#" className="flex items-center gap-2 px-3 py-2 hover:bg-gray-200 hover:text-gray-900 active:bg-gray-800 active:text-white transition-colors duration-200 rounded-lg">
                 <MessageSquare color="#111d22" />
                 Obrolan
               </Link>
             </li>
             <li>
-              <Link href="#" className="flex items-center gap-2 px-3 py-2 hover:bg-black-70 hover:text-black-600 transition-colors duration-200">
+              <Link href="#" className="flex items-center gap-2 px-3 py-2 hover:bg-gray-200 hover:text-gray-900 active:bg-gray-800 active:text-white transition-colors duration-200 rounded-lg">
                 <BookOpen color="#111d22" />
                 Jelajahi Koleksi
               </Link>
             </li>
             <li>
-              <Link href="#" className="flex items-center gap-2 px-3 py-2 hover:bg-black-70 hover:text-black-600 transition-colors duration-200">
+              <Link href="#" className="flex items-center gap-2 px-3 py-2 hover:bg-gray-200 hover:text-gray-900 active:bg-gray-800 active:text-white transition-colors duration-200 rounded-lg">
                 <FileCheck color="#111d22" />
                 Cek Plagiat
               </Link>
             </li>
             <li>
-              <Link href="#" className="flex items-center gap-2 px-3 py-2 hover:bg-black-70 hover:text-black-600 transition-colors duration-200">
+              <Link href="#" className="flex items-center gap-2 px-3 py-2 hover:bg-gray-200 hover:text-gray-900 active:bg-gray-800 active:text-white transition-colors duration-200 rounded-lg">
                 <Search color="#111d22" />
                 Pencarian
               </Link>
             </li>
             <li>
-              <Link href="#" className="flex items-center gap-2 px-3 py-2 hover:bg-black-70 hover:text-black-600 transition-colors duration-200">
+              <Link href="#" className="flex items-center gap-2 px-3 py-2 hover:bg-gray-200 hover:text-gray-900 active:bg-gray-800 active:text-white transition-colors duration-200 rounded-lg">
                 <Settings color="#111d22" />
                 Pengaturan
               </Link>
