@@ -36,7 +36,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, toggleSidebar }) => {
         className={`fixed inset-y-0 left-0 transform ${
           isOpen ? 'translate-x-0' : '-translate-x-full'
         } lg:translate-x-0 transition-transform duration-300 ease-in-out
-                   w-64 bg-base-100 shadow-xl flex flex-col p-4 z-50 lg:relative lg:flex-shrink-0 h-screen lg:h-full`}
+                   w-64 bg-base-100 border border-gray-200 flex flex-col p-4 z-50 lg:relative lg:flex-shrink-0 h-screen lg:h-full`}
       >
         <div className="flex items-center justify-between lg:justify-start mb-8">
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
@@ -64,38 +64,40 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, toggleSidebar }) => {
           <ul>
             <li>
               <Link href="#" className="flex items-center gap-2 px-3 py-2 hover:bg-gray-200 hover:text-gray-900 active:bg-gray-800 active:text-white transition-colors duration-200 rounded-lg">
-                <MessageSquare color="#111d22" />
+                <MessageSquare size={20} color="#111d22" />
                 Obrolan
               </Link>
             </li>
             <li>
               <Link href="#" className="flex items-center gap-2 px-3 py-2 hover:bg-gray-200 hover:text-gray-900 active:bg-gray-800 active:text-white transition-colors duration-200 rounded-lg">
-                <BookOpen color="#111d22" />
+                <BookOpen size={20} color="#111d22" />
                 Jelajahi Koleksi
               </Link>
             </li>
             <li>
               <Link href="#" className="flex items-center gap-2 px-3 py-2 hover:bg-gray-200 hover:text-gray-900 active:bg-gray-800 active:text-white transition-colors duration-200 rounded-lg">
-                <FileCheck color="#111d22" />
+                <FileCheck size={20} color="#111d22" />
                 Cek Plagiat
               </Link>
             </li>
             <li>
               <Link href="#" className="flex items-center gap-2 px-3 py-2 hover:bg-gray-200 hover:text-gray-900 active:bg-gray-800 active:text-white transition-colors duration-200 rounded-lg">
-                <Search color="#111d22" />
+                <Search size={20} color="#111d22" />
                 Pencarian
               </Link>
             </li>
             <li>
               <Link href="#" className="flex items-center gap-2 px-3 py-2 hover:bg-gray-200 hover:text-gray-900 active:bg-gray-800 active:text-white transition-colors duration-200 rounded-lg">
-                <Settings color="#111d22" />
+                <Settings size={20} color="#111d22" />
                 Pengaturan
               </Link>
             </li>
           </ul>
         </nav>
-
-        <div className="border-t border-base-200 pt-4 mt-auto flex justify-between items-center">
+        {/* ubah hr jadi full dan grey 200 */}
+        <hr className="my-4 -mx-4 border-t border-gray-300" />
+        {/* hr ini ya */}
+        <div className="pt-4 mt-auto flex justify-between items-center">
           <div>
             {/* <div className="text-sm text-neutral-content opacity-70">Mahasiswa</div>
             <div className="font-semibold text-neutral-content">Student</div> */}

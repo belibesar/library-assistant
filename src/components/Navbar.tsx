@@ -26,7 +26,7 @@ export default function Navbar() {
 
   if (isLoading) {
     return (
-      <div className="navbar bg-base-100 shadow-sm">
+      <div className="navbar bg-base-100 border-b border-gray-200">
         <div className="navbar-start">
           <div className="flex items-center px-7">
             <BookOpen className="h-8 w-8 text-blue-600" />
@@ -43,7 +43,7 @@ export default function Navbar() {
   }
 
   return (
-    <div className="navbar bg-base-100 shadow-sm">
+    <div className="navbar bg-base-100 border-b border-gray-200">
       <div className="navbar-start">
         <div className="flex items-center px-7">
           <BookOpen className="h-8 w-8 text-blue-600" />

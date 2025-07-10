@@ -1,16 +1,9 @@
-// ChatbotSection.tsx
 'use client';
 
 import React, { useState } from 'react';
 import ChatbotHeaderCard from './ChatbotHeaderCard';
 import ChatbotMessagesCard from './ChatbotMessagesCard';
-
-interface ChatMessage {
-  id: number;
-  sender: 'user' | 'bot';
-  message: string;
-  timestamp: string;
-}
+import { ChatMessage } from '@/libs/types';
 
 const ChatbotSection: React.FC = () => {
   const [messages, setMessages] = useState<ChatMessage[]>([
