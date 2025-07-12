@@ -15,7 +15,9 @@ export type ButtonProps = {
   onClick?: () => void;
   type?: "button" | "submit" | "reset";
 };
-
+export function cn(...classes: (string | undefined | null | false)[]) {
+  return classes.filter(Boolean).join(" ");
+}
 export type HeroSectionProps = {
   heroTitle: string;
   heroDescription: string;
@@ -55,4 +57,20 @@ export type NewUser = {
 export type CustomError = {
     message: string;
     status: number;
+}
+
+export interface Book {
+  id: number;
+  title: string;
+  author: string;
+  year: string;
+  category: string;
+  description: string;
+  available: number;
+  total: number;
+}
+
+export interface SidebarProps {
+  isOpen: boolean;
+  toggleSidebar: () => void;
 }
