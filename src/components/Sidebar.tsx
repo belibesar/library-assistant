@@ -4,11 +4,8 @@ import React, { useState } from 'react';
 import { MessageSquare, BookOpen, FileCheck, Search, Settings } from 'lucide-react';
 import Link from 'next/link';
 import { useAuth } from '@/contexts/AuthContext';
+import { SidebarProps } from '@/libs/types';
 
-interface SidebarProps {
-  isOpen: boolean;
-  toggleSidebar: () => void;
-}
 
 const Sidebar: React.FC<SidebarProps> = ({ isOpen, toggleSidebar }) => {
   const { user, logout } = useAuth();
@@ -63,13 +60,13 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, toggleSidebar }) => {
         <nav className="menu p-0 text-base-content w-full flex-grow">
           <ul>
             <li>
-              <Link href="#" className="flex items-center gap-2 px-3 py-2 hover:bg-gray-200 hover:text-gray-900 active:bg-gray-800 active:text-white transition-colors duration-200 rounded-lg">
+              <Link href="/dashboard" className="flex items-center gap-2 px-3 py-2 hover:bg-gray-200 hover:text-gray-900 active:bg-gray-800 active:text-white transition-colors duration-200 rounded-lg">
                 <MessageSquare size={20} color="#111d22" />
                 Obrolan
               </Link>
             </li>
             <li>
-              <Link href="#" className="flex items-center gap-2 px-3 py-2 hover:bg-gray-200 hover:text-gray-900 active:bg-gray-800 active:text-white transition-colors duration-200 rounded-lg">
+              <Link href="/dashboard/books" className="flex items-center gap-2 px-3 py-2 hover:bg-gray-200 hover:text-gray-900 active:bg-gray-800 active:text-white transition-colors duration-200 rounded-lg">
                 <BookOpen size={20} color="#111d22" />
                 Jelajahi Koleksi
               </Link>
