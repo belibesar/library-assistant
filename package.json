@@ -9,18 +9,29 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@flaticon/flaticon-uicons": "^3.3.1",
+    "@google/genai": "^1.9.0",
+    "bcryptjs": "^3.0.2",
+    "daisyui": "^5.0.46",
+    "jose": "^6.0.11",
+    "jsonwebtoken": "^9.0.2",
+    "lucide-react": "^0.525.0",
+    "mongodb": "^6.17.0",
     "next": "15.3.5",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "sweetalert2": "^11.22.2",
+    "zod": "^3.25.76"
   },
   "devDependencies": {
-    "@tailwindcss/postcss": "^4",
+    "@tailwindcss/postcss": "^4.1.11",
+    "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "prettier": "^3.6.2",
     "prettier-plugin-tailwindcss": "^0.6.13",
-    "tailwindcss": "^4",
+    "tailwindcss": "^4.1.11",
     "typescript": "^5"
   }
 }

@@ -18,19 +18,24 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Database
 
-## Learn More
+This app use mongodb as the databse, you can use docker to set up your database locally
 
-To learn more about Next.js, take a look at the following resources:
+Just run this command on your terminal to start the database locally:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```
+docker run -d \
+  --name mongodb-dev \
+  -p 27017:27017 \
+  -v mongo-libdata:/data/db \
+  mongo:latest
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+And paste this into your .env file, use your .env example as reference
 
-## Deploy on Vercel
+```
+MONGODB_URI="mongodb://localhost:27017/librarydb"
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+You can connect your local database running on docker with Mongo Compass, just use `localhost:27017` to connect with your compass
