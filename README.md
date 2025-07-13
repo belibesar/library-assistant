@@ -35,7 +35,7 @@ docker run -d \
 And paste this into your .env file, use your .env example as reference
 
 ```
-MONGODB_URI="mongodb://localhost:27017/library-usd"
+MONGODB_URI="mongodb://localhost:27017/librarydb"
 ```
 
 You can connect your local database running on docker with Mongo Compass, just use `localhost:27017` to connect with your compass

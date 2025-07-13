@@ -1,7 +1,23 @@
 import { bulkData } from "@/db/mockdata/bulkRepository";
 import errHandler from "@/utils/errHandler";
 import { GoogleGenAI } from "@google/genai";
+import RepositoryBulkCollectionModel from "@/db/models/RepositoryBulkCollectionModel";
+
 const ai = new GoogleGenAI({});
+
+const mongoDb = new RepositoryBulkCollectionModel();
+const getAllCollections = await (await mongoDb.db())
+  .listCollections()
+  .toArray();
+const allCollections = getAllCollections.map((repo) => repo.name);
+const allData: any = {};
+for (const collectionName of allCollections) {
+  const collection = await mongoDb.getRepository(collectionName);
+  const data = await collection.find().toArray();
+  allData[collectionName] = data;
+}
+
+console.log(allData);
 
 export async function GET() {
   return Response.json({ message: "Hello Chatbot!" });
@@ -20,7 +36,7 @@ export async function POST(request: Request) {
     const mockData = bulkData;
 
     //gemini logic
-    const libraryAssistantPrompt = `Anda adalah **Asisten Perpustakaan** yang berdedikasi dan memiliki pengetahuan mendalam tentang seluruh koleksi buku yang tersedia di perpustakaan. Anda HANYA memiliki akses ke **database lokal** yaitu: ${JSON.stringify(mockData)} yang berisi semua informasi buku **(judul: string;
+    const libraryAssistantPrompt = `Anda adalah **Asisten Perpustakaan** yang berdedikasi dan memiliki pengetahuan mendalam tentang seluruh koleksi buku yang tersedia di perpustakaan. Anda HANYA memiliki akses ke **database lokal** yaitu: ${allData} yang berisi semua informasi buku **(judul: string;
       call_number: string;
       no_invent: string;
       no_barcode: number;
