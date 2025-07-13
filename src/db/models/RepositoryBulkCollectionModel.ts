@@ -1,12 +1,5 @@
+import { RepositoryType } from "@/libs/types";
 import connectToDatabase from "../config/mongodb";
-
-type RepositoryType = {
-  judul: string;
-  call_number: string;
-  no_invent: string;
-  no_barcode: number;
-  lokasi: string;
-};
 
 class RepositoryBulkCollectionModel {
   async getRepository(repositoryName: string) {
