@@ -5,11 +5,10 @@ import { NextRequest, NextResponse } from "next/server";
 
 const mongoDb = new RepositoryBulkCollectionModel();
 
-export async function GET(
-  request: NextRequest,
-  { params }: { params: { id: string } },
-) {
-  const { id } = params;
+export async function GET(request: NextRequest) {
+  // Ambil id dari url, misal: /api/books/123
+  const urlParts = request.nextUrl.pathname.split("/");
+  const id = urlParts[urlParts.length - 1];
   try {
     const getAllCollections = await (await mongoDb.db())
       .listCollections()
@@ -22,13 +21,21 @@ export async function GET(
     for (const collectionName of allCollections) {
       const collection = await mongoDb.getRepository(collectionName);
       let data = null;
-      try {
-        data = await collection.findOne({
-          _id: Number(id),
-        });
-      } catch (e) {
-        // Jika id bukan ObjectId valid, skip error
-      }
+      // Coba cari dengan ObjectId, Number, dan String sekaligus
+      const filter: any = {
+        $or: [
+          (() => {
+            try {
+              return { _id: new ObjectId(id) };
+            } catch {
+              return null;
+            }
+          })(),
+          !isNaN(Number(id)) ? { _id: Number(id) } : null,
+          { _id: id },
+        ].filter(Boolean),
+      };
+      data = await collection.findOne(filter);
       if (data) {
         found = data;
         foundIn = collectionName;
