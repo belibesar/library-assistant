@@ -29,7 +29,7 @@ export type HeroSectionProps = {
 // Chat related types
 export interface ChatMessage {
   id: number;
-  sender: 'user' | 'bot';
+  sender: "user" | "bot";
   message: string;
   timestamp: string;
 }
@@ -48,16 +48,22 @@ export interface ChatbotHeaderCardProps {
 }
 
 export type userType = {
-    email:string, username:string, name:string, password:string
-}
+  email: string;
+  username: string;
+  name: string;
+  password: string;
+};
 export type NewUser = {
-    email:string, password:string, name:string, username:string
-}
+  email: string;
+  password: string;
+  name: string;
+  username: string;
+};
 
 export type CustomError = {
-    message: string;
-    status: number;
-}
+  message: string;
+  status: number;
+};
 
 export interface Book {
   id: number;
@@ -74,3 +80,11 @@ export interface SidebarProps {
   isOpen: boolean;
   toggleSidebar: () => void;
 }
+
+export type RepositoryType = {
+  judul: string;
+  call_number: string;
+  no_invent: string;
+  no_barcode: number;
+  lokasi: string;
+};
