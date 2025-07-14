@@ -88,14 +88,15 @@ const ChatbotMessagesCard: React.FC<ChatbotMessagesCardProps> = ({
 
       <div className="flex gap-2 flex-col sm:flex-row">
         <input
-          type="text"
-          placeholder="Tanya tentang buku, cari di rak, atau minta saran..."
-          className="input input-bordered border-blue-500 flex-grow rounded-sm text-xs sm:text-sm"
-          value={inputMessage}
-          onChange={(e) => setInputMessage(e.target.value)}
-          onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
-          disabled={!agreePrivacy}
+        type="text"
+        placeholder="Tanya tentang buku, cari di rak, atau minta saran..."
+        className="input input-bordered flex-grow rounded-sm text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+        value={inputMessage}
+        onChange={(e) => setInputMessage(e.target.value)}
+       onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
+        disabled={!agreePrivacy}
         />
+
         <button
           className="btn btn-sm sm:btn-md bg-blue-500 text-white rounded-[10%] px-3 sm:px-4"
           onClick={sendMessage}
