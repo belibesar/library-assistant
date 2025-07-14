@@ -87,10 +87,8 @@ export default function BooksPage() {
 
   const totalBooks = books.length;
 
-  // Auto focus pada judul buku ketika modal dibuka
   const handleModalOpen = () => {
     setIsModalOpen(true);
-    // Delay sedikit untuk memastikan modal sudah rendered
     setTimeout(() => {
       const titleInput = document.getElementById("book-title-input");
       if (titleInput) {
@@ -100,7 +98,7 @@ export default function BooksPage() {
   };
 
   return (
-    <div className="bg-base-100 h-full w-full">
+    <div className="bg-base-100 h-full w-full mt-[-20px]">
       <div className="bg-white">
         <div className="flex items-center justify-between">
           <div>
@@ -122,7 +120,6 @@ export default function BooksPage() {
       <div className="flex w-full flex-col py-2">
         <div className="w-full rounded-lg border border-gray-200 bg-white p-4 shadow-sm">
           <div className="grid grid-cols-1 gap-3 lg:grid-cols-12">
-            {/* Search Input */}
             <div className="relative lg:col-span-9">
               <Search
                 className="absolute top-1/2 left-3 -translate-y-1/2 text-gray-400"
@@ -137,7 +134,6 @@ export default function BooksPage() {
               />
             </div>
 
-            {/* Category Filter */}
             <div className="relative lg:col-span-3">
               <Filter
                 className="absolute top-1/2 left-3 -translate-y-1/2 text-gray-400"
@@ -175,15 +171,12 @@ export default function BooksPage() {
           </div>
         </div>
       </div>
-
-      {/* Books Grid */}
       <div className="grid grid-cols-1 gap-4 pt-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {filteredBooks.map((book) => (
           <div
             key={book.id}
             className="overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm transition-all duration-300 hover:border-blue-300 hover:shadow-xl hover:shadow-blue-100"
           >
-            {/* Card Header */}
             <div className="p-4 pb-3">
               <div className="mb-1 flex items-start justify-between">
                 <div>
