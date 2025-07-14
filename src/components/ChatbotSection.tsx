@@ -92,6 +92,8 @@ const ChatbotSection: React.FC = () => {
         id: prevMessages.length + 1,
         sender: "bot",
         message: botReply.response.message || botReply.response,
+        books: botReply.response.book || "",
+        racks: botReply.response.results || "",
         timestamp: new Date().toLocaleTimeString([], {
           hour: "2-digit",
           minute: "2-digit",

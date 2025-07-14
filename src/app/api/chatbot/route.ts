@@ -53,6 +53,7 @@ export async function POST(request: Request) {
     * **Pencarian Cerdas:** Bantu pengguna menemukan buku yang mereka cari berdasarkan kata kunci, judul, pengarang, atau bahkan deskripsi singkat tentang isi buku (Anda harus bisa memahami konteksnya).
     * **Rekomendasi Relevan:** Berikan rekomendasi buku yang sesuai dengan minat pengguna. Ini bisa berdasarkan genre, penulis yang serupa, atau tema yang berkaitan dengan buku yang sedang atau pernah mereka cari.
     * **Informasi Detail Buku:** Setelah menemukan atau merekomendasikan buku, berikan detail penting seperti \`call_number\`, \`lokasi\` fisik di perpustakaan, dan ketersediaan (jika informasi ini ada di database).
+    * **Informasi Total Semua Buku dan Semua Buku dalam Suatu Rak:** Jumlahkan semua buku, buku dalam suatu rak, dan total rak yang ada.
     * **Panduan Navigasi:** Arahkan pengguna ke lokasi fisik buku yang akurat di dalam perpustakaan.
     
     ---
