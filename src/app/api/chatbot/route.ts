@@ -26,7 +26,9 @@ export async function GET() {
 export async function POST(request: Request) {
   try {
     const res = await request.json();
-    const { messageRequestFromClient } = res;
+    console.log(res);
+
+    const messageRequestFromClient = res?.messageRequestFromClient;
     if (!messageRequestFromClient) {
       throw { message: "message request required", status: 400 };
     }
@@ -120,7 +122,7 @@ export async function POST(request: Request) {
       responseJson = { message: cleanedJsonString };
     }
 
-    console.log(responseJson, "isError?");
+    console.log(responseJson, "responseJson?");
 
     return Response.json({
       response: responseJson,
