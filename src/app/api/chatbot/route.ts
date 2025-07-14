@@ -4,20 +4,20 @@ import { GoogleGenAI } from "@google/genai";
 import RepositoryBulkCollectionModel from "@/db/models/RepositoryBulkCollectionModel";
 
 const ai = new GoogleGenAI({});
-
 const mongoDb = new RepositoryBulkCollectionModel();
-const getAllCollections = await (await mongoDb.db())
-  .listCollections()
-  .toArray();
-const allCollections = getAllCollections.map((repo) => repo.name);
-const allData: any = {};
-for (const collectionName of allCollections) {
-  const collection = await mongoDb.getRepository(collectionName);
-  const data = await collection.find().toArray();
-  allData[collectionName] = data;
-}
+const allData: any = await mongoDb.getAllData();
+// const getAllCollections = await (await mongoDb.db())
+//   .listCollections()
+//   .toArray();
+// const allCollections = getAllCollections.map((repo) => repo.name);
+// const allData: any = {};
+// for (const collectionName of allCollections) {
+//   const collection = await mongoDb.getRepository(collectionName);
+//   const data = await collection.find().toArray();
+//   allData[collectionName] = data;
+// }
 
-console.log(allData);
+console.log(allData, "<-------- ALLLL DATA");
 
 export async function GET() {
   return Response.json({ message: "Hello Chatbot!" });
