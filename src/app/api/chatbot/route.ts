@@ -4,20 +4,20 @@ import { GoogleGenAI } from "@google/genai";
 import RepositoryBulkCollectionModel from "@/db/models/RepositoryBulkCollectionModel";
 
 const ai = new GoogleGenAI({});
-
 const mongoDb = new RepositoryBulkCollectionModel();
-const getAllCollections = await (await mongoDb.db())
-  .listCollections()
-  .toArray();
-const allCollections = getAllCollections.map((repo) => repo.name);
-const allData: any = {};
-for (const collectionName of allCollections) {
-  const collection = await mongoDb.getRepository(collectionName);
-  const data = await collection.find().toArray();
-  allData[collectionName] = data;
-}
+const allData: any = await mongoDb.getAllData();
+// const getAllCollections = await (await mongoDb.db())
+//   .listCollections()
+//   .toArray();
+// const allCollections = getAllCollections.map((repo) => repo.name);
+// const allData: any = {};
+// for (const collectionName of allCollections) {
+//   const collection = await mongoDb.getRepository(collectionName);
+//   const data = await collection.find().toArray();
+//   allData[collectionName] = data;
+// }
 
-console.log(allData);
+console.log(allData, "<-------- ALLLL DATA");
 
 export async function GET() {
   return Response.json({ message: "Hello Chatbot!" });
@@ -86,7 +86,7 @@ export async function POST(request: Request) {
     **Asisten Perpustakaan siap membantu Anda menjelajahi koleksi kami! Silakan ajukan pertanyaan Anda.**
     **Input pengunjung perpustakaan**: ${messageRequestFromClient}
     **1. jika outputnya adalah 1 buku, maka jenis responsenya adalah json dengan format {message, book}**
-    **2. jika outputnya adalah >1 buku, maka beri batas maksimal 5 buku , dan jenis responsenya adalah json dengan format {message, book: [{}] (array of books)}**
+    **2. jika outputnya adalah >1 buku, maka beri 5 buku pilihan , dan jenis responsenya adalah json dengan format {message, book: [{}] (array of books)} KECUALI jika ditanya jumlah/total buku dari rak ... atau kalimat sejenisnya, sebutkan jumlah dalam angka, misalnya berapa jumlah buku dari rak ABC, misalkan jumlahnya 10, maka sebutkan saja jumlah buku dari rak ABC adalah 10**
     **3. Jika outputnya diluar tipe buku, maka batasi item resultnya sampai 5 item, dan responsenya adalah json {message, results}**
     **jika outputnya diluar 1, 2, 3, dan negatif (mohon maaf, tidak ada, tampaknya, dan yang serupa) maka response nya adalah json {message: ((isi pesan))}**
 
@@ -113,14 +113,18 @@ export async function POST(request: Request) {
       .replace("\n```", "");
 
     // Now, you can parse it using JSON.parse()
-    const responseJson = JSON.parse(cleanedJsonString);
-    if (!responseJson) {
-      console.log(cleanedJsonString);
+    let responseJson;
+    try {
+      responseJson = JSON.parse(cleanedJsonString);
+    } catch {
+      responseJson = { message: cleanedJsonString };
     }
 
-    console.log(responseJson);
+    console.log(responseJson, "isError?");
 
-    return Response.json({ response: responseJson });
+    return Response.json({
+      response: responseJson,
+    });
   } catch (error) {
     console.log(error);
     console.error("JSON parsing error:", error);
