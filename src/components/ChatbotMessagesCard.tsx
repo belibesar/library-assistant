@@ -111,12 +111,13 @@ const ChatbotMessagesCard: React.FC<ChatbotMessagesCardProps> = ({
         <input
           type="text"
           placeholder="Tanya tentang buku, cari di rak, atau minta saran..."
-          className="input input-bordered flex-grow rounded-sm border-blue-500 text-xs sm:text-sm"
+          className="input input-bordered flex-grow rounded-sm text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
           value={inputMessage}
           onChange={(e) => setInputMessage(e.target.value)}
-          onKeyPress={(e) => e.key === "Enter" && sendMessage()}
+          onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
           disabled={!agreePrivacy}
         />
+
         <button
           className="btn btn-sm sm:btn-md rounded-[10%] bg-blue-500 px-3 text-white sm:px-4"
           onClick={sendMessage}

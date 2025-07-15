@@ -72,13 +72,13 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, toggleSidebar }) => {
               </Link>
             </li>
             <li>
-              <Link href="#" className="flex items-center gap-2 px-3 py-2 hover:bg-gray-200 hover:text-gray-900 active:bg-gray-800 active:text-white transition-colors duration-200 rounded-lg">
+              <Link href="/dashboard/plagiarism" className="flex items-center gap-2 px-3 py-2 hover:bg-gray-200 hover:text-gray-900 active:bg-gray-800 active:text-white transition-colors duration-200 rounded-lg">
                 <FileCheck size={20} color="#111d22" />
                 Cek Plagiat
               </Link>
             </li>
             <li>
-              <Link href="#" className="flex items-center gap-2 px-3 py-2 hover:bg-gray-200 hover:text-gray-900 active:bg-gray-800 active:text-white transition-colors duration-200 rounded-lg">
+              <Link href="/dashboard/search" className="flex items-center gap-2 px-3 py-2 hover:bg-gray-200 hover:text-gray-900 active:bg-gray-800 active:text-white transition-colors duration-200 rounded-lg">
                 <Search size={20} color="#111d22" />
                 Pencarian
               </Link>
@@ -96,8 +96,6 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, toggleSidebar }) => {
         {/* hr ini ya */}
         <div className="pt-4 mt-auto flex justify-between items-center">
           <div>
-            {/* <div className="text-sm text-neutral-content opacity-70">Mahasiswa</div>
-            <div className="font-semibold text-neutral-content">Student</div> */}
             <div className="text-sm">
               {user?.email || 'Guest'}
             </div>

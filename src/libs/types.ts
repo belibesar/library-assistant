@@ -66,7 +66,19 @@ export type CustomError = {
   message: string;
   status: number;
 };
-
+export interface Buku {
+  id: string;
+  title: string;
+  author: string;
+  category: string;
+  year: number;
+  description: string;
+  available: number;
+  total: number;
+  rating?: number;
+  isbn?: string;
+  publisher?: string;
+};
 export interface Book {
   id: number;
   title: string;
