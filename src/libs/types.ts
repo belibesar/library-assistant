@@ -32,6 +32,8 @@ export interface ChatMessage {
   sender: "user" | "bot";
   message: string;
   timestamp: string;
+  books?: RepositoryType[];
+  racks?: [rak: string];
 }
 
 export interface ChatbotMessagesCardProps {

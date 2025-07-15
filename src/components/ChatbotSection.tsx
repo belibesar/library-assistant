@@ -1,15 +1,15 @@
-'use client';
+"use client";
 
-import React, { useState } from 'react';
-import ChatbotHeaderCard from './ChatbotHeaderCard';
-import ChatbotMessagesCard from './ChatbotMessagesCard';
-import { ChatMessage } from '@/libs/types';
+import React, { useState } from "react";
+import ChatbotHeaderCard from "./ChatbotHeaderCard";
+import ChatbotMessagesCard from "./ChatbotMessagesCard";
+import { ChatMessage } from "@/libs/types";
 
 const ChatbotSection: React.FC = () => {
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
       id: 1,
-      sender: 'bot',
+      sender: "bot",
       message: `Selamat datang di Perpustakaan USD! 👋
       Saya siap membantu Anda mencari buku dan koleksi perpustakaan. Berikut beberapa contoh yang bisa Anda tanyakan:
       <ul>
@@ -19,27 +19,38 @@ const ChatbotSection: React.FC = () => {
         <li>"Rekomendasi buku teknologi terbaru"</li>
       </ul>
       Silakan ketik pertanyaan Anda!`,
-      timestamp: '16.00',
+      timestamp: "16.00",
     },
   ]);
-  const [inputMessage, setInputMessage] = useState<string>('');
+  const [inputMessage, setInputMessage] = useState<string>("");
   const [agreePrivacy, setAgreePrivacy] = useState<boolean>(false);
 
-  const getBotResponse = (userMessage: string): string => {
-    const lowerCaseMessage = userMessage.toLowerCase();
+  const sentRequestToChatBotAI = async (userMessage: string) => {
+    try {
+      const lowerCaseMessage = userMessage.toLowerCase();
+      console.log(lowerCaseMessage, "<----sentRequestToChatBotAI");
 
-    if (lowerCaseMessage.includes('filsafat')) {
-      return 'Tentu, Anda mencari buku tentang filsafat. Bisakah Anda sebutkan penulis atau judul spesifiknya?';
-    } else if (lowerCaseMessage.includes('psikologi')) {
-      return 'Untuk sinopsis buku psikologi, mohon berikan judul bukunya. Kami akan coba carikan.';
-    } else if (lowerCaseMessage.includes('teologi')) {
-      return 'Buku teologi umumnya terletak di rak F (Filsafat dan Teologi) di lantai 2. Ada buku spesifik yang Anda cari?';
-    } else if (lowerCaseMessage.includes('teknologi terbaru')) {
-      return 'Kami memiliki koleksi buku teknologi terbaru di bagian referensi. Apa topik teknologi yang Anda minati (misalnya AI, blockchain, cybersecurity)?';
-    } else if (lowerCaseMessage.includes('halo') || lowerCaseMessage.includes('hai')) {
-      return 'Halo! Ada yang bisa saya bantu hari ini?';
-    } else {
-      return 'Maaf, saya belum mengerti pertanyaan Anda. Bisakah Anda merumuskan ulang atau bertanya dengan contoh yang diberikan?';
+      const response = await fetch("/api/chatbot", {
+        method: "POST",
+        body: JSON.stringify({ messageRequestFromClient: lowerCaseMessage }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      const responseJson = await response.json();
+      console.log(responseJson);
+
+      if (!response.ok) {
+        throw new Error(responseJson.message || "Error occurred");
+      }
+
+      console.log(response, "response from api/chatbot");
+
+      return responseJson; // Assuming the API returns a 'reply' field
+    } catch (error) {
+      console.log(error, "<--- sentRequestToApiChatbot");
+      return "An error occurred"; // Return a fallback message
     }
   };
 
@@ -48,34 +59,49 @@ const ChatbotSection: React.FC = () => {
   };
 
   const sendMessage = async () => {
-    if (inputMessage.trim() === '') return;
+    if (inputMessage.trim() === "") return;
     if (!agreePrivacy) {
-      alert('Anda harus menyetujui kebijakan privasi untuk menggunakan fitur chat.');
+      alert(
+        "Anda harus menyetujui kebijakan privasi untuk menggunakan fitur chat.",
+      );
       return;
     }
 
     const newMessage: ChatMessage = {
       id: messages.length + 1,
-      sender: 'user',
+      sender: "user",
       message: inputMessage.trim(),
-      timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+      timestamp: new Date().toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit",
+      }),
     };
 
-    setMessages((prevMessages) => [...prevMessages, newMessage]);
-    setInputMessage('');
+    console.log(newMessage, "<-----sendMessage");
 
-    setTimeout(() => {
-      const botReply = getBotResponse(newMessage.message);
-      setMessages((prevMessages) => [
-        ...prevMessages,
-        {
-          id: prevMessages.length + 1,
-          sender: 'bot',
-          message: botReply,
-          timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-        },
-      ]);
-    }, 1000);
+    setMessages((prevMessages) => [...prevMessages, newMessage]);
+    setInputMessage("");
+
+    // setTimeout(async () => {
+    const botReply = await sentRequestToChatBotAI(newMessage.message);
+    console.log(botReply, "botReply");
+
+    setMessages((prevMessages) => [
+      ...prevMessages,
+      {
+        id: prevMessages.length + 1,
+        sender: "bot",
+        message: botReply.response.message || botReply.response,
+        books: botReply.response.book || "",
+        racks: botReply.response.results || "",
+        timestamp: new Date().toLocaleTimeString([], {
+          hour: "2-digit",
+          minute: "2-digit",
+        }),
+      },
+    ]);
+
+    // }, 1000);
   };
 
   return (
