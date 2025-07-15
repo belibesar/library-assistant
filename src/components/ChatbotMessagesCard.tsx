@@ -77,12 +77,12 @@ const ChatbotMessagesCard: React.FC<ChatbotMessagesCardProps> = ({
                 {/* // Usage of BookDisplay component within the messages mapping */}
                 {/* kalo ada buku */}
                 {msg.books &&
-                  msg.books.map((book) => (
-                    <BookDisplay key={book.id} book={book} />
+                  msg.books.map((book, index) => (
+                    <BookDisplay key={index} book={book} />
                   ))}
                 {msg.racks &&
-                  msg.racks.map((rack) => (
-                    <RackDisplay key={rack.id} rack={rack} />
+                  msg.racks.map((rack, index) => (
+                    <RackDisplay key={index} rack={rack} />
                   ))}
               </div>
               <div className="mt-1 text-sm text-gray-500">{msg.timestamp}</div>
@@ -111,10 +111,10 @@ const ChatbotMessagesCard: React.FC<ChatbotMessagesCardProps> = ({
         <input
           type="text"
           placeholder="Tanya tentang buku, cari di rak, atau minta saran..."
-          className="input input-bordered flex-grow rounded-sm text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          className="input input-bordered flex-grow rounded-sm text-xs focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none sm:text-sm"
           value={inputMessage}
           onChange={(e) => setInputMessage(e.target.value)}
-          onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
+          onKeyPress={(e) => e.key === "Enter" && sendMessage()}
           disabled={!agreePrivacy}
         />
 
