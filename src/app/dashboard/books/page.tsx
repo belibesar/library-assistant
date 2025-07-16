@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Search, Filter, BookOpen, Edit3, Trash2, Plus } from "lucide-react";
 import { Book } from "@/libs/types";
 
@@ -75,15 +75,62 @@ const dummyBooks: Book[] = [
 export default function BooksPage() {
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("");
-  const [books] = useState(dummyBooks);
+  const [books, setBooks] = useState<Book[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [page, setPage] = useState(1);
+  const [limit] = useState(12);
+  const [total, setTotal] = useState(0);
+  const [loading, setLoading] = useState(false);
 
-  const filteredBooks = books.filter(
-    (book) =>
-      (book.title.toLowerCase().includes(search.toLowerCase()) ||
-        book.author.toLowerCase().includes(search.toLowerCase())) &&
-      (category === "" || book.category === category),
-  );
+  useEffect(() => {
+    async function fetchBooks() {
+      setLoading(true);
+      try {
+        const params = new URLSearchParams({
+          page: page.toString(),
+          limit: limit.toString(),
+        });
+        if (search) params.append("search", search);
+        const res = await fetch(`/api/books?${params.toString()}`);
+        const json = await res.json();
+        if (json.success && Array.isArray(json.data)) {
+          const mapped = json.data.map((item: any, idx: number) => ({
+            id: item._id ? (typeof item._id === 'object' && item._id.$oid ? item._id.$oid : item._id) : idx,
+            title: item.title || item.judul || "",
+            call_number: item.call_number || "-",
+            no_invent: item.no_invent || "-",
+            no_barcode: item.no_barcode || "-",
+            lokasi: item.lokasi || "-",
+            available: item.available || 0,
+            total: item.total || 0,
+          }));
+          setBooks(mapped);
+          setTotal(json.total || 0);
+        }
+      } catch (e) {
+        setBooks([]);
+        setTotal(0);
+      }
+      setLoading(false);
+    }
+    fetchBooks();
+  }, [page, limit, search]);
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearch(e.target.value);
+    setPage(1); 
+  };
+
+  const totalPages = Math.ceil(total / limit);
+  const handlePrev = () => setPage((p) => Math.max(1, p - 1));
+  const handleNext = () => setPage((p) => Math.min(totalPages, p + 1));
+
+  // const filteredBooks = books.filter(
+  //   (book) =>
+  //     (book.title.toLowerCase().includes(search.toLowerCase()) ||
+  //       book.author.toLowerCase().includes(search.toLowerCase())) &&
+  //     (category === "" || book.category === category),
+  // );
 
   const totalBooks = books.length;
 
@@ -129,7 +176,7 @@ export default function BooksPage() {
                 type="text"
                 placeholder="Cari judul atau pengarang..."
                 value={search}
-                onChange={(e) => setSearch(e.target.value)}
+                onChange={handleSearchChange}
                 className="w-full rounded-md border border-gray-300 bg-gray-50 py-2 pr-3 pl-10 text-sm transition outline-none focus:bg-white focus:ring-2 focus:ring-blue-500"
               />
             </div>
@@ -172,70 +219,78 @@ export default function BooksPage() {
         </div>
       </div>
       <div className="grid grid-cols-1 gap-4 pt-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-        {filteredBooks.map((book) => (
-          <div
-            key={book.id}
-            className="overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm transition-all duration-300 hover:border-blue-300 hover:shadow-xl hover:shadow-blue-100"
-          >
-            <div className="p-4 pb-3">
-              <div className="mb-1 flex items-start justify-between">
-                <div>
-                  <BookOpen size={30} color="#113FF7" />
+        {loading ? (
+          <div className="col-span-full text-center py-8 text-gray-500">Loading...</div>
+        ) : books.length > 0 ? (
+          books.map((book) => (
+            <div
+              key={book.id}
+              className="overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm transition-all duration-300 hover:border-blue-300 hover:shadow-xl hover:shadow-blue-100"
+            >
+              <div className="p-4 pb-3">
+                <div className="mb-1 flex items-start justify-between">
+                  <div>
+                    <BookOpen size={30} color="#113FF7" />
+                  </div>
+                  <div className="flex gap-1">
+                    <button className="rounded-lg p-2 text-gray-400 transition-colors hover:bg-blue-50 hover:text-blue-600">
+                      <Edit3 size={16} />
+                    </button>
+                    <button className="rounded-lg p-2 text-gray-400 transition-colors hover:bg-red-50 hover:text-red-600">
+                      <Trash2 size={16} />
+                    </button>
+                  </div>
                 </div>
-                <div className="flex gap-1">
-                  <button className="rounded-lg p-2 text-gray-400 transition-colors hover:bg-blue-50 hover:text-blue-600">
-                    <Edit3 size={16} />
-                  </button>
-                  <button className="rounded-lg p-2 text-gray-400 transition-colors hover:bg-red-50 hover:text-red-600">
-                    <Trash2 size={16} />
-                  </button>
+
+                <div className="space-y-3">
+                  <h3 className="line-clamp-2 text-lg leading-tight font-bold text-gray-900">
+                    {book.title}
+                  </h3>
+                  <p className="text-sm text-gray-600">oleh {book.call_number
+}</p>
+
+                  <span className="inline-block rounded-full bg-gray-100 px-3 text-xs font-medium text-gray-700">
+                    {book.no_invent}
+                  </span>
+
+                  <p className="line-clamp-3 text-sm leading-relaxed text-gray-600">
+                    {book.no_barcode}
+                  </p>
                 </div>
               </div>
 
-              {/* Book Content */}
-              <div className="space-y-3">
-                <h3 className="line-clamp-2 text-lg leading-tight font-bold text-gray-900">
-                  {book.title}
-                </h3>
-                <p className="text-sm text-gray-600">oleh {book.author}</p>
-
-                {/* Category Badge */}
-                <span className="inline-block rounded-full bg-gray-100 px-3 text-xs font-medium text-gray-700">
-                  {book.category}
-                </span>
-
-                {/* Description */}
-                <p className="line-clamp-3 text-sm leading-relaxed text-gray-600">
-                  {book.description}
-                </p>
+              <div className="border-t border-gray-100 bg-gray-50 px-4 py-3">
+                <div className="flex items-center justify-between">
+                  <span className="text-md text-gray-500">{book.lokasi}</span>
+                  <span className="rounded-md bg-green-50 px-2 py-1 text-sm font-semibold text-green-600">
+                    Status: tersedia
+                  </span>
+                </div>
               </div>
             </div>
-
-            {/* Card Footer */}
-            <div className="border-t border-gray-100 bg-gray-50 px-4 py-3">
-              <div className="flex items-center justify-between">
-                <span className="text-md text-gray-500">{book.year}</span>
-                <span className="rounded-md bg-green-50 px-2 py-1 text-sm font-semibold text-green-600">
-                  {book.available}/{book.total} tersedia
-                </span>
-              </div>
-            </div>
-          </div>
-        ))}
+          ))
+        ) : (
+          <div className="col-span-full text-center py-8 text-gray-500">Tidak ada buku yang ditemukan</div>
+        )}
       </div>
 
-      {/* Empty State */}
-      {filteredBooks.length === 0 && (
-        <div className="py-16 text-center">
-          <div className="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-full bg-gray-100">
-            <BookOpen className="text-gray-400" size={32} />
-          </div>
-          <h3 className="mb-2 text-lg font-medium text-gray-900">
-            Tidak ada buku yang ditemukan
-          </h3>
-          <p className="text-gray-500">
-            Coba ubah kata kunci pencarian atau filter kategori
-          </p>
+      {totalPages > 1 && (
+        <div className="flex justify-center items-center gap-2 mt-8">
+          <button
+            onClick={handlePrev}
+            disabled={page === 1}
+            className="px-3 py-1 rounded border text-sm disabled:opacity-50"
+          >
+            Prev
+          </button>
+          <span className="px-2 text-sm">Halaman {page} dari {totalPages}</span>
+          <button
+            onClick={handleNext}
+            disabled={page === totalPages}
+            className="px-3 py-1 rounded border text-sm disabled:opacity-50"
+          >
+            Next
+          </button>
         </div>
       )}
 

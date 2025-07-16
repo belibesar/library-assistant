@@ -80,14 +80,18 @@ export interface Buku {
   publisher?: string;
 };
 export interface Book {
-  id: number;
+  id: number | string;
   title: string;
-  author: string;
-  year: string;
-  category: string;
-  description: string;
-  available: number;
-  total: number;
+  author?: string;
+  year?: string;
+  category?: string;
+  description?: string;
+  available?: number;
+  total?: number;
+  call_number?: string;
+  no_invent?: string;
+  no_barcode?: string;
+  lokasi?: string;
 }
 
 export interface SidebarProps {

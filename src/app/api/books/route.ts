@@ -4,7 +4,6 @@ import { NextRequest, NextResponse } from "next/server";
 
 const mongoDb = new RepositoryBulkCollectionModel();
 
-//url: /api/books?search=literature&page=1&limit=10
 export async function GET(request: NextRequest) {
   const params = request.nextUrl;
   const searchParams = params.searchParams;
@@ -22,20 +21,25 @@ export async function GET(request: NextRequest) {
       .listCollections()
       .toArray();
     const allCollections = getAllCollections.map((repo) => repo.name);
-    const allData: any = {};
+    let allBooks: any[] = [];
     for (const collectionName of allCollections) {
       const collection = await mongoDb.getRepository(collectionName);
-      const data = await collection
-        .find(query)
-        .skip(skip)
-        .limit(limit)
-        .toArray();
-      allData[collectionName] = data;
+      const data = await collection.find(query).toArray();
+      const mapped = data.map((item: any) => ({
+        title: item.judul || "",
+        author: "",
+        category: "",
+        ...item,
+      }));
+      allBooks = allBooks.concat(mapped);
     }
-
+    const paginatedBooks = allBooks.slice(skip, skip + limit);
     return NextResponse.json({
       success: true,
-      data: allData,
+      data: paginatedBooks,
+      total: allBooks.length,
+      page,
+      limit,
     });
   } catch (error) {
     console.error("JSON parsing error:", error);

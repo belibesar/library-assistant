@@ -18,7 +18,6 @@ export async function GET(request: NextRequest) {
 
     const decoded = jwt.verify(token, jwtSecret) as any;
     
-    // Return user data from token
     return Response.json({
       id: decoded.id,
       name: decoded.name,
