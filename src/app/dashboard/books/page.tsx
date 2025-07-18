@@ -4,73 +4,7 @@ import { useState, useEffect } from "react";
 import { Search, Filter, BookOpen, Edit3, Trash2, Plus } from "lucide-react";
 import { Book } from "@/libs/types";
 
-const dummyBooks: Book[] = [
-  {
-    id: 1,
-    title: "Pengantar Filsafat Barat",
-    author: "Dr. Ahmad Suryadi",
-    year: "2020",
-    category: "Filsafat",
-    description:
-      "Buku pengantar komprehensif tentang sejarah dan perkembangan filsafat Barat dari zaman kuno hingga modern.",
-    available: 3,
-    total: 5,
-  },
-  {
-    id: 2,
-    title: "Psikologi Kognitif Modern",
-    author: "Prof. Maria Sari",
-    year: "2021",
-    category: "Psikologi",
-    description:
-      "Eksplorasi mendalam tentang proses kognitif manusia dan aplikasinya dalam kehidupan sehari-hari.",
-    available: 2,
-    total: 3,
-  },
-  {
-    id: 3,
-    title: "Teologi Kontemporer",
-    author: "Dr. Yohanes Kristianto",
-    year: "2019",
-    category: "Teologi",
-    description:
-      "Analisis teologi modern dalam konteks masyarakat kontemporer dan tantangan zaman. Membahas berbagai perspektif teologi dalam menghadapi tantangan modern.",
-    available: 4,
-    total: 4,
-  },
-  {
-    id: 4,
-    title: "Artificial Intelligence dan Machine Learning",
-    author: "Dr. Tech Innovator",
-    year: "2023",
-    category: "Teknologi",
-    description:
-      "Panduan komprehensif tentang AI dan ML untuk pemula hingga advanced.",
-    available: 1,
-    total: 2,
-  },
-  {
-    id: 5,
-    title: "Sastra Indonesia Modern",
-    author: "Prof. Sastra Nusantara",
-    year: "2022",
-    category: "Sastra",
-    description: "Analisis mendalam karya sastra Indonesia kontemporer.",
-    available: 6,
-    total: 8,
-  },
-  {
-    id: 6,
-    title: "Sejarah Nusantara",
-    author: "Dr. Sejarah Indonesia",
-    year: "2020",
-    category: "Sejarah",
-    description:
-      "Perjalanan sejarah Indonesia dari masa kerajaan hingga modern.",
-    available: 2,
-    total: 4,
-  },
-];
+
 
 export default function BooksPage() {
   const [search, setSearch] = useState("");
@@ -192,12 +126,12 @@ export default function BooksPage() {
                 className="w-full appearance-none rounded-md border border-gray-300 bg-gray-50 py-2 pr-8 pl-10 text-sm transition outline-none focus:bg-white focus:ring-2 focus:ring-blue-500"
               >
                 <option value="">Semua Kategori</option>
-                <option value="Filsafat">Filsafat</option>
-                <option value="Psikologi">Psikologi</option>
-                <option value="Teologi">Teologi</option>
-                <option value="Teknologi">Teknologi</option>
+                <option value="Buku">Buku</option>
+                <option value="Jurnal">Jurnal</option>
+                <option value="Karya Ilmiah">Karya Ilmiah</option>
+                {/* <option value="Teknologi">Teknologi</option>
                 <option value="Sastra">Sastra</option>
-                <option value="Sejarah">Sejarah</option>
+                <option value="Sejarah">Sejarah</option> */}
               </select>
               <div className="pointer-events-none absolute top-1/2 right-2 -translate-y-1/2">
                 <svg
@@ -370,9 +304,9 @@ export default function BooksPage() {
                     </label>
                     <select className="w-full appearance-none rounded-md border border-gray-300 bg-white px-3 py-2 outline-none focus:border-transparent focus:ring-2 focus:ring-blue-500">
                       <option value="">Pilih kategori</option>
-                      <option value="Filsafat">Filsafat</option>
+                      <option value="Buku">Buku</option>
                       <option value="Psikologi">Psikologi</option>
-                      <option value="Teologi">Teologi</option>
+                      <option value="Karya Ilmiah">Karya Ilmiah</option>
                       <option value="Teknologi">Teknologi</option>
                       <option value="Sastra">Sastra</option>
                       <option value="Sejarah">Sejarah</option>
