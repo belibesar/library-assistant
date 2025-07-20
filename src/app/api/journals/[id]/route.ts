@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import BookModel from "@/db/models/BookModel";
+import JournalModel from "@/db/models/JournalModel";
 
 export async function GET(
   request: NextRequest,
@@ -7,7 +7,7 @@ export async function GET(
 ) {
   try {
     const { id } = await params;
-    const data = await BookModel.getBookById(id);
+    const data = await JournalModel.getJournalById(id);
     if (!data[0]) {
       return NextResponse.json(
         {
@@ -21,7 +21,7 @@ export async function GET(
     }
     return NextResponse.json({
       success: true,
-      message: `Data for Book ID ${id}`,
+      message: `Data for Journal ID ${id}`,
       data: data[0],
     });
   } catch (error) {
