@@ -1,11 +1,11 @@
 import { db } from "../config/mongodb";
 
-class BookModel {
+class JournalModel {
   static async collection() {
-    return await db("buku");
+    return await db("jurnal");
   }
 
-  static async getAllBook(page: number, limit: number, search: string) {
+  static async getAllJournal(page: number, limit: number, search: string) {
     const currentLimit = Number(limit);
     const currentPage = Number(page);
     const skip = (currentPage - 1) * currentLimit;
@@ -22,14 +22,14 @@ class BookModel {
     const totalCount = await collection.countDocuments(searchQuery);
 
     // Get paginated results
-    const books = await collection
+    const journals = await collection
       .find(searchQuery)
       .limit(currentLimit)
       .skip(skip)
       .toArray();
 
     return {
-      books,
+      journals,
       pagination: {
         currentPage,
         totalPages: Math.ceil(totalCount / currentLimit),
@@ -41,51 +41,37 @@ class BookModel {
     };
   }
 
-  static async getBookById(id: string) {
+  static async getJournalById(id: string) {
     const collection = await this.collection();
-    const book = await collection
+    const journal = await collection
       .aggregate([
         {
           $match: { id: id }, // Filter dokumen berdasarkan id buku
         },
         {
           $lookup: {
-            from: "pengarang",
-            localField: "pengarang_id",
+            from: "publikasi",
+            localField: "jurnal_id",
             foreignField: "id",
-            as: "pengarang",
-          },
-        },
-        {
-          $lookup: {
-            from: "penerbit",
-            localField: "penerbit_id",
-            foreignField: "id",
-            as: "penerbit",
+            as: "publikasi",
           },
         },
         {
           $unwind: {
-            path: "$pengarang",
-            preserveNullAndEmptyArrays: true,
-          },
-        },
-        {
-          $unwind: {
-            path: "$penerbit",
+            path: "$publikasi",
             preserveNullAndEmptyArrays: true,
           },
         },
       ])
       .toArray();
-    return book;
+    return journal;
   }
 
-  static async createBook(data) {}
+  static async createJournal(data) {}
 
-  static async updateBook(id: string, data) {}
+  static async updateJournal(id: string, data) {}
 
-  static async deleteBook(id: string) {}
+  static async deleteJournal(id: string) {}
 }
 
-export default BookModel;
+export default JournalModel;
