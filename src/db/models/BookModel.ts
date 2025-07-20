@@ -1,3 +1,4 @@
+import bookSchema from "@/libs/schemas/BookSchema";
 import { db } from "../config/mongodb";
 
 class BookModel {
@@ -81,11 +82,31 @@ class BookModel {
     return book;
   }
 
-  static async createBook(data) {}
+  static async createBook(data: Book) {
+    const collection = await this.collection();
+    const book = await collection.insertOne(data);
+    return book;
+  }
 
-  static async updateBook(id: string, data) {}
+  static async updateBook(id: string, data: Book) {
+    const collection = await this.collection();
+    const identifier = { id };
+    const currentBook = await collection.findOne(identifier);
+    if (!currentBook) {
+      throw new Error("Book not found");
+    }
+    return await collection.updateOne(identifier, { $set: data });
+  }
 
-  static async deleteBook(id: string) {}
+  static async deleteBook(id: string) {
+    const collection = await this.collection();
+    const query = { id };
+    const currentBook = await collection.findOne(query);
+    if (!currentBook) {
+      throw new Error("Book not found");
+    }
+    return await collection.deleteOne(query);
+  }
 }
 
 export default BookModel;

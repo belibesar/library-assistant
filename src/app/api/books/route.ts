@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import BookModel from "@/db/models/BookModel";
+import * as z from "zod";
+import bookSchema from "@/libs/schemas/BookSchema";
 
 export async function GET(request: NextRequest) {
   // Get search parameters from the URL
@@ -24,9 +26,57 @@ export async function GET(request: NextRequest) {
     });
   } catch (error) {
     console.log(error);
-    return NextResponse.json({
-      success: false,
-      error,
-    });
+    return NextResponse.json(
+      {
+        success: false,
+        error,
+      },
+      {
+        status: 500,
+      },
+    );
+  }
+}
+
+export async function POST(request: NextRequest) {
+  try {
+    const requestData = await request.json();
+    const timestamp = new Date();
+    const newData: Book = {
+      id: requestData.id || +new Date(),
+      judul: requestData.judul,
+      abstrak: requestData.abstrak,
+      jumlah: Number(requestData.jumlah),
+      tersedia: Number(requestData.jumlah),
+      dipinjam: 0,
+      penerbit_id: requestData.penerbit_id,
+      pengarang_id: requestData.pengarang_id,
+      createdAt: timestamp.toISOString(),
+      updatedAt: timestamp.toISOString(),
+    };
+
+    const bookData = await bookSchema.parseAsync(newData);
+    const insertBook = await BookModel.createBook(bookData);
+    return NextResponse.json(
+      {
+        success: true,
+        message: "created!",
+        data: insertBook,
+      },
+      {
+        status: 201,
+      },
+    );
+  } catch (error) {
+    console.log(error);
+    return NextResponse.json(
+      {
+        success: false,
+        error,
+      },
+      {
+        status: 500,
+      },
+    );
   }
 }
