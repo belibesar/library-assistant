@@ -1,11 +1,10 @@
 import { bulkData } from "@/db/mockdata/bulkRepository";
+import BookModel from "@/db/models/BookModel";
 import errHandler from "@/utils/errHandler";
 import { GoogleGenAI } from "@google/genai";
-import RepositoryBulkCollectionModel from "@/db/models/RepositoryBulkCollectionModel";
 
 const ai = new GoogleGenAI({});
-const mongoDb = new RepositoryBulkCollectionModel();
-const allData: any = await mongoDb.getAllData();
+const allData: any = await BookModel.getAllBook(1, 0, "");
 // const getAllCollections = await (await mongoDb.db())
 //   .listCollections()
 //   .toArray();

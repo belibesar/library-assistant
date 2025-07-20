@@ -68,30 +68,14 @@ export type CustomError = {
 };
 export interface Buku {
   id: string;
-  title: string;
-  author: string;
-  category: string;
-  year: number;
-  description: string;
-  available: number;
-  total: number;
-  rating?: number;
-  isbn?: string;
-  publisher?: string;
-};
-export interface Book {
-  id: number | string;
-  title: string;
-  author?: string;
-  year?: string;
-  category?: string;
-  description?: string;
-  available?: number;
-  total?: number;
-  call_number?: string;
-  no_invent?: string;
-  no_barcode?: string;
-  lokasi?: string;
+  judul: string;
+  pengarang: string;
+  jumlah: string;
+  tersedia: number;
+  dipinjam: string;
+  penerbit_id: number;
+  pengarang_id: number;
+  deskripsi?: string;
 }
 
 export interface SidebarProps {
