@@ -107,6 +107,21 @@ class BookModel {
     }
     return await collection.deleteOne(query);
   }
+
+  static async countBook(id: string) {
+    const collection = await this.collection();
+    const identifier = { id };
+    const currentBook = await collection.findOne(identifier);
+    const bookCount = currentBook?.count || 0;
+    if (!currentBook) {
+      throw new Error("Book not found");
+    }
+    return await collection.updateOne(identifier, {
+      $set: {
+        count: Number(bookCount) + 1,
+      },
+    });
+  }
 }
 
 export default BookModel;

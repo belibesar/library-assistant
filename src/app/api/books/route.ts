@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
 import BookModel from "@/db/models/BookModel";
-import * as z from "zod";
 import bookSchema from "@/libs/schemas/BookSchema";
 
 export async function GET(request: NextRequest) {
