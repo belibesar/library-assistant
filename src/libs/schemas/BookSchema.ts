@@ -11,6 +11,7 @@ const bookSchema = z.object({
   }),
   tersedia: z.number(),
   dipinjam: z.number(),
+  count: z.number().optional(),
   penerbit_id: z.string({
     required_error: "Penerbit harus diisi!",
   }),

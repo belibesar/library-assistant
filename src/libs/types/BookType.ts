@@ -5,6 +5,7 @@ type Book = {
   jumlah: number;
   tersedia: number;
   dipinjam: number;
+  count?: number;
   penerbit_id: string;
   pengarang_id: string;
   updatedAt?: string;
