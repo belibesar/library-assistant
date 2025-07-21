@@ -1,5 +1,5 @@
 import { NewUser, userType } from "@/libs/types";
-import connectToDatabase from "../config/mongodb";
+import {client} from "@/db/config/mongodb"
 import { z } from "zod";
 import { hashPassword } from "@/utils/hashPassword";
 
@@ -21,8 +21,8 @@ const userSchema = z.object({
 
 class UserModel {
     static async collection() {
-        const db = await connectToDatabase();
-        return db.collection<userType>("users");
+        const db = await client.db("library-usd").collection("users")
+        return db
     }
     static async create(newUser: NewUser) {
         userSchema.parse(newUser);
@@ -31,6 +31,8 @@ class UserModel {
         const user = await collection.findOne({
             $or: [{ email: newUser.email }, { username: newUser.username }],
         });
+        console.log(user);
+        
         if (user) {
             if (user.email === newUser.email) {
                 throw { message: "Email already exists", status: 400 };

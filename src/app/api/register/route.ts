@@ -1,18 +1,14 @@
 import UserModel from "@/db/models/UserModel";
 import errHandler from "@/utils/errHandler";
-import connectToDatabase from "@/db/config/mongodb";
 
 export async function POST(request: Request){
-    try {
-        console.log("Starting registration process...");
-        console.log("Connecting to database...");
-        await connectToDatabase();
-        console.log("Database connected successfully");
-        
+    try {      
         const res = await request.json();
         console.log("Received registration data:", res);
         
         const result = await UserModel.create(res);
+        console.log(result, 'result');
+        
         console.log("User created successfully:", result);
         
         return Response.json({
