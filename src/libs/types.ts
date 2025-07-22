@@ -90,3 +90,13 @@ export type RepositoryType = {
   no_barcode: number;
   lokasi: string;
 };
+export interface Book {
+  id: string;
+  title: string;
+  call_number?: string;
+  no_invent?: string;
+  no_barcode?: string;
+  lokasi?: string;
+  available?: number;
+  total?: number;
+}
