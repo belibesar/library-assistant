@@ -1,21 +1,40 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Search, Filter, BookOpen, Edit3, Trash2, Plus } from "lucide-react";
+import { Search, Filter, BookOpen, Edit3, Trash2, Plus, FileText, Newspaper } from "lucide-react";
 import { ZodError } from "zod";
 
-interface Book {
+interface BaseItem {
+  _id?: { $oid: string } | string; 
   id: string;
   judul: string;
   abstrak: string;
   jumlah: number;
   tersedia: number;
   dipinjam: number;
-  penerbit_id: string;
-  pengarang_id: string;
   createdAt?: string;
   updatedAt?: string;
+  viewCount?: number;
 }
+
+interface Book extends BaseItem {
+  penerbit_id: string;
+  pengarang_id: string;
+  type: "book";
+}
+
+interface Journal extends BaseItem {
+  jurnal_id: string;
+  type: "journal";
+}
+
+interface Skripsi extends BaseItem {
+  tahun: string;
+  nim: string;
+  type: "skripsi";
+}
+
+type LibraryItem = Book | Journal | Skripsi;
 
 interface BookFormInput {
   id: string;
@@ -30,27 +49,52 @@ interface BookFormInput {
   updatedAt?: string;
 }
 
-export default function BooksPage() {
+interface JournalFormInput {
+  id: string;
+  judul: string;
+  abstrak: string;
+  jumlah: number | string;
+  tersedia: number | string;
+  dipinjam: number | string;
+  jurnal_id: string;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+interface SkripsiFormInput {
+  id: string;
+  judul: string;
+  abstrak: string;
+  jumlah: number | string;
+  tersedia: number | string;
+  dipinjam: number | string;
+  tahun: string;
+  nim: string;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+type FormInput = BookFormInput | JournalFormInput | SkripsiFormInput;
+
+export default function LibraryCollectionPage() {
   const [search, setSearch] = useState("");
-  const [category, setCategory] = useState("");
-  const [books, setBooks] = useState<Book[]>([]);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [category, setCategory] = useState<"book" | "journal" | "skripsi" | "">("book");
+  const [items, setItems] = useState<LibraryItem[]>([]);
+  const [isFormModalOpen, setIsFormModalOpen] = useState(false);
+  const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
+  const [selectedItem, setSelectedItem] = useState<LibraryItem | null>(null);
   const [page, setPage] = useState(1);
   const [limit] = useState(12);
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(false);
-  const [formInput, setFormInput] = useState<BookFormInput>({
+  const [formInput, setFormInput] = useState<FormInput>({
     id: "",
     judul: "",
     abstrak: "",
     jumlah: "",
     tersedia: "",
     dipinjam: "",
-    penerbit_id: "",
-    pengarang_id: "",
-    createdAt: "",
-    updatedAt: "",
-  });
+  } as FormInput);
   const [formErrors, setFormErrors] = useState<{ [key: string]: string }>({});
   const [notification, setNotification] = useState<{
     message: string;
@@ -71,7 +115,19 @@ export default function BooksPage() {
     return date.toISOString().split("T")[0];
   };
 
-  const fetchBooks = async () => {
+  const endpointMap: Record<string, string> = {
+    book: "books",
+    journal: "journals",
+    skripsi: "thesis",
+  };
+
+  const fetchItems = async () => {
+    if (!category) {
+      setItems([]);
+      setTotal(0);
+      return;
+    }
+
     setLoading(true);
     try {
       const params = new URLSearchParams({
@@ -80,10 +136,11 @@ export default function BooksPage() {
       });
       if (search) params.append("search", search);
 
-      const res = await fetch(`/api/books?${params.toString()}`);
+      const url = `/api/${endpointMap[category]}?${params.toString()}`; // Use endpointMap
+      const res = await fetch(url);
 
       if (!res.ok) {
-        let errorMessage = `Gagal mengambil data buku (Status: ${res.status})`;
+        let errorMessage = `Gagal mengambil data ${category} (Status: ${res.status})`;
         try {
           const errorData = await res.json();
           errorMessage = errorData.message || errorMessage;
@@ -91,7 +148,7 @@ export default function BooksPage() {
           console.error("Failed to parse error response:", jsonParseError);
         }
         showNotification(errorMessage, "error");
-        setBooks([]);
+        setItems([]);
         setTotal(0);
         return;
       }
@@ -99,41 +156,57 @@ export default function BooksPage() {
       const json = await res.json();
 
       if (json.success && Array.isArray(json.data)) {
-        const mappedBooks: Book[] = json.data.map((item: any) => ({
-          id: item._id?.$oid || item._id || item.id,
-          judul: item.judul || "",
-          abstrak: item.abstrak || "",
-          jumlah: Number(item.jumlah) || 0,
-          tersedia: Number(item.tersedia) || 0,
-          dipinjam: Number(item.dipinjam) || 0,
-          penerbit_id: item.penerbit_id || "",
-          pengarang_id: item.pengarang_id || "",
-          createdAt: item.createdAt,
-          updatedAt: item.updatedAt,
-        }));
-        setBooks(mappedBooks);
-        setTotal(json.pagination?.totalItems || json.total || mappedBooks.length);
+        const mappedItems: LibraryItem[] = json.data.map((item: any) => {
+          const base: BaseItem = {
+            id: item._id?.$oid || item._id || item.id,
+            judul: item.judul || "",
+            abstrak: item.abstrak || "",
+            jumlah: Number(item.jumlah) || 0,
+            tersedia: Number(item.tersedia) || 0,
+            dipinjam: Number(item.dipinjam) || 0,
+            createdAt: item.createdAt,
+            updatedAt: item.updatedAt,
+            viewCount: Number(item.viewCount) || 0, 
+          };
+
+          if (item.penerbit_id || item.pengarang_id) {
+            return { ...base, penerbit_id: item.penerbit_id || "", pengarang_id: item.pengarang_id || "", type: "book" } as Book;
+          } else if (item.jurnal_id) {
+            return { ...base, jurnal_id: item.jurnal_id || "", type: "journal" } as Journal;
+          } else if (item.tahun || item.nim) {
+            return { ...base, tahun: item.tahun || "", nim: item.nim || "", type: "skripsi" } as Skripsi;
+          }
+          return base as LibraryItem; 
+        });
+        setItems(mappedItems);
+        setTotal(json.pagination?.totalItems || json.total || mappedItems.length);
       } else {
-        setBooks([]);
+        setItems([]);
         setTotal(0);
-        showNotification(json.message || "Gagal mengambil data buku.", "error");
+        showNotification(json.message || `Gagal mengambil data ${category}.`, "error");
       }
     } catch (e: any) {
-      console.error("Error fetching books:", e);
-      setBooks([]);
+      console.error(`Error fetching ${category}s:`, e);
+      setItems([]);
       setTotal(0);
-      showNotification("Terjadi kesalahan jaringan saat mengambil buku.", "error");
+      showNotification(`Terjadi kesalahan jaringan saat mengambil ${category}.`, "error");
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchBooks();
-  }, [page, limit, search]);
+    fetchItems();
+  }, [page, limit, search, category]);
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(e.target.value);
+    setPage(1);
+  };
+
+  const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setCategory(e.target.value as "book" | "journal" | "skripsi" | "");
+    setSearch("");
     setPage(1);
   };
 
@@ -141,28 +214,39 @@ export default function BooksPage() {
   const handlePrev = () => setPage((p) => Math.max(1, p - 1));
   const handleNext = () => setPage((p) => Math.min(totalPages, p + 1));
 
-  const handleModalOpen = () => {
-    setFormInput({
+  const handleOpenFormModal = (itemType: "book" | "journal" | "skripsi") => {
+    setCategory(itemType);
+    setFormInput(getInitialFormInput(itemType));
+    setFormErrors({});
+    setIsFormModalOpen(true);
+    setTimeout(() => {
+      const idInput = document.getElementById(`${itemType}-id-input`);
+      if (idInput) {
+        (idInput as HTMLInputElement).focus();
+      }
+    }, 100);
+  };
+
+  const getInitialFormInput = (itemType: "book" | "journal" | "skripsi"): FormInput => {
+    const commonFields = {
       id: "",
       judul: "",
       abstrak: "",
       jumlah: "",
       tersedia: "",
       dipinjam: "",
-      penerbit_id: "",
-      pengarang_id: "",
       createdAt: new Date().toISOString().split("T")[0],
       updatedAt: new Date().toISOString().split("T")[0],
-    });
-    setFormErrors({});
-    setIsModalOpen(true);
-    
-    setTimeout(() => {
-      const titleInput = document.getElementById("book-id-input");
-      if (titleInput) {
-        (titleInput as HTMLInputElement).focus();
-      }
-    }, 100);
+    };
+
+    if (itemType === "book") {
+      return { ...commonFields, penerbit_id: "", pengarang_id: "" } as BookFormInput;
+    } else if (itemType === "journal") {
+      return { ...commonFields, jurnal_id: "" } as JournalFormInput;
+    } else if (itemType === "skripsi") {
+      return { ...commonFields, tahun: "", nim: "" } as SkripsiFormInput;
+    }
+    return commonFields as FormInput;
   };
 
   const handleFormChange = (
@@ -170,7 +254,7 @@ export default function BooksPage() {
   ) => {
     const { name, value } = e.target;
     setFormInput((prev) => ({ ...prev, [name]: value }));
-    
+
     if (formErrors[name]) {
       setFormErrors((prev) => {
         const newErrors = { ...prev };
@@ -180,54 +264,99 @@ export default function BooksPage() {
     }
   };
 
-  const handleAddBook = async (e: React.FormEvent) => {
+  const handleAddItem = async (e: React.FormEvent) => {
     e.preventDefault();
     setFormErrors({});
 
-    try {
-      const newErrors: { [key: string]: string } = {};
-      
-      if (!formInput.id.trim()) newErrors.id = "ID wajib diisi";
-      if (!formInput.judul.trim()) newErrors.judul = "Judul wajib diisi";
-      if (!formInput.abstrak.trim()) newErrors.abstrak = "Abstrak wajib diisi";
-      if (!formInput.jumlah || Number(formInput.jumlah) < 1) newErrors.jumlah = "Jumlah harus minimal 1";
-      if (!formInput.tersedia || Number(formInput.tersedia) < 0) newErrors.tersedia = "Tersedia tidak boleh negatif";
-      if (!formInput.dipinjam || Number(formInput.dipinjam) < 0) newErrors.dipinjam = "Dipinjam tidak boleh negatif";
-      if (!formInput.penerbit_id.trim()) newErrors.penerbit_id = "Penerbit ID wajib diisi";
-      if (!formInput.pengarang_id.trim()) newErrors.pengarang_id = "Pengarang ID wajib diisi";
-      if (!formInput.createdAt) newErrors.createdAt = "Tanggal dibuat wajib diisi";
-      if (!formInput.updatedAt) newErrors.updatedAt = "Tanggal diperbarui wajib diisi";
+    let newErrors: { [key: string]: string } = {};
+    let payload: any;
+    let endpoint = "";
+    let isUpdating = false;
+    let itemId = (formInput as any).id;
 
-      const jumlahNum = Number(formInput.jumlah);
-      const tersediaNum = Number(formInput.tersedia);
-      const dipinjamNum = Number(formInput.dipinjam);
-      
-      if (tersediaNum + dipinjamNum !== jumlahNum) {
-        newErrors.general = "Jumlah tersedia + dipinjam harus sama dengan total jumlah";
-      }
+    if (!formInput.id.trim()) newErrors.id = "ID wajib diisi";
+    if (!formInput.judul.trim()) newErrors.judul = "Judul wajib diisi";
+    if (!formInput.abstrak.trim()) newErrors.abstrak = "Abstrak wajib diisi";
+    if (!formInput.jumlah || Number(formInput.jumlah) < 1) newErrors.jumlah = "Jumlah harus minimal 1";
+    if (!formInput.tersedia || Number(formInput.tersedia) < 0) newErrors.tersedia = "Tersedia tidak boleh negatif";
+    if (!formInput.dipinjam || Number(formInput.dipinjam) < 0) newErrors.dipinjam = "Dipinjam tidak boleh negatif";
 
-      if (Object.keys(newErrors).length > 0) {
-        setFormErrors(newErrors);
-        return;
-      }
+    const jumlahNum = Number(formInput.jumlah);
+    const tersediaNum = Number(formInput.tersedia);
+    const dipinjamNum = Number(formInput.dipinjam);
 
-      const payload = {
-        id: formInput.id.trim(),
-        judul: formInput.judul.trim(),
-        abstrak: formInput.abstrak.trim(),
-        jumlah: Number(formInput.jumlah),
-        tersedia: Number(formInput.tersedia),
-        dipinjam: Number(formInput.dipinjam),
-        penerbit_id: formInput.penerbit_id.trim(),
-        pengarang_id: formInput.pengarang_id.trim(),
-        createdAt: formInput.createdAt,
-        updatedAt: formInput.updatedAt
+    if (tersediaNum + dipinjamNum !== jumlahNum) {
+      newErrors.general = "Jumlah tersedia + dipinjam harus sama dengan total jumlah";
+    }
+
+    if (!formInput.createdAt) newErrors.createdAt = "Tanggal dibuat wajib diisi";
+    if (!formInput.updatedAt) newErrors.updatedAt = "Tanggal diperbarui wajib diisi";
+
+    if (category === "book") {
+      const bookFormInput = formInput as BookFormInput;
+      if (!bookFormInput.penerbit_id.trim()) newErrors.penerbit_id = "Penerbit ID wajib diisi";
+      if (!bookFormInput.pengarang_id.trim()) newErrors.pengarang_id = "Pengarang ID wajib diisi";
+      payload = {
+        id: bookFormInput.id.trim(),
+        judul: bookFormInput.judul.trim(),
+        abstrak: bookFormInput.abstrak.trim(),
+        jumlah: jumlahNum,
+        tersedia: tersediaNum,
+        dipinjam: dipinjamNum,
+        penerbit_id: bookFormInput.penerbit_id.trim(),
+        pengarang_id: bookFormInput.pengarang_id.trim(),
+        createdAt: bookFormInput.createdAt,
+        updatedAt: bookFormInput.updatedAt,
       };
+      endpoint = "/api/books";
+      isUpdating = items.some(item => item.id === bookFormInput.id && item.type === "book");
 
-      const existingBook = books.find(book => book.id === formInput.id);
-      const isUpdating = !!existingBook;
-      
-      const url = isUpdating ? `/api/books/${formInput.id}` : "/api/books";
+    } else if (category === "journal") {
+      const journalFormInput = formInput as JournalFormInput;
+      if (!journalFormInput.jurnal_id.trim()) newErrors.jurnal_id = "Jurnal ID wajib diisi";
+      payload = {
+        id: journalFormInput.id.trim(),
+        judul: journalFormInput.judul.trim(),
+        abstrak: journalFormInput.abstrak.trim(),
+        jumlah: jumlahNum,
+        tersedia: tersediaNum,
+        dipinjam: dipinjamNum,
+        jurnal_id: journalFormInput.jurnal_id.trim(),
+        createdAt: journalFormInput.createdAt,
+        updatedAt: journalFormInput.updatedAt,
+      };
+      endpoint = "/api/journals";
+      isUpdating = items.some(item => item.id === journalFormInput.id && item.type === "journal");
+
+    } else if (category === "skripsi") {
+      const skripsiFormInput = formInput as SkripsiFormInput;
+      if (!skripsiFormInput.tahun.trim()) newErrors.tahun = "Tahun wajib diisi";
+      if (!skripsiFormInput.nim.trim()) newErrors.nim = "NIM wajib diisi";
+      payload = {
+        id: skripsiFormInput.id.trim(),
+        judul: skripsiFormInput.judul.trim(),
+        abstrak: skripsiFormInput.abstrak.trim(),
+        jumlah: jumlahNum,
+        tersedia: tersediaNum,
+        dipinjam: dipinjamNum,
+        tahun: skripsiFormInput.tahun.trim(),
+        nim: skripsiFormInput.nim.trim(),
+        createdAt: skripsiFormInput.createdAt,
+        updatedAt: skripsiFormInput.updatedAt,
+      };
+      endpoint = "/api/thesis"; 
+      isUpdating = items.some(item => item.id === skripsiFormInput.id && item.type === "skripsi");
+    } else {
+      newErrors.general = "Tipe kategori tidak valid.";
+    }
+
+    if (Object.keys(newErrors).length > 0) {
+      setFormErrors(newErrors);
+      return;
+    }
+
+    try {
+      const url = isUpdating ? `${endpoint}/${itemId}` : endpoint;
       const method = isUpdating ? "PUT" : "POST";
 
       const res = await fetch(url, {
@@ -239,7 +368,7 @@ export default function BooksPage() {
       });
 
       if (!res.ok) {
-        let errorMessage = `Gagal ${isUpdating ? 'memperbarui' : 'menambahkan'} buku`;
+        let errorMessage = `Gagal ${isUpdating ? 'memperbarui' : 'menambahkan'} ${category}`;
         try {
           const errorData = await res.json();
           if (errorData.error && errorData.error.issues) {
@@ -263,25 +392,22 @@ export default function BooksPage() {
 
       if (json.success) {
         showNotification(
-          `Buku berhasil ${isUpdating ? 'diperbarui' : 'ditambahkan'}!`, 
+          `${category} berhasil ${isUpdating ? 'diperbarui' : 'ditambahkan'}!`,
           "success"
         );
-        setIsModalOpen(false);
-        
-        await fetchBooks();
-        
+        setIsFormModalOpen(false);
+        await fetchItems();
         if (!isUpdating) {
           setPage(1);
         }
       } else {
         showNotification(
-          json.message || `Gagal ${isUpdating ? 'memperbarui' : 'menambahkan'} buku`,
+          json.message || `Gagal ${isUpdating ? 'memperbarui' : 'menambahkan'} ${category}`,
           "error"
         );
       }
     } catch (error: any) {
-      console.error("Error saving book:", error);
-      
+      console.error("Error saving item:", error);
       if (error instanceof ZodError) {
         const zodErrors: { [key: string]: string } = {};
         error.errors.forEach((issue) => {
@@ -295,26 +421,26 @@ export default function BooksPage() {
     }
   };
 
-  const handleDeleteBook = async (id: string) => {
-    if (!id) {
-      showNotification("ID buku tidak valid", "error");
+  const handleDeleteItem = async (id: string, itemType: "book" | "journal" | "skripsi") => {
+    if (!id || !itemType) {
+      showNotification("ID atau tipe item tidak valid", "error");
       return;
     }
 
-    const bookToDelete = books.find(book => book.id === id);
-    const bookTitle = bookToDelete ? bookToDelete.judul : "buku ini";
-    
-    if (!confirm(`Anda yakin ingin menghapus "${bookTitle}"?\nTindakan ini tidak dapat dibatalkan.`)) {
+    const itemToDelete = items.find(item => item.id === id && item.type === itemType);
+    const itemTitle = itemToDelete ? itemToDelete.judul : "item ini";
+
+    if (!confirm(`Anda yakin ingin menghapus "${itemTitle}" (${itemType})?\nTindakan ini tidak dapat dibatalkan.`)) {
       return;
     }
 
     try {
-      const res = await fetch(`/api/books/${id}`, {
+      const res = await fetch(`/api/${endpointMap[itemType]}/${id}`, {
         method: "DELETE",
       });
 
       if (!res.ok) {
-        let errorMessage = `Gagal menghapus buku (Status: ${res.status})`;
+        let errorMessage = `Gagal menghapus ${itemType} (Status: ${res.status})`;
         try {
           const errorData = await res.json();
           errorMessage = errorData.message || errorMessage;
@@ -328,62 +454,356 @@ export default function BooksPage() {
       const json = await res.json();
 
       if (json.success) {
-        showNotification("Buku berhasil dihapus!", "success");
-        
-        setBooks((prevBooks) => prevBooks.filter((book) => book.id !== id));
+        showNotification(`${itemType} berhasil dihapus!`, "success");
+        setItems((prevItems) => prevItems.filter((item) => !(item.id === id && item.type === itemType)));
         setTotal((prevTotal) => prevTotal - 1);
-        
-        const remainingBooksOnPage = books.filter(book => book.id !== id).length;
-        if (remainingBooksOnPage === 0 && page > 1) {
+
+        const remainingItemsOnPage = items.filter(item => !(item.id === id && item.type === itemType)).length;
+        if (remainingItemsOnPage === 0 && page > 1) {
           setPage(page - 1);
         }
-        
+
         setTimeout(() => {
-          fetchBooks();
+          fetchItems();
         }, 500);
       } else {
-        showNotification(json.message || "Gagal menghapus buku.", "error");
+        showNotification(json.message || `Gagal menghapus ${itemType}.`, "error");
       }
     } catch (error) {
-      console.error("Error deleting book:", error);
-      showNotification("Terjadi kesalahan jaringan saat menghapus buku.", "error");
+      console.error("Error deleting item:", error);
+      showNotification("Terjadi kesalahan jaringan saat menghapus item.", "error");
     }
   };
 
-  const handleEditBook = (book: Book) => {
-    setFormInput({
-      id: book.id || "",
-      judul: book.judul,
-      abstrak: book.abstrak,
-      jumlah: book.jumlah.toString(),
-      tersedia: book.tersedia.toString(),
-      dipinjam: book.dipinjam.toString(),
-      penerbit_id: book.penerbit_id,
-      pengarang_id: book.pengarang_id,
-      createdAt: formatDateForInput(book.createdAt),
-      updatedAt: formatDateForInput(book.updatedAt),
-    });
+  const handleEditItem = (item: LibraryItem) => {
+    setSelectedItem(item);
+    if (item.type === "book") {
+      setFormInput({
+        id: item.id || "",
+        judul: item.judul,
+        abstrak: item.abstrak,
+        jumlah: item.jumlah.toString(),
+        tersedia: item.tersedia.toString(),
+        dipinjam: item.dipinjam.toString(),
+        penerbit_id: (item as Book).penerbit_id,
+        pengarang_id: (item as Book).pengarang_id,
+        createdAt: formatDateForInput(item.createdAt),
+        updatedAt: formatDateForInput(item.updatedAt),
+      } as BookFormInput);
+    } else if (item.type === "journal") {
+      setFormInput({
+        id: item.id || "",
+        judul: item.judul,
+        abstrak: item.abstrak,
+        jumlah: item.jumlah.toString(),
+        tersedia: item.tersedia.toString(),
+        dipinjam: item.dipinjam.toString(),
+        jurnal_id: (item as Journal).jurnal_id,
+        createdAt: formatDateForInput(item.createdAt),
+        updatedAt: formatDateForInput(item.updatedAt),
+      } as JournalFormInput);
+    } else if (item.type === "skripsi") {
+      setFormInput({
+        id: item.id || "",
+        judul: item.judul,
+        abstrak: item.abstrak,
+        jumlah: item.jumlah.toString(),
+        tersedia: item.tersedia.toString(),
+        dipinjam: item.dipinjam.toString(),
+        tahun: (item as Skripsi).tahun,
+        nim: (item as Skripsi).nim,
+        createdAt: formatDateForInput(item.createdAt),
+        updatedAt: formatDateForInput(item.updatedAt),
+      } as SkripsiFormInput);
+    }
+    setCategory(item.type);
     setFormErrors({});
-    setIsModalOpen(true);
+    setIsFormModalOpen(true);
   };
+
+  const handleViewDetail = async (item: LibraryItem) => {
+    setSelectedItem(item);
+    setIsDetailModalOpen(true);
+
+    setItems(prevItems =>
+      prevItems.map(i =>
+        i.id === item.id && i.type === item.type
+          ? { ...i, viewCount: (i.viewCount || 0) + 1 }
+          : i
+      )
+    );
+
+    try {
+      const res = await fetch(`/api/${endpointMap[item.type]}/${item.id}/view`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+      });
+      if (!res.ok) {
+        console.error(`Failed to increment view count for ${item.type} ${item.id}`);
+      }
+    } catch (error) {
+      console.error(`Error calling view API for ${item.type} ${item.id}:`, error);
+    }
+  };
+
+
+  const BookCard: React.FC<{ book: Book; onEdit: (book: Book) => void; onDelete: (id: string, type: "book") => void; onViewDetail: (item: LibraryItem) => void }> = ({ book, onEdit, onDelete, onViewDetail }) => (
+    <div
+      key={book.id}
+      className="overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm transition-all duration-300 hover:border-blue-300 hover:shadow-xl hover:shadow-blue-100 cursor-pointer"
+      onClick={() => onViewDetail(book)}
+    >
+      <div className="p-4 pb-3">
+        <div className="mb-1 flex items-start justify-between">
+          <div>
+            <BookOpen size={30} color="#113FF7" />
+          </div>
+          <div className="flex gap-1">
+            <button
+              onClick={(e) => { e.stopPropagation(); onEdit(book); }}
+              className="rounded-lg p-2 text-gray-400 transition-colors hover:bg-blue-50 hover:text-blue-600"
+              title="Edit buku"
+            >
+              <Edit3 size={16} />
+            </button>
+            <button
+              onClick={(e) => { e.stopPropagation(); onDelete(book.id, "book"); }}
+              className="rounded-lg p-2 text-gray-400 transition-colors hover:bg-red-50 hover:text-red-600"
+              title="Hapus buku"
+            >
+              <Trash2 size={16} />
+            </button>
+          </div>
+        </div>
+
+        <div className="space-y-3">
+          <h3 className="line-clamp-2 text-lg leading-tight font-bold text-gray-900">
+            {book.judul}
+          </h3>
+          <p className="text-sm text-gray-600">
+            ID Buku: {book.id}
+          </p>
+          <p className="text-sm text-gray-600">
+            Pengarang ID: {book.pengarang_id}
+          </p>
+
+          <span className="inline-block rounded-full bg-gray-100 px-3 text-xs font-medium text-gray-700">
+            Penerbit ID: {book.penerbit_id}
+          </span>
+
+          <p className="line-clamp-3 text-sm leading-relaxed text-gray-600">
+            {book.abstrak}
+          </p>
+        </div>
+      </div>
+
+      <div className="border-t border-gray-100 bg-gray-50 px-4 py-3">
+        <div className="flex items-center justify-between mb-2">
+          <span className="text-sm text-gray-500">
+            Total: {book.jumlah}
+          </span>
+          <div className="flex gap-2">
+            <span className="rounded-md bg-green-50 px-2 py-1 text-xs font-semibold text-green-600">
+              Tersedia: {book.tersedia}
+            </span>
+            <span className="rounded-md bg-yellow-50 px-2 py-1 text-xs font-semibold text-yellow-600">
+              Dipinjam: {book.dipinjam}
+            </span>
+          </div>
+        </div>
+        <div className="flex items-center justify-between text-xs text-gray-500">
+          <span>Dibuat: {formatDateForInput(book.createdAt)}</span>
+          <span>Diperbarui: {formatDateForInput(book.updatedAt)}</span>
+        </div>
+        {book.viewCount !== undefined && (
+          <div className="mt-2 text-right text-xs text-gray-500">
+            Dilihat: {book.viewCount} kali
+          </div>
+        )}
+      </div>
+    </div>
+  );
+
+  const JournalCard: React.FC<{ journal: Journal; onEdit: (journal: Journal) => void; onDelete: (id: string, type: "journal") => void; onViewDetail: (item: LibraryItem) => void }> = ({ journal, onEdit, onDelete, onViewDetail }) => (
+    <div
+      key={journal.id}
+      className="overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm transition-all duration-300 hover:border-purple-300 hover:shadow-xl hover:shadow-purple-100 cursor-pointer"
+      onClick={() => onViewDetail(journal)}
+    >
+      <div className="p-4 pb-3">
+        <div className="mb-1 flex items-start justify-between">
+          <div>
+            <Newspaper size={30} color="#8A2BE2" />
+          </div>
+          <div className="flex gap-1">
+            <button
+              onClick={(e) => { e.stopPropagation(); onEdit(journal); }}
+              className="rounded-lg p-2 text-gray-400 transition-colors hover:bg-purple-50 hover:text-purple-600"
+              title="Edit jurnal"
+            >
+              <Edit3 size={16} />
+            </button>
+            <button
+              onClick={(e) => { e.stopPropagation(); onDelete(journal.id, "journal"); }}
+              className="rounded-lg p-2 text-gray-400 transition-colors hover:bg-red-50 hover:text-red-600"
+              title="Hapus jurnal"
+            >
+              <Trash2 size={16} />
+            </button>
+          </div>
+        </div>
+
+        <div className="space-y-3">
+          <h3 className="line-clamp-2 text-lg leading-tight font-bold text-gray-900">
+            {journal.judul}
+          </h3>
+          <p className="text-sm text-gray-600">
+            ID Jurnal: {journal.id}
+          </p>
+          <span className="inline-block rounded-full bg-gray-100 px-3 text-xs font-medium text-gray-700">
+            Jurnal ID: {journal.jurnal_id}
+          </span>
+          <p className="line-clamp-3 text-sm leading-relaxed text-gray-600">
+            {journal.abstrak}
+          </p>
+        </div>
+      </div>
+
+      <div className="border-t border-gray-100 bg-gray-50 px-4 py-3">
+        <div className="flex items-center justify-between mb-2">
+          <span className="text-sm text-gray-500">
+            Total: {journal.jumlah}
+          </span>
+          <div className="flex gap-2">
+            <span className="rounded-md bg-green-50 px-2 py-1 text-xs font-semibold text-green-600">
+              Tersedia: {journal.tersedia}
+            </span>
+            <span className="rounded-md bg-yellow-50 px-2 py-1 text-xs font-semibold text-yellow-600">
+              Dipinjam: {journal.dipinjam}
+            </span>
+          </div>
+        </div>
+        <div className="flex items-center justify-between text-xs text-gray-500">
+          <span>Dibuat: {formatDateForInput(journal.createdAt)}</span>
+          <span>Diperbarui: {formatDateForInput(journal.updatedAt)}</span>
+        </div>
+        {journal.viewCount !== undefined && (
+          <div className="mt-2 text-right text-xs text-gray-500">
+            Dilihat: {journal.viewCount} kali
+          </div>
+        )}
+      </div>
+    </div>
+  );
+
+  const SkripsiCard: React.FC<{ skripsi: Skripsi; onEdit: (skripsi: Skripsi) => void; onDelete: (id: string, type: "skripsi") => void; onViewDetail: (item: LibraryItem) => void }> = ({ skripsi, onEdit, onDelete, onViewDetail }) => (
+    <div
+      key={skripsi.id}
+      className="overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm transition-all duration-300 hover:border-orange-300 hover:shadow-xl hover:shadow-orange-100 cursor-pointer"
+      onClick={() => onViewDetail(skripsi)}
+    >
+      <div className="p-4 pb-3">
+        <div className="mb-1 flex items-start justify-between">
+          <div>
+            <FileText size={30} color="#FFA500" />
+          </div>
+          <div className="flex gap-1">
+            <button
+              onClick={(e) => { e.stopPropagation(); onEdit(skripsi); }}
+              className="rounded-lg p-2 text-gray-400 transition-colors hover:bg-orange-50 hover:text-orange-600"
+              title="Edit skripsi"
+            >
+              <Edit3 size={16} />
+            </button>
+            <button
+              onClick={(e) => { e.stopPropagation(); onDelete(skripsi.id, "skripsi"); }}
+              className="rounded-lg p-2 text-gray-400 transition-colors hover:bg-red-50 hover:text-red-600"
+              title="Hapus skripsi"
+            >
+              <Trash2 size={16} />
+            </button>
+          </div>
+        </div>
+
+        <div className="space-y-3">
+          <h3 className="line-clamp-2 text-lg leading-tight font-bold text-gray-900">
+            {skripsi.judul}
+          </h3>
+          <p className="text-sm text-gray-600">
+            ID Skripsi: {skripsi.id}
+          </p>
+          <p className="text-sm text-gray-600">
+            NIM: {skripsi.nim}
+          </p>
+          <span className="inline-block rounded-full bg-gray-100 px-3 text-xs font-medium text-gray-700">
+            Tahun: {skripsi.tahun}
+          </span>
+          <p className="line-clamp-3 text-sm leading-relaxed text-gray-600">
+            {skripsi.abstrak}
+          </p>
+        </div>
+      </div>
+
+      <div className="border-t border-gray-100 bg-gray-50 px-4 py-3">
+        <div className="flex items-center justify-between mb-2">
+          <span className="text-sm text-gray-500">
+            Total: {skripsi.jumlah}
+          </span>
+          <div className="flex gap-2">
+            <span className="rounded-md bg-green-50 px-2 py-1 text-xs font-semibold text-green-600">
+              Tersedia: {skripsi.tersedia}
+            </span>
+            <span className="rounded-md bg-yellow-50 px-2 py-1 text-xs font-semibold text-yellow-600">
+              Dipinjam: {skripsi.dipinjam}
+            </span>
+          </div>
+        </div>
+        <div className="flex items-center justify-between text-xs text-gray-500">
+          <span>Dibuat: {formatDateForInput(skripsi.createdAt)}</span>
+          <span>Diperbarui: {formatDateForInput(skripsi.updatedAt)}</span>
+        </div>
+        {skripsi.viewCount !== undefined && (
+          <div className="mt-2 text-right text-xs text-gray-500">
+            Dilihat: {skripsi.viewCount} kali
+          </div>
+        )}
+      </div>
+    </div>
+  );
 
   return (
     <div className="bg-base-100 h-full w-full mt-[-20px]">
       <div className="bg-white">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">Koleksi Buku</h1>
+            <h1 className="text-3xl font-bold text-gray-900">Koleksi Perpustakaan</h1>
             <p className="mt-1 text-gray-600">
-              Kelola koleksi perpustakaan ({total} total buku)
+              Kelola koleksi {category === "book" ? "buku" : category === "journal" ? "jurnal" : category === "skripsi" ? "skripsi" : ""} ({total} total item)
             </p>
           </div>
-          <button
-            onClick={handleModalOpen}
-            className="flex items-center gap-2 rounded-md bg-blue-600 px-6 py-2 text-sm font-medium text-white shadow-sm transition-colors hover:bg-blue-700"
-          >
-            <Plus size={16} />
-            Tambah Buku
-          </button>
+          <div className="flex gap-2">
+            <button
+              onClick={() => handleOpenFormModal("book")}
+              className="flex items-center gap-2 rounded-md bg-blue-600 px-6 py-2 text-sm font-medium text-white shadow-sm transition-colors hover:bg-blue-700"
+            >
+              <Plus size={16} />
+              Tambah Buku
+            </button>
+            <button
+              onClick={() => handleOpenFormModal("journal")}
+              className="flex items-center gap-2 rounded-md bg-purple-600 px-6 py-2 text-sm font-medium text-white shadow-sm transition-colors hover:bg-purple-700"
+            >
+              <Plus size={16} />
+              Tambah Jurnal
+            </button>
+            <button
+              onClick={() => handleOpenFormModal("skripsi")}
+              className="flex items-center gap-2 rounded-md bg-orange-600 px-6 py-2 text-sm font-medium text-white shadow-sm transition-colors hover:bg-orange-700"
+            >
+              <Plus size={16} />
+              Tambah Skripsi
+            </button>
+          </div>
         </div>
       </div>
 
@@ -397,7 +817,7 @@ export default function BooksPage() {
               />
               <input
                 type="text"
-                placeholder="Cari judul atau pengarang..."
+                placeholder={`Cari ${category}...`}
                 value={search}
                 onChange={handleSearchChange}
                 className="w-full rounded-md border border-gray-300 bg-gray-50 py-2 pr-3 pl-10 text-sm transition outline-none focus:bg-white focus:ring-2 focus:ring-blue-500"
@@ -411,13 +831,12 @@ export default function BooksPage() {
               />
               <select
                 value={category}
-                onChange={(e) => setCategory(e.target.value)}
+                onChange={handleCategoryChange}
                 className="w-full appearance-none rounded-md border border-gray-300 bg-gray-50 py-2 pr-8 pl-10 text-sm transition outline-none focus:bg-white focus:ring-2 focus:ring-blue-500"
               >
-                <option value="">Semua Kategori</option>
-                <option value="Buku">Buku</option>
-                <option value="Jurnal">Jurnal</option>
-                <option value="Karya Ilmiah">Karya Ilmiah</option>
+                <option value="book">Buku</option>
+                <option value="journal">Jurnal</option>
+                <option value="skripsi">Skripsi</option>
               </select>
               <div className="pointer-events-none absolute top-1/2 right-2 -translate-y-1/2">
                 <svg
@@ -449,90 +868,31 @@ export default function BooksPage() {
         </div>
       )}
 
-      
       <div className="grid grid-cols-1 gap-4 pt-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {loading ? (
           <div className="col-span-full text-center py-8 text-gray-500">
             <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
             <p className="mt-2">Loading...</p>
           </div>
-        ) : books.length > 0 ? (
-          books.map((book) => (
-            <div
-              key={book.id}
-              className="overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm transition-all duration-300 hover:border-blue-300 hover:shadow-xl hover:shadow-blue-100"
-            >
-              <div className="p-4 pb-3">
-                <div className="mb-1 flex items-start justify-between">
-                  <div>
-                    <BookOpen size={30} color="#113FF7" />
-                  </div>
-                  <div className="flex gap-1">
-                    <button
-                      onClick={() => handleEditBook(book)}
-                      className="rounded-lg p-2 text-gray-400 transition-colors hover:bg-blue-50 hover:text-blue-600"
-                      title="Edit buku"
-                    >
-                      <Edit3 size={16} />
-                    </button>
-                    <button
-                      onClick={() => handleDeleteBook(book.id!)}
-                      className="rounded-lg p-2 text-gray-400 transition-colors hover:bg-red-50 hover:text-red-600"
-                      title="Hapus buku"
-                    >
-                      <Trash2 size={16} />
-                    </button>
-                  </div>
-                </div>
-
-                <div className="space-y-3">
-                  <h3 className="line-clamp-2 text-lg leading-tight font-bold text-gray-900">
-                    {book.judul}
-                  </h3>
-                  <p className="text-sm text-gray-600">
-                    ID Buku: {book.id}
-                  </p>
-                  <p className="text-sm text-gray-600">
-                    Pengarang ID: {book.pengarang_id}
-                  </p>
-
-                  <span className="inline-block rounded-full bg-gray-100 px-3 text-xs font-medium text-gray-700">
-                    Penerbit ID: {book.penerbit_id}
-                  </span>
-
-                  <p className="line-clamp-3 text-sm leading-relaxed text-gray-600">
-                    {book.abstrak}
-                  </p>
-                </div>
-              </div>
-
-              <div className="border-t border-gray-100 bg-gray-50 px-4 py-3">
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-sm text-gray-500">
-                    Total: {book.jumlah}
-                  </span>
-                  <div className="flex gap-2">
-                    <span className="rounded-md bg-green-50 px-2 py-1 text-xs font-semibold text-green-600">
-                      Tersedia: {book.tersedia}
-                    </span>
-                    <span className="rounded-md bg-yellow-50 px-2 py-1 text-xs font-semibold text-yellow-600">
-                      Dipinjam: {book.dipinjam}
-                    </span>
-                  </div>
-                </div>
-                <div className="flex items-center justify-between text-xs text-gray-500">
-                  <span>Dibuat: {formatDateForInput(book.createdAt)}</span>
-                  <span>Diperbarui: {formatDateForInput(book.updatedAt)}</span>
-                </div>
-              </div>
-            </div>
-          ))
+        ) : items.length > 0 ? (
+          items.map((item) => {
+            if (item.type === "book") {
+              return <BookCard key={item.id} book={item as Book} onEdit={handleEditItem} onDelete={handleDeleteItem} onViewDetail={handleViewDetail} />;
+            } else if (item.type === "journal") {
+              return <JournalCard key={item.id} journal={item as Journal} onEdit={handleEditItem} onDelete={handleDeleteItem} onViewDetail={handleViewDetail} />;
+            } else if (item.type === "skripsi") {
+              return <SkripsiCard key={item.id} skripsi={item as Skripsi} onEdit={handleEditItem} onDelete={handleDeleteItem} onViewDetail={handleViewDetail} />;
+            }
+            return null; 
+          })
         ) : (
           <div className="col-span-full text-center py-16">
             <BookOpen className="mx-auto h-12 w-12 text-gray-400" />
-            <h3 className="mt-2 text-sm font-medium text-gray-900">Tidak ada buku</h3>
+            <h3 className="mt-2 text-sm font-medium text-gray-900">
+              Tidak ada {category === "book" ? "buku" : category === "journal" ? "jurnal" : category === "skripsi" ? "skripsi" : "item"}
+            </h3>
             <p className="mt-1 text-sm text-gray-500">
-              {search ? "Tidak ada buku yang sesuai dengan pencarian." : "Mulai dengan menambahkan buku pertama."}
+              {search ? "Tidak ada item yang sesuai dengan pencarian." : `Mulai dengan menambahkan ${category}.`}
             </p>
           </div>
         )}
@@ -560,15 +920,16 @@ export default function BooksPage() {
         </div>
       )}
 
-      {/* {isModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-50 backdrop-blur-sm">
-          <div className="bg-white rounded-xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
-            <div className="flex items-center justify-between p-6 border-b">
+      {isFormModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-gray-900 bg-opacity-30 backdrop-blur-sm transition duration-300">
+          <div className="animate-fadeIn max-h-[90vh] w-full max-w-2xl scale-[0.98] overflow-y-auto rounded-xl border border-gray-100 bg-white shadow-[0_12px_32px_rgba(0,0,0,0.15)]">
+            {/* Modal Header */}
+            <div className="flex items-center justify-between p-3 border-b">
               <h2 className="text-xl font-semibold text-gray-900">
-                {formInput.id ? "Edit Buku" : "Tambah Buku Baru"}
+                {formInput.id ? `Edit ${category === "book" ? "Buku" : category === "journal" ? "Jurnal" : "Skripsi"}` : `Tambah ${category === "book" ? "Buku" : category === "journal" ? "Jurnal" : "Skripsi"} Baru`}
               </h2>
               <button
-                onClick={() => setIsModalOpen(false)}
+                onClick={() => setIsFormModalOpen(false)}
                 className="text-gray-400 hover:text-gray-600 transition-colors"
               >
                 <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -577,9 +938,9 @@ export default function BooksPage() {
               </button>
             </div>
 
-            <div className="p-6">
-              <form className="space-y-4" onSubmit={handleAddBook}>
-      
+            <div className="p-4">
+              <form className="space-y-3" onSubmit={handleAddItem}>
+          
                 {formErrors.general && (
                   <div className="bg-red-50 border border-red-200 rounded-md p-3">
                     <div className="text-red-800 text-sm">{formErrors.general}</div>
@@ -587,11 +948,11 @@ export default function BooksPage() {
                 )}
 
                 <div>
-                  <label htmlFor="book-id-input" className="block text-sm font-medium text-gray-700 mb-1">
-                    ID Buku <span className="text-red-500">*</span>
+                  <label htmlFor={`${category}-id-input`} className="mb-2 block text-sm font-medium text-gray-700">
+                    ID {category === "book" ? "Buku" : category === "journal" ? "Jurnal" : "Skripsi"} <span className="text-red-500">*</span>
                   </label>
                   <input
-                    id="book-id-input"
+                    id={`${category}-id-input`}
                     type="text"
                     name="id"
                     value={formInput.id}
@@ -599,20 +960,17 @@ export default function BooksPage() {
                     className={`w-full rounded-md border px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
                       formErrors.id ? "border-red-500 bg-red-50" : "border-gray-300"
                     }`}
-                    placeholder="Masukkan ID unik untuk buku (contoh: B001, B002, dll)"
+                    placeholder={`Masukkan ID unik untuk ${category}`}
                   />
                   {formErrors.id && <p className="text-red-500 text-xs mt-1">{formErrors.id}</p>}
-                  <p className="text-gray-500 text-xs mt-1">
-                    ID ini akan digunakan sebagai identifier unik untuk buku. Pastikan tidak sama dengan buku lain.
-                  </p>
                 </div>
 
                 <div>
-                  <label htmlFor="book-judul-input" className="block text-sm font-medium text-gray-700 mb-1">
-                    Judul Buku <span className="text-red-500">*</span>
+                  <label htmlFor={`${category}-judul-input`} className="mb-2 block text-sm font-medium text-gray-700">
+                    Judul {category === "book" ? "Buku" : category === "journal" ? "Jurnal" : "Skripsi"} <span className="text-red-500">*</span>
                   </label>
                   <input
-                    id="book-judul-input"
+                    id={`${category}-judul-input`}
                     type="text"
                     name="judul"
                     value={formInput.judul}
@@ -620,56 +978,116 @@ export default function BooksPage() {
                     className={`w-full rounded-md border px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
                       formErrors.judul ? "border-red-500 bg-red-50" : "border-gray-300"
                     }`}
-                    placeholder="Masukkan judul buku"
+                    placeholder={`Masukkan judul ${category}`}
                   />
                   {formErrors.judul && <p className="text-red-500 text-xs mt-1">{formErrors.judul}</p>}
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <label htmlFor="book-pengarang-input" className="block text-sm font-medium text-gray-700 mb-1">
-                      Pengarang ID <span className="text-red-500">*</span>
-                    </label>
-                    <input
-                      id="book-pengarang-input"
-                      type="text"
-                      name="pengarang_id"
-                      value={formInput.pengarang_id}
-                      onChange={handleFormChange}
-                      className={`w-full rounded-md border px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-                        formErrors.pengarang_id ? "border-red-500 bg-red-50" : "border-gray-300"
-                      }`}
-                      placeholder="Masukkan ID pengarang"
-                    />
-                    {formErrors.pengarang_id && <p className="text-red-500 text-xs mt-1">{formErrors.pengarang_id}</p>}
+                {category === "book" && (
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label htmlFor="book-pengarang-input" className="mb-2 block text-sm font-medium text-gray-700">
+                        Pengarang ID <span className="text-red-500">*</span>
+                      </label>
+                      <input
+                        id="book-pengarang-input"
+                        type="text"
+                        name="pengarang_id"
+                        value={(formInput as BookFormInput).pengarang_id || ""}
+                        onChange={handleFormChange}
+                        className={`w-full rounded-md border px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
+                          formErrors.pengarang_id ? "border-red-500 bg-red-50" : "border-gray-300"
+                        }`}
+                        placeholder="Masukkan ID pengarang"
+                      />
+                      {formErrors.pengarang_id && <p className="text-red-500 text-xs mt-1">{formErrors.pengarang_id}</p>}
+                    </div>
+                    <div>
+                      <label htmlFor="book-penerbit-input" className="mb-2 block text-sm font-medium text-gray-700">
+                        Penerbit ID <span className="text-red-500">*</span>
+                      </label>
+                      <input
+                        id="book-penerbit-input"
+                        type="text"
+                        name="penerbit_id"
+                        value={(formInput as BookFormInput).penerbit_id || ""}
+                        onChange={handleFormChange}
+                        className={`w-full rounded-md border px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
+                          formErrors.penerbit_id ? "border-red-500 bg-red-50" : "border-gray-300"
+                        }`}
+                        placeholder="Masukkan ID penerbit"
+                      />
+                      {formErrors.penerbit_id && <p className="text-red-500 text-xs mt-1">{formErrors.penerbit_id}</p>}
+                    </div>
                   </div>
+                )}
 
+                {category === "journal" && (
                   <div>
-                    <label htmlFor="book-penerbit-input" className="block text-sm font-medium text-gray-700 mb-1">
-                      Penerbit ID <span className="text-red-500">*</span>
+                    <label htmlFor="journal-jurnalid-input" className="mb-2 block text-sm font-medium text-gray-700">
+                      Jurnal ID <span className="text-red-500">*</span>
                     </label>
                     <input
-                      id="book-penerbit-input"
+                      id="journal-jurnalid-input"
                       type="text"
-                      name="penerbit_id"
-                      value={formInput.penerbit_id}
+                      name="jurnal_id"
+                      value={(formInput as JournalFormInput).jurnal_id || ""}
                       onChange={handleFormChange}
                       className={`w-full rounded-md border px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-                        formErrors.penerbit_id ? "border-red-500 bg-red-50" : "border-gray-300"
+                        formErrors.jurnal_id ? "border-red-500 bg-red-50" : "border-gray-300"
                       }`}
-                      placeholder="Masukkan ID penerbit"
+                      placeholder="Masukkan ID jurnal"
                     />
-                    {formErrors.penerbit_id && <p className="text-red-500 text-xs mt-1">{formErrors.penerbit_id}</p>}
+                    {formErrors.jurnal_id && <p className="text-red-500 text-xs mt-1">{formErrors.jurnal_id}</p>}
                   </div>
-                </div>
+                )}
+
+                {category === "skripsi" && (
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label htmlFor="skripsi-nim-input" className="mb-2 block text-sm font-medium text-gray-700">
+                        NIM <span className="text-red-500">*</span>
+                      </label>
+                      <input
+                        id="skripsi-nim-input"
+                        type="text"
+                        name="nim"
+                        value={(formInput as SkripsiFormInput).nim || ""}
+                        onChange={handleFormChange}
+                        className={`w-full rounded-md border px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
+                          formErrors.nim ? "border-red-500 bg-red-50" : "border-gray-300"
+                        }`}
+                        placeholder="Masukkan NIM mahasiswa"
+                      />
+                      {formErrors.nim && <p className="text-red-500 text-xs mt-1">{formErrors.nim}</p>}
+                    </div>
+                    <div>
+                      <label htmlFor="skripsi-tahun-input" className="mb-2 block text-sm font-medium text-gray-700">
+                        Tahun <span className="text-red-500">*</span>
+                      </label>
+                      <input
+                        id="skripsi-tahun-input"
+                        type="text"
+                        name="tahun"
+                        value={(formInput as SkripsiFormInput).tahun || ""}
+                        onChange={handleFormChange}
+                        className={`w-full rounded-md border px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
+                          formErrors.tahun ? "border-red-500 bg-red-50" : "border-gray-300"
+                        }`}
+                        placeholder="Masukkan tahun skripsi"
+                      />
+                      {formErrors.tahun && <p className="text-red-500 text-xs mt-1">{formErrors.tahun}</p>}
+                    </div>
+                  </div>
+                )}
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   <div>
-                    <label htmlFor="book-jumlah-input" className="block text-sm font-medium text-gray-700 mb-1">
+                    <label htmlFor={`${category}-jumlah-input`} className="block text-sm font-medium text-gray-700 mb-1">
                       Total Eksemplar <span className="text-red-500">*</span>
                     </label>
                     <input
-                      id="book-jumlah-input"
+                      id={`${category}-jumlah-input`}
                       type="number"
                       name="jumlah"
                       value={formInput.jumlah}
@@ -684,11 +1102,11 @@ export default function BooksPage() {
                   </div>
 
                   <div>
-                    <label htmlFor="book-tersedia-input" className="block text-sm font-medium text-gray-700 mb-1">
+                    <label htmlFor={`${category}-tersedia-input`} className="block text-sm font-medium text-gray-700 mb-1">
                       Tersedia <span className="text-red-500">*</span>
                     </label>
                     <input
-                      id="book-tersedia-input"
+                      id={`${category}-tersedia-input`}
                       type="number"
                       name="tersedia"
                       value={formInput.tersedia}
@@ -703,11 +1121,11 @@ export default function BooksPage() {
                   </div>
 
                   <div>
-                    <label htmlFor="book-dipinjam-input" className="block text-sm font-medium text-gray-700 mb-1">
+                    <label htmlFor={`${category}-dipinjam-input`} className="block text-sm font-medium text-gray-700 mb-1">
                       Dipinjam <span className="text-red-500">*</span>
                     </label>
                     <input
-                      id="book-dipinjam-input"
+                      id={`${category}-dipinjam-input`}
                       type="number"
                       name="dipinjam"
                       value={formInput.dipinjam}
@@ -724,11 +1142,11 @@ export default function BooksPage() {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <label htmlFor="book-createdAt-input" className="block text-sm font-medium text-gray-700 mb-1">
+                    <label htmlFor={`${category}-createdAt-input`} className="block text-sm font-medium text-gray-700 mb-1">
                       Tanggal Dibuat <span className="text-red-500">*</span>
                     </label>
                     <input
-                      id="book-createdAt-input"
+                      id={`${category}-createdAt-input`}
                       type="date"
                       name="createdAt"
                       value={formInput.createdAt}
@@ -741,11 +1159,11 @@ export default function BooksPage() {
                   </div>
 
                   <div>
-                    <label htmlFor="book-updatedAt-input" className="block text-sm font-medium text-gray-700 mb-1">
+                    <label htmlFor={`${category}-updatedAt-input`} className="block text-sm font-medium text-gray-700 mb-1">
                       Terakhir Diperbarui <span className="text-red-500">*</span>
                     </label>
                     <input
-                      id="book-updatedAt-input"
+                      id={`${category}-updatedAt-input`}
                       type="date"
                       name="updatedAt"
                       value={formInput.updatedAt}
@@ -759,11 +1177,11 @@ export default function BooksPage() {
                 </div>
 
                 <div>
-                  <label htmlFor="book-abstrak-input" className="block text-sm font-medium text-gray-700 mb-1">
+                  <label htmlFor={`${category}-abstrak-input`} className="mb-2 block text-sm font-medium text-gray-700">
                     Abstrak <span className="text-red-500">*</span>
                   </label>
                   <textarea
-                    id="book-abstrak-input"
+                    id={`${category}-abstrak-input`}
                     rows={4}
                     name="abstrak"
                     value={formInput.abstrak}
@@ -771,22 +1189,22 @@ export default function BooksPage() {
                     className={`w-full resize-none rounded-md border px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
                       formErrors.abstrak ? "border-red-500 bg-red-50" : "border-gray-300"
                     }`}
-                    placeholder="Masukkan abstrak buku"
+                    placeholder={`Masukkan abstrak ${category}`}
                   />
                   {formErrors.abstrak && <p className="text-red-500 text-xs mt-1">{formErrors.abstrak}</p>}
                 </div>
 
-                <div className="flex justify-end gap-3 pt-4 border-t">
+                <div className="mt-2 flex justify-end gap-3">
                   <button
                     type="button"
-                    onClick={() => setIsModalOpen(false)}
-                    className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 transition-colors"
+                    onClick={() => setIsFormModalOpen(false)}
+                    className="rounded-md border border-gray-300 px-4 py-2 text-gray-700 transition-colors hover:bg-gray-50"
                   >
                     Batal
                   </button>
                   <button
                     type="submit"
-                    className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+                    className="rounded-md bg-blue-600 px-4 py-2 text-white transition-colors hover:bg-blue-700"
                   >
                     {formInput.id ? "Update" : "Simpan"}
                   </button>
@@ -795,250 +1213,63 @@ export default function BooksPage() {
             </div>
           </div>
         </div>
-      )} */}
-      {isModalOpen && (
-  <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-gray bg-opacity-30 backdrop-blur-sm transition duration-300">
-    <div className="animate-fadeIn max-h-[90vh] w-full max-w-2xl scale-[0.98] overflow-y-auto rounded-xl border border-gray-100 bg-white shadow-[0_12px_32px_rgba(0,0,0,0.15)]">
-      
-      {/* Modal Header */}
-      <div className="flex items-center justify-between p-3 border-b">
-        <h2 className="text-xl font-semibold text-gray-900">
-          {formInput.id ? "Edit Buku" : "Tambah Buku Baru"}
-        </h2>
-        <button
-          onClick={() => setIsModalOpen(false)}
-          className="text-gray-400 hover:text-gray-600 transition-colors"
-        >
-          <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-          </svg>
-        </button>
-      </div>
+      )}
 
-      {/* Modal Body */}
-      <div className="p-4">
-        <form className="space-y-3" onSubmit={handleAddBook}>
-          {/* Error Alert */}
-          {formErrors.general && (
-            <div className="bg-red-50 border border-red-200 rounded-md p-3">
-              <div className="text-red-800 text-sm">{formErrors.general}</div>
+      {isDetailModalOpen && selectedItem && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-gray-900 bg-opacity-30 backdrop-blur-sm transition duration-300">
+          <div className="animate-fadeIn max-h-[90vh] w-full max-w-2xl scale-[0.98] overflow-y-auto rounded-xl border border-gray-100 bg-white shadow-[0_12px_32px_rgba(0,0,0,0.15)]">
+            <div className="flex items-center justify-between p-3 border-b">
+              <h2 className="text-xl font-semibold text-gray-900">Detail {selectedItem.type === "book" ? "Buku" : selectedItem.type === "journal" ? "Jurnal" : "Skripsi"}</h2>
+              <button
+                onClick={() => setIsDetailModalOpen(false)}
+                className="text-gray-400 hover:text-gray-600 transition-colors"
+              >
+                <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
             </div>
-          )}
+            <div className="p-4 space-y-4">
+              <div>
+                <h3 className="text-2xl font-bold text-gray-900">{selectedItem.judul}</h3>
+                <p className="text-sm text-gray-500">ID: {selectedItem.id}</p>
+              </div>
 
-          {/* ID Buku */}
-          <div>
-            <label htmlFor="book-id-input" className="mb-2 block text-sm font-medium text-gray-700">
-              ID Buku <span className="text-red-500">*</span>
-            </label>
-            <input
-              id="book-id-input"
-              type="text"
-              name="id"
-              value={formInput.id}
-              onChange={handleFormChange}
-              className={`w-full rounded-md border px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-                formErrors.id ? "border-red-500 bg-red-50" : "border-gray-300"
-              }`}
-              placeholder="Masukkan ID unik untuk buku"
-            />
-            {formErrors.id && <p className="text-red-500 text-xs mt-1">{formErrors.id}</p>}
-          </div>
+              {selectedItem.type === "book" && (
+                <>
+                  <p className="text-gray-700"><strong>Pengarang ID:</strong> {(selectedItem as Book).pengarang_id}</p>
+                  <p className="text-gray-700"><strong>Penerbit ID:</strong> {(selectedItem as Book).penerbit_id}</p>
+                </>
+              )}
+              {selectedItem.type === "journal" && (
+                <p className="text-gray-700"><strong>Jurnal ID:</strong> {(selectedItem as Journal).jurnal_id}</p>
+              )}
+              {selectedItem.type === "skripsi" && (
+                <>
+                  <p className="text-gray-700"><strong>NIM:</strong> {(selectedItem as Skripsi).nim}</p>
+                  <p className="text-gray-700"><strong>Tahun:</strong> {(selectedItem as Skripsi).tahun}</p>
+                </>
+              )}
 
-          {/* Judul Buku */}
-          <div>
-            <label htmlFor="book-judul-input" className="mb-2 block text-sm font-medium text-gray-700">
-              Judul Buku <span className="text-red-500">*</span>
-            </label>
-            <input
-              id="book-judul-input"
-              type="text"
-              name="judul"
-              value={formInput.judul}
-              onChange={handleFormChange}
-              className={`w-full rounded-md border px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-                formErrors.judul ? "border-red-500 bg-red-50" : "border-gray-300"
-              }`}
-              placeholder="Masukkan judul buku"
-            />
-            {formErrors.judul && <p className="text-red-500 text-xs mt-1">{formErrors.judul}</p>}
-          </div>
-
-          {/* Pengarang & Penerbit */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label htmlFor="book-pengarang-input" className="mb-2 block text-sm font-medium text-gray-700">
-                Pengarang ID <span className="text-red-500">*</span>
-              </label>
-              <input
-                id="book-pengarang-input"
-                type="text"
-                name="pengarang_id"
-                value={formInput.pengarang_id}
-                onChange={handleFormChange}
-                className={`w-full rounded-md border px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-                  formErrors.pengarang_id ? "border-red-500 bg-red-50" : "border-gray-300"
-                }`}
-                placeholder="Masukkan ID pengarang"
-              />
-              {formErrors.pengarang_id && <p className="text-red-500 text-xs mt-1">{formErrors.pengarang_id}</p>}
-            </div>
-            <div>
-              <label htmlFor="book-penerbit-input" className="mb-2 block text-sm font-medium text-gray-700">
-                Penerbit ID <span className="text-red-500">*</span>
-              </label>
-              <input
-                id="book-penerbit-input"
-                type="text"
-                name="penerbit_id"
-                value={formInput.penerbit_id}
-                onChange={handleFormChange}
-                className={`w-full rounded-md border px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-                  formErrors.penerbit_id ? "border-red-500 bg-red-50" : "border-gray-300"
-                }`}
-                placeholder="Masukkan ID penerbit"
-              />
-              {formErrors.penerbit_id && <p className="text-red-500 text-xs mt-1">{formErrors.penerbit_id}</p>}
-            </div>
-          </div>
-
-          {/* Total Eksemplar, Tersedia, Dipinjam */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <div>
-                    <label htmlFor="book-jumlah-input" className="block text-sm font-medium text-gray-700 mb-1">
-                      Total Eksemplar <span className="text-red-500">*</span>
-                    </label>
-                    <input
-                      id="book-jumlah-input"
-                      type="number"
-                      name="jumlah"
-                      value={formInput.jumlah}
-                      onChange={handleFormChange}
-                      min="1"
-                      className={`w-full rounded-md border px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-                        formErrors.jumlah ? "border-red-500 bg-red-50" : "border-gray-300"
-                      }`}
-                      placeholder="1"
-                    />
-                    {formErrors.jumlah && <p className="text-red-500 text-xs mt-1">{formErrors.jumlah}</p>}
-                  </div>
-
-                  <div>
-                    <label htmlFor="book-tersedia-input" className="block text-sm font-medium text-gray-700 mb-1">
-                      Tersedia <span className="text-red-500">*</span>
-                    </label>
-                    <input
-                      id="book-tersedia-input"
-                      type="number"
-                      name="tersedia"
-                      value={formInput.tersedia}
-                      onChange={handleFormChange}
-                      min="0"
-                      className={`w-full rounded-md border px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-                        formErrors.tersedia ? "border-red-500 bg-red-50" : "border-gray-300"
-                      }`}
-                      placeholder="1"
-                    />
-                    {formErrors.tersedia && <p className="text-red-500 text-xs mt-1">{formErrors.tersedia}</p>}
-                  </div>
-
-                  <div>
-                    <label htmlFor="book-dipinjam-input" className="block text-sm font-medium text-gray-700 mb-1">
-                      Dipinjam <span className="text-red-500">*</span>
-                    </label>
-                    <input
-                      id="book-dipinjam-input"
-                      type="number"
-                      name="dipinjam"
-                      value={formInput.dipinjam}
-                      onChange={handleFormChange}
-                      min="0"
-                      className={`w-full rounded-md border px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-                        formErrors.dipinjam ? "border-red-500 bg-red-50" : "border-gray-300"
-                      }`}
-                      placeholder="0"
-                    />
-                    {formErrors.dipinjam && <p className="text-red-500 text-xs mt-1">{formErrors.dipinjam}</p>}
-                  </div>
+              <p className="text-gray-700"><strong>Abstrak:</strong> {selectedItem.abstrak}</p>
+              <div className="grid grid-cols-3 gap-2 text-sm text-gray-700 border-t pt-4">
+                <p><strong>Total:</strong> {selectedItem.jumlah}</p>
+                <p><strong>Tersedia:</strong> {selectedItem.tersedia}</p>
+                <p><strong>Dipinjam:</strong> {selectedItem.dipinjam}</p>
+              </div>
+              <div className="grid grid-cols-2 gap-2 text-xs text-gray-500">
+                <p><strong>Dibuat:</strong> {formatDateForInput(selectedItem.createdAt)}</p>
+                <p><strong>Diperbarui:</strong> {formatDateForInput(selectedItem.updatedAt)}</p>
+              </div>
+              {selectedItem.viewCount !== undefined && (
+                <div className="text-right text-sm text-gray-600 border-t pt-4 font-semibold">
+                  Dilihat: {selectedItem.viewCount} kali
                 </div>
-
-          {/* Tanggal */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-                    <label htmlFor="book-createdAt-input" className="block text-sm font-medium text-gray-700 mb-1">
-                      Tanggal Dibuat <span className="text-red-500">*</span>
-                    </label>
-                    <input
-                      id="book-createdAt-input"
-                      type="date"
-                      name="createdAt"
-                      value={formInput.createdAt}
-                      onChange={handleFormChange}
-                      className={`w-full rounded-md border px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-                        formErrors.createdAt ? "border-red-500 bg-red-50" : "border-gray-300"
-                      }`}
-                    />
-                    {formErrors.createdAt && <p className="text-red-500 text-xs mt-1">{formErrors.createdAt}</p>}
-                  </div>
-
-                  <div>
-                    <label htmlFor="book-updatedAt-input" className="block text-sm font-medium text-gray-700 mb-1">
-                      Terakhir Diperbarui <span className="text-red-500">*</span>
-                    </label>
-                    <input
-                      id="book-updatedAt-input"
-                      type="date"
-                      name="updatedAt"
-                      value={formInput.updatedAt}
-                      onChange={handleFormChange}
-                      className={`w-full rounded-md border px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-                        formErrors.updatedAt ? "border-red-500 bg-red-50" : "border-gray-300"
-                      }`}
-                    />
-                    {formErrors.updatedAt && <p className="text-red-500 text-xs mt-1">{formErrors.updatedAt}</p>}
-                  </div>
+              )}
+            </div>
           </div>
-
-          {/* Abstrak */}
-          <div>
-            <label htmlFor="book-abstrak-input" className="mb-2 block text-sm font-medium text-gray-700">
-              Abstrak <span className="text-red-500">*</span>
-            </label>
-            <textarea
-              id="book-abstrak-input"
-              rows={4}
-              name="abstrak"
-              value={formInput.abstrak}
-              onChange={handleFormChange}
-              className={`w-full resize-none rounded-md border px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-                formErrors.abstrak ? "border-red-500 bg-red-50" : "border-gray-300"
-              }`}
-              placeholder="Masukkan abstrak buku"
-            />
-            {formErrors.abstrak && <p className="text-red-500 text-xs mt-1">{formErrors.abstrak}</p>}
-          </div>
-
-          {/* Footer */}
-          <div className="mt-2 flex justify-end gap-3">
-            <button
-              type="button"
-              onClick={() => setIsModalOpen(false)}
-              className="rounded-md border border-gray-300 px-4 py-2 text-gray-700 transition-colors hover:bg-gray-50"
-            >
-              Batal
-            </button>
-            <button
-              type="submit"
-              className="rounded-md bg-blue-600 px-4 py-2 text-white transition-colors hover:bg-blue-700"
-            >
-              {formInput.id ? "Update" : "Simpan"}
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
-  </div>
-)}
-
+        </div>
+      )}
     </div>
   );
 }
