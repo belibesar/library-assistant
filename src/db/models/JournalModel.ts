@@ -67,11 +67,46 @@ class JournalModel {
     return journal;
   }
 
-  static async createJournal(data) {}
+  static async createJournal(data: Journal) {
+    const collection = await this.collection();
+    const journal = await collection.insertOne(data);
+    return journal;
+  }
 
-  static async updateJournal(id: string, data) {}
+  static async updateJournal(id: string, data: Journal) {
+    const collection = await this.collection();
+    const identifier = { id };
+    const currentBook = await collection.findOne(identifier);
+    if (!currentBook) {
+      throw new Error("Book not found");
+    }
+    return await collection.updateOne(identifier, { $set: data });
+  }
 
-  static async deleteJournal(id: string) {}
+  static async deleteJournal(id: string) {
+    const collection = await this.collection();
+    const query = { id };
+    const currentJournal = await collection.findOne(query);
+    if (!currentJournal) {
+      throw new Error("Book not found");
+    }
+    return await collection.deleteOne(query);
+  }
+
+  static async countJournal(id: string) {
+    const collection = await this.collection();
+    const identifier = { id };
+    const currentJournal = await collection.findOne(identifier);
+    const journalCount = currentJournal?.count || 0;
+    if (!currentJournal) {
+      throw new Error("Journal not found");
+    }
+    return await collection.updateOne(identifier, {
+      $set: {
+        count: Number(journalCount) + 1,
+      },
+    });
+  }
 }
 
 export default JournalModel;

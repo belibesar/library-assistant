@@ -118,7 +118,7 @@ export async function PATCH(
     return NextResponse.json(
       {
         success: true,
-        message: `Book with id ${id} has been deleted`,
+        message: `Book count with id ${id} has been updated`,
         data: increaseCount,
       },
       { status: 200 },
