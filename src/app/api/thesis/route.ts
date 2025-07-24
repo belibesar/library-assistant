@@ -43,12 +43,12 @@ export async function POST(request: NextRequest) {
       updatedAt: timestamp,
     };
     const thesisData = await thesisSchema.parseAsync(newThesis);
-    const createThesis = await ThesisModel.createThesis(thesisData);
+    const createdThesis = await ThesisModel.createThesis(thesisData);
 
     return NextResponse.json({
       success: true,
       message: "created!",
-      data: thesisData,
+      data: createdThesis,
     });
   } catch (error) {
     console.log(error);
