@@ -28,9 +28,15 @@ export async function GET(
       data: dataThesis,
     });
   } catch (error) {
-    return NextResponse.json({
-      error,
-    });
+    return NextResponse.json(
+      {
+        success: false,
+        message: error,
+      },
+      {
+        status: 500,
+      },
+    );
   }
 }
 
