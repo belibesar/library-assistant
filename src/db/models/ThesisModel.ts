@@ -87,18 +87,22 @@ class ThesisModel {
       const collection = await this.collection();
       const identifier = { id };
       const currentThesis = await collection.findOne(identifier);
-      console.log(currentThesis);
 
-      if (!currentThesis) {
-        throw new Error("Thesis not found");
-      }
       return await collection.updateOne(identifier, { $set: data });
     } catch (error) {
       throw error;
     }
   }
 
-  static async deleteThesis(id: string) {}
+  static async deleteThesis(id: string) {
+    try {
+      const collection = await this.collection();
+
+      return await collection.deleteOne({ id });
+    } catch (error) {
+      throw error;
+    }
+  }
 }
 
 export default ThesisModel;
