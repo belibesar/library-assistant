@@ -48,7 +48,7 @@ class ThesisModel {
       const journal = await collection
         .aggregate([
           {
-            $match: { id: id }, // Filter dokumen berdasarkan id buku
+            $match: { id: id }, // Filter dokumen berdasarkan id thesis
           },
           {
             $lookup: {
@@ -86,7 +86,6 @@ class ThesisModel {
     try {
       const collection = await this.collection();
       const identifier = { id };
-      const currentThesis = await collection.findOne(identifier);
 
       return await collection.updateOne(identifier, { $set: data });
     } catch (error) {

@@ -50,7 +50,7 @@ export async function PUT(
     const timestamp = new Date().toISOString();
 
     const newThesis: Thesis = {
-      id: requestData.id || +new Date(),
+      id: requestData.id || id,
       judul: requestData.judul,
       abstrak: requestData.abstrak,
       nim: requestData.nim,

@@ -7,10 +7,10 @@ const thesisSchema = z.object({
   }),
   abstrak: z.string().optional(),
   nim: z.string({
-    required_error: "NIM harus diisi",
+    required_error: "NIM harus diisi!",
   }),
   tahun: z.string({
-    required_error: "Tahun harus diisi",
+    required_error: "Tahun harus diisi!",
   }),
   createdAt: z.string().optional(),
   updatedAt: z.string().optional(),
