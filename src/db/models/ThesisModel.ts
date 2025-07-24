@@ -1,3 +1,4 @@
+import thesisSchema from "@/libs/schemas/ThesisSchema";
 import { db } from "../config/mongodb";
 
 class ThesisModel {
@@ -67,7 +68,15 @@ class ThesisModel {
     return journal;
   }
 
-  static async createThesis(data) {}
+  static async createThesis(data: Thesis) {
+    try {
+      const collection = await this.collection();
+      const thesis = await collection.insertOne(data);
+      return thesis;
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   static async updateThesis(id: string, data) {}
 
