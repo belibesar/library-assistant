@@ -74,11 +74,25 @@ class ThesisModel {
       const thesis = await collection.insertOne(data);
       return thesis;
     } catch (error) {
-      console.log(error);
+      throw error;
     }
   }
 
-  static async updateThesis(id: string, data) {}
+  static async updateThesis(id: string, data: Thesis) {
+    try {
+      const collection = await this.collection();
+      const identifier = { id };
+      const currentThesis = await collection.findOne(identifier);
+      console.log(currentThesis);
+
+      if (!currentThesis) {
+        throw new Error("Thesis not found");
+      }
+      return await collection.updateOne(identifier, { $set: data });
+    } catch (error) {
+      throw error;
+    }
+  }
 
   static async deleteThesis(id: string) {}
 }
