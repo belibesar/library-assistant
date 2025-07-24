@@ -43,29 +43,33 @@ class ThesisModel {
   }
 
   static async getThesisById(id: string) {
-    const collection = await this.collection();
-    const journal = await collection
-      .aggregate([
-        {
-          $match: { id: id }, // Filter dokumen berdasarkan id buku
-        },
-        {
-          $lookup: {
-            from: "mahasiswa",
-            localField: "nim",
-            foreignField: "id",
-            as: "mahasiswa",
+    try {
+      const collection = await this.collection();
+      const journal = await collection
+        .aggregate([
+          {
+            $match: { id: id }, // Filter dokumen berdasarkan id buku
           },
-        },
-        {
-          $unwind: {
-            path: "$mahasiswa",
-            preserveNullAndEmptyArrays: true,
+          {
+            $lookup: {
+              from: "mahasiswa",
+              localField: "nim",
+              foreignField: "id",
+              as: "mahasiswa",
+            },
           },
-        },
-      ])
-      .toArray();
-    return journal;
+          {
+            $unwind: {
+              path: "$mahasiswa",
+              preserveNullAndEmptyArrays: true,
+            },
+          },
+        ])
+        .toArray();
+      return journal;
+    } catch (error) {
+      throw error;
+    }
   }
 
   static async createThesis(data: Thesis) {
