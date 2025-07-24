@@ -48,7 +48,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({
       success: true,
       message: "created!",
-      data: createThesis,
+      data: thesisData,
     });
   } catch (error) {
     console.log(error);
@@ -63,3 +63,5 @@ export async function POST(request: NextRequest) {
     );
   }
 }
+
+
