@@ -1,3 +1,4 @@
+import thesisSchema from "@/libs/schemas/ThesisSchema";
 import { db } from "../config/mongodb";
 
 class ThesisModel {
@@ -42,36 +43,65 @@ class ThesisModel {
   }
 
   static async getThesisById(id: string) {
-    const collection = await this.collection();
-    const journal = await collection
-      .aggregate([
-        {
-          $match: { id: id }, // Filter dokumen berdasarkan id buku
-        },
-        {
-          $lookup: {
-            from: "mahasiswa",
-            localField: "nim",
-            foreignField: "id",
-            as: "mahasiswa",
+    try {
+      const collection = await this.collection();
+      const journal = await collection
+        .aggregate([
+          {
+            $match: { id: id }, // Filter dokumen berdasarkan id thesis
           },
-        },
-        {
-          $unwind: {
-            path: "$mahasiswa",
-            preserveNullAndEmptyArrays: true,
+          {
+            $lookup: {
+              from: "mahasiswa",
+              localField: "nim",
+              foreignField: "id",
+              as: "mahasiswa",
+            },
           },
-        },
-      ])
-      .toArray();
-    return journal;
+          {
+            $unwind: {
+              path: "$mahasiswa",
+              preserveNullAndEmptyArrays: true,
+            },
+          },
+        ])
+        .toArray();
+      return journal;
+    } catch (error) {
+      throw error;
+    }
   }
 
-  static async createThesis(data) {}
+  static async createThesis(data: Thesis) {
+    try {
+      const collection = await this.collection();
+      const thesis = await collection.insertOne(data);
+      return thesis;
+    } catch (error) {
+      throw error;
+    }
+  }
 
-  static async updateThesis(id: string, data) {}
+  static async updateThesis(id: string, data: Thesis) {
+    try {
+      const collection = await this.collection();
+      const identifier = { id };
 
-  static async deleteThesis(id: string) {}
+      return await collection.updateOne(identifier, { $set: data });
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  static async deleteThesis(id: string) {
+    try {
+      const collection = await this.collection();
+
+      return await collection.deleteOne({ id });
+    } catch (error) {
+      throw error;
+    }
+  }
 }
 
 export default ThesisModel;
