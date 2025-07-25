@@ -1,4 +1,4 @@
-import { Notification } from "./type";
+import { Notification } from "../../libs/types/libraryType";
 
 interface LibraryNotificationProps {
   notification: Notification | null;

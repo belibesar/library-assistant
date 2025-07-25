@@ -1,4 +1,4 @@
-import { Journal } from "./type";
+import { Journal } from "../../libs/types/libraryType";
 import { formatDateForInput } from "../../utils/libraryUtil";
 import { Newspaper, Edit3, Trash2 } from "lucide-react";
 

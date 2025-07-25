@@ -17,7 +17,7 @@ import {
   LibraryItemType,
   Notification,
   SkripsiFormInput,
-} from "@/components/library/type";
+} from "@/libs/types/libraryType";
 import { getInitialFormInput, endpointMap } from "@/utils/libraryUtil";
 import { useLibraryItems } from "@/hooks/useLibraryItems";
 import { SkripsiCard } from "@/components/library/SkripsiCard";
@@ -401,7 +401,7 @@ export default function LibraryCollectionPage() {
     }
   };
 
-  console.log(selectedItem)
+  console.log(selectedItem);
 
   return (
     <div className="bg-base-100 mt-[-20px] h-full w-full">

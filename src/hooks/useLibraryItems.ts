@@ -5,7 +5,7 @@ import {
   LibraryItemType,
   Notification,
   Skripsi,
-} from "@/components/library/type";
+} from "@/libs/types/libraryType";
 import { endpointMap } from "@/utils/libraryUtil";
 
 export const useLibraryItems = () => {

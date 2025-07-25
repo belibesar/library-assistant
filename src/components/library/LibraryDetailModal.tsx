@@ -1,4 +1,4 @@
-import { LibraryItem } from "./type";
+import { LibraryItem } from "../../libs/types/libraryType";
 import { formatDateForInput, getItemTypeLabel } from "@/utils/libraryUtil";
 
 interface LibraryDetailModalProps {

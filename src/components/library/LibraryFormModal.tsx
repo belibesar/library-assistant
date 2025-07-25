@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { FormInput, LibraryItemType } from "./type";
+import { FormInput, LibraryItemType } from "../../libs/types/libraryType";
 import { getItemTypeLabel } from "@/utils/libraryUtil";
 
 interface LibraryFormModalProps {
@@ -25,7 +25,7 @@ export const LibraryFormModal = ({
   formErrors,
   onChange,
   onSubmit,
-  isEditMode
+  isEditMode,
 }: LibraryFormModalProps) => {
   if (!isOpen) return null;
 

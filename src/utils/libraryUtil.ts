@@ -4,7 +4,7 @@ import {
   JournalFormInput,
   LibraryItemType,
   SkripsiFormInput,
-} from "../components/library/type";
+} from "../libs/types/libraryType";
 
 export const formatDateForInput = (dateString?: string) => {
   if (!dateString) return "";

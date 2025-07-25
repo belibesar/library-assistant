@@ -1,4 +1,4 @@
-import { Skripsi } from "./type";
+import { Skripsi } from "../../libs/types/libraryType";
 import { formatDateForInput } from "../../utils/libraryUtil";
 import { FileText, Edit3, Trash2 } from "lucide-react";
 

@@ -1,4 +1,4 @@
-import { Book } from "./type";
+import { Book } from "../../libs/types/libraryType";
 import { formatDateForInput } from "../../utils/libraryUtil";
 import { BookOpen, Edit3, Trash2 } from "lucide-react";
 
