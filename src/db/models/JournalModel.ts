@@ -1,3 +1,4 @@
+import { ObjectId } from "mongodb";
 import { db } from "../config/mongodb";
 
 class JournalModel {
@@ -46,7 +47,7 @@ class JournalModel {
     const journal = await collection
       .aggregate([
         {
-          $match: { id: id }, // Filter dokumen berdasarkan id buku
+          $match: { _id: new ObjectId(id) }, // Filter dokumen berdasarkan id buku
         },
         {
           $lookup: {
@@ -64,7 +65,7 @@ class JournalModel {
         },
       ])
       .toArray();
-    return journal;
+    return journal[0] || null;
   }
 
   static async createJournal(data: Journal) {
@@ -75,10 +76,10 @@ class JournalModel {
 
   static async updateJournal(id: string, data: Journal) {
     const collection = await this.collection();
-    const identifier = { id };
-    const currentBook = await collection.findOne(identifier);
-    if (!currentBook) {
-      throw new Error("Book not found");
+    const identifier = { _id: new ObjectId(id) };
+    const currenJournal = await collection.findOne(identifier);
+    if (!currenJournal) {
+      throw new Error("Journal not found");
     }
     return await collection.updateOne(identifier, { $set: data });
   }
@@ -95,7 +96,7 @@ class JournalModel {
 
   static async countJournal(id: string) {
     const collection = await this.collection();
-    const identifier = { id };
+    const identifier = { _id: new ObjectId(id) };
     const currentJournal = await collection.findOne(identifier);
     const journalCount = currentJournal?.count || 0;
     if (!currentJournal) {

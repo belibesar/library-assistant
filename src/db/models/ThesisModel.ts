@@ -1,5 +1,6 @@
 import thesisSchema from "@/libs/schemas/ThesisSchema";
 import { db } from "../config/mongodb";
+import { ObjectId } from "mongodb";
 
 class ThesisModel {
   static async collection() {
@@ -48,7 +49,7 @@ class ThesisModel {
       const journal = await collection
         .aggregate([
           {
-            $match: { id: id }, // Filter dokumen berdasarkan id thesis
+            $match: { _id: new ObjectId(id) }, // Filter dokumen berdasarkan id thesis
           },
           {
             $lookup: {
@@ -66,7 +67,7 @@ class ThesisModel {
           },
         ])
         .toArray();
-      return journal;
+      return journal[0] || null;
     } catch (error) {
       throw error;
     }
@@ -85,8 +86,8 @@ class ThesisModel {
   static async updateThesis(id: string, data: Thesis) {
     try {
       const collection = await this.collection();
-      const identifier = { id };
-
+      const identifier = { _id: new ObjectId(id) };
+      
       return await collection.updateOne(identifier, { $set: data });
     } catch (error) {
       throw error;
@@ -101,6 +102,21 @@ class ThesisModel {
     } catch (error) {
       throw error;
     }
+  }
+
+  static async countThesis(id: string) {
+    const collection = await this.collection();
+    const identifier = { _id: new ObjectId(id) };
+    const currentThesis = await collection.findOne(identifier);
+    const thesisCount = currentThesis?.count || 0;
+    if (!currentThesis) {
+      throw new Error("Thesis not found");
+    }
+    return await collection.updateOne(identifier, {
+      $set: {
+        count: Number(thesisCount) + 1,
+      },
+    });
   }
 }
 

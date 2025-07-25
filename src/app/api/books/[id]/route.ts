@@ -56,6 +56,8 @@ export async function PUT(
       dipinjam: Number(requestData.dipinjam) || 0,
       penerbit_id: requestData.penerbit_id,
       pengarang_id: requestData.pengarang_id,
+      createdAt: requestData.createdAt, 
+      updatedAt: new Date().toISOString(), 
     };
 
     const bookData = await bookSchema.parseAsync(newData);
@@ -80,8 +82,8 @@ export async function DELETE(
 ) {
   try {
     const { id } = await params;
-    const currentBook = BookModel.getBookById(id);
-
+    const currentBook = await BookModel.getBookById(id);
+    console.log("current book", currentBook);
     if (!currentBook) {
       throw new Error(`Book not found!`);
     }

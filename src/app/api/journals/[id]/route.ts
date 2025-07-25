@@ -40,22 +40,28 @@ export async function PUT(
 ) {
   try {
     const { id } = await params;
-    const currentJournal = JournalModel.getJournalById(id);
+    const currentJournal = await JournalModel.getJournalById(id);
+    const timestamp = new Date().toISOString();
 
     if (!currentJournal) {
-      throw new Error(`Book not found!`);
+      return NextResponse.json(
+        { success: false, message: `Journal with id ${id} not found` },
+        { status: 404 },
+      );
     }
 
     const requestData = await request.json();
     const newData: Journal = {
-      id: requestData.id,
+      id: requestData.id || id,
       judul: requestData.judul,
       abstrak: requestData.abstrak,
       jurnal_id: requestData.jurnal_id,
-      updatedAt: requestData.updatedAt,
       createdAt: requestData.createdAt,
+      jumlah: Number(requestData.jumlah ?? currentJournal.jumlah),
+      dipinjam: Number(requestData.dipinjam ?? currentJournal.dipinjam),
+      tersedia: Number(requestData.tersedia ?? currentJournal.tersedia),
+      updatedAt: timestamp,
     };
-
     const journalData = await journlSchema.parseAsync(newData);
     const updatedJournal = await JournalModel.updateJournal(id, journalData);
     return NextResponse.json({
@@ -78,7 +84,7 @@ export async function DELETE(
 ) {
   try {
     const { id } = await params;
-    const currentJournal = JournalModel.getJournalById(id);
+    const currentJournal = await JournalModel.getJournalById(id);
 
     if (!currentJournal) {
       throw new Error(`Book not found!`);
@@ -109,6 +115,8 @@ export async function PATCH(
   try {
     const { id } = await params;
     const journal = await JournalModel.getJournalById(id);
+    console.log(journal);
+    console.log(id);
     if (!journal) {
       throw new Error(`Journal not found!`);
     }

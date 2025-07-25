@@ -49,15 +49,6 @@ export async function PUT(
     const requestData = await request.json();
     const timestamp = new Date().toISOString();
 
-    const newThesis: Thesis = {
-      id: requestData.id || id,
-      judul: requestData.judul,
-      abstrak: requestData.abstrak,
-      nim: requestData.nim,
-      tahun: requestData.tahun,
-      updatedAt: timestamp,
-    };
-    const thesisData = await thesisSchema.parseAsync(newThesis);
     const foundedThesis = await ThesisModel.getThesisById(id);
     if (!foundedThesis[0]) {
       return NextResponse.json(
@@ -70,6 +61,21 @@ export async function PUT(
         },
       );
     }
+    const existing = foundedThesis[0]; // dari database
+    const newThesis: Thesis = {
+      id: requestData.id || existing.id,
+      judul: requestData.judul || existing.judul,
+      abstrak: requestData.abstrak ?? existing.abstrak,
+      nim: requestData.nim || existing.nim,
+      jumlah: Number(requestData.jumlah ?? existing.jumlah),
+      dipinjam: Number(requestData.dipinjam ?? existing.dipinjam),
+      tersedia: Number(requestData.tersedia ?? existing.tersedia),
+      tahun: requestData.tahun || existing.tahun,
+      createdAt: existing.createdAt,
+      updatedAt: timestamp,
+    };
+
+    const thesisData = await thesisSchema.parseAsync(newThesis);
     const updatedThesis = await ThesisModel.updateThesis(id, thesisData);
 
     return NextResponse.json({
