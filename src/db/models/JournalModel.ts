@@ -1,5 +1,6 @@
 import { ObjectId } from "mongodb";
 import { db } from "../config/mongodb";
+import { Journal } from "@/libs/types/JournalType";
 
 class JournalModel {
   static async collection() {
@@ -107,6 +108,37 @@ class JournalModel {
         count: Number(journalCount) + 1,
       },
     });
+  }
+
+  static async getTop5MostAccessedJournals() {
+    const collection = await this.collection();
+    
+    const journals = await collection
+      .aggregate([
+        {
+          $lookup: {
+            from: "publikasi",
+            localField: "jurnal_id",
+            foreignField: "id",
+            as: "publikasi",
+          },
+        },
+        {
+          $unwind: {
+            path: "$publikasi",
+            preserveNullAndEmptyArrays: true,
+          },
+        },
+        {
+          $sort: { count: -1 }
+        },
+        {
+          $limit: 5
+        }
+      ])
+      .toArray();
+
+    return journals;
   }
 }
 

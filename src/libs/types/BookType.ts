@@ -1,4 +1,4 @@
-type Book = {
+export type Book = {
   id: string;
   judul: string;
   abstrak?: string;
