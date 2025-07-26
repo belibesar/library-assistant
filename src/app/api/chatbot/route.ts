@@ -101,25 +101,30 @@ export async function POST(request: Request) {
       contents: libraryAssistantPrompt,
       config: {
         thinkingConfig: {
-          thinkingBudget: 0, // Disables thinking
+          thinkingBudget: 0, 
         },
       },
     });
 
-    // To parse this string into a usable JavaScript object,
-    // you first need to remove the "```json\n" and "\n```" wrappers.
     console.log(response.text);
 
     const cleanedJsonString = (response.text as string)
       .replace("```json\n", "")
       .replace("\n```", "");
 
-    // Now, you can parse it using JSON.parse()
     let responseJson;
     try {
       responseJson = JSON.parse(cleanedJsonString);
     } catch {
       responseJson = { message: cleanedJsonString };
+    }
+
+    if (responseJson.book && !Array.isArray(responseJson.book)) {
+      responseJson.books = [responseJson.book];
+      delete responseJson.book;
+    } else if (Array.isArray(responseJson.book)) {
+      responseJson.books = responseJson.book;
+      delete responseJson.book;
     }
 
     console.log(responseJson, "responseJson?");
