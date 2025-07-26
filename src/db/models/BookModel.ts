@@ -1,6 +1,7 @@
 import bookSchema from "@/libs/schemas/BookSchema";
 import { db } from "../config/mongodb";
 import { ObjectId } from "mongodb";
+import { Book } from "@/libs/types/BookType";
 
 class BookModel {
   static async collection() {
@@ -123,6 +124,51 @@ class BookModel {
         count: Number(bookCount) + 1,
       },
     });
+  }
+
+  static async getTop5MostBorrowedBooks() {
+    const collection = await this.collection();
+    
+    const books = await collection
+      .aggregate([
+        {
+          $lookup: {
+            from: "pengarang",
+            localField: "pengarang_id",
+            foreignField: "id",
+            as: "pengarang",
+          },
+        },
+        {
+          $lookup: {
+            from: "penerbit",
+            localField: "penerbit_id",
+            foreignField: "id",
+            as: "penerbit",
+          },
+        },
+        {
+          $unwind: {
+            path: "$pengarang",
+            preserveNullAndEmptyArrays: true,
+          },
+        },
+        {
+          $unwind: {
+            path: "$penerbit",
+            preserveNullAndEmptyArrays: true,
+          },
+        },
+        {
+          $sort: { count: -1 }
+        },
+        {
+          $limit: 5
+        }
+      ])
+      .toArray();
+
+    return books;
   }
 }
 

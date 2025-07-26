@@ -1,6 +1,7 @@
 import thesisSchema from "@/libs/schemas/ThesisSchema";
 import { db } from "../config/mongodb";
 import { ObjectId } from "mongodb";
+import { Thesis } from "@/libs/types/ThesisType";
 
 class ThesisModel {
   static async collection() {
@@ -117,6 +118,37 @@ class ThesisModel {
         count: Number(thesisCount) + 1,
       },
     });
+  }
+
+  static async getTop5MostAccessedThesis() {
+    const collection = await this.collection();
+    
+    const thesis = await collection
+      .aggregate([
+        {
+          $lookup: {
+            from: "mahasiswa",
+            localField: "nim",
+            foreignField: "id",
+            as: "mahasiswa",
+          },
+        },
+        {
+          $unwind: {
+            path: "$mahasiswa",
+            preserveNullAndEmptyArrays: true,
+          },
+        },
+        {
+          $sort: { count: -1 } 
+        },
+        {
+          $limit: 5 
+        }
+      ])
+      .toArray();
+
+    return thesis;
   }
 }
 
