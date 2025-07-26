@@ -100,3 +100,21 @@ export interface Book {
   available?: number;
   total?: number;
 }
+
+export interface BookData {
+  _id: string;
+  judul: string;
+  count?: number;
+}
+
+export interface JournalData {
+  _id: string;
+  judul: string;
+  count?: number;
+}
+
+export interface ThesisData {
+  _id: string;
+  judul: string;
+  count?: number;
+}
