@@ -1,5 +1,6 @@
 import ThesisModel from "@/db/models/ThesisModel";
 import thesisSchema from "@/libs/schemas/ThesisSchema";
+import { Thesis } from "@/libs/types/ThesisType";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest) {
@@ -42,6 +43,7 @@ export async function POST(request: NextRequest) {
       id: requestData.id || +new Date(),
       judul: requestData.judul,
       abstrak: requestData.abstrak,
+      count: 0,
       nim: requestData.nim,
       tahun: requestData.tahun,
       createdAt: timestamp,

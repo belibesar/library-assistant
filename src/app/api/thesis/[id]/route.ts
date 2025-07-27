@@ -1,5 +1,6 @@
 import ThesisModel from "@/db/models/ThesisModel";
 import thesisSchema from "@/libs/schemas/ThesisSchema";
+import { Thesis } from "@/libs/types/ThesisType";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(
@@ -67,9 +68,6 @@ export async function PUT(
       judul: requestData.judul || existing.judul,
       abstrak: requestData.abstrak ?? existing.abstrak,
       nim: requestData.nim || existing.nim,
-      jumlah: Number(requestData.jumlah ?? existing.jumlah),
-      dipinjam: Number(requestData.dipinjam ?? existing.dipinjam),
-      tersedia: Number(requestData.tersedia ?? existing.tersedia),
       tahun: requestData.tahun || existing.tahun,
       createdAt: existing.createdAt,
       updatedAt: timestamp,

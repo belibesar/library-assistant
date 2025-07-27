@@ -1,25 +1,29 @@
-import ThesisModel from "@/db/models/ThesisModel";
 import { NextRequest, NextResponse } from "next/server";
+import ThesisModel from "@/db/models/ThesisModel";
 
-export async function PATCH(
+export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } },
+  { params }: { params: Promise<{ id: string }> },
 ) {
   try {
     const { id } = await params;
-    const book = await ThesisModel.getThesisById(id);
-    if (!book) {
-      throw new Error(`Thesis not found!`);
+    const data = await ThesisModel.getThesisById(id);
+    if (!data[0]) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: "Data not found!",
+        },
+        {
+          status: 404,
+        },
+      );
     }
-    const increaseCount = await ThesisModel.countThesis(id);
-    return NextResponse.json(
-      {
-        success: true,
-        message: `Thesis count with id ${id} has been updated`,
-        data: increaseCount,
-      },
-      { status: 200 },
-    );
+    return NextResponse.json({
+      success: true,
+      message: `Data for Thesis ID ${id}`,
+      data: data[0],
+    });
   } catch (error) {
     console.log(error);
     return NextResponse.json({

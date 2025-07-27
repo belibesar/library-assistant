@@ -1,10 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import BookModel from "@/db/models/BookModel";
 import bookSchema from "@/libs/schemas/BookSchema";
+import { Book } from "@/libs/types/BookType";
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } },
+  { params }: { params: Promise<{ id: string }> },
 ) {
   try {
     const { id } = await params;
@@ -36,7 +37,7 @@ export async function GET(
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } },
+  { params }: { params: Promise<{ id: string }> },
 ) {
   try {
     const { id } = await params;
@@ -56,8 +57,8 @@ export async function PUT(
       dipinjam: Number(requestData.dipinjam) || 0,
       penerbit_id: requestData.penerbit_id,
       pengarang_id: requestData.pengarang_id,
-      createdAt: requestData.createdAt, 
-      updatedAt: new Date().toISOString(), 
+      createdAt: requestData.createdAt,
+      updatedAt: new Date().toISOString(),
     };
 
     const bookData = await bookSchema.parseAsync(newData);
@@ -78,7 +79,7 @@ export async function PUT(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } },
+  { params }: { params: Promise<{ id: string }> },
 ) {
   try {
     const { id } = await params;
@@ -108,7 +109,7 @@ export async function DELETE(
 
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { id: string } },
+  { params }: { params: Promise<{ id: string }> },
 ) {
   try {
     const { id } = await params;

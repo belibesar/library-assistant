@@ -4,20 +4,6 @@
 // import { Search, BookOpen, User, Tag, Edit3, Trash2  } from 'lucide-react';
 // import { Buku } from '@/libs/types';
 
-// // interface Book {
-// //   id: string;
-// //   title: string;
-// //   author: string;
-// //   category: string;
-// //   year: number;
-// //   description: string;
-// //   available: number;
-// //   total: number;
-// //   rating?: number;
-// //   isbn?: string;
-// //   publisher?: string;
-// // }
-
 // export default function SearchPage() {
 //   const [searchQuery, setSearchQuery] = useState('');
 //   const [searchResults, setSearchResults] = useState<Buku[]>([]);
@@ -93,13 +79,13 @@
 //     setHasSearched(true);
 
 //     setTimeout(() => {
-//       const filtered = mockBooks.filter(book => 
+//       const filtered = mockBooks.filter(book =>
 //         book.title.toLowerCase().includes(query.toLowerCase()) ||
 //         book.author.toLowerCase().includes(query.toLowerCase()) ||
 //         book.category.toLowerCase().includes(query.toLowerCase()) ||
 //         book.description.toLowerCase().includes(query.toLowerCase())
 //       );
-      
+
 //       setSearchResults(filtered);
 //       setIsSearching(false);
 //     }, 300);
@@ -122,10 +108,11 @@
 //     const books = searchResults.length;
 //     const authors = new Set(searchResults.map(book => book.author)).size;
 //     const categories = new Set(searchResults.map(book => book.category)).size;
-    
+
 //     return { books, authors, categories };
 //   };
-// const getCategoryDescription = (category: string): string => {
+
+//   const getCategoryDescription = (category: string): string => {
 //     const descriptions: Record<string, string> = {
 //       'Filsafat': 'Buku-buku tentang filsafat dan pemikiran',
 //       'Teknologi': 'Buku-buku tentang teknologi dan komputer',
@@ -136,9 +123,10 @@
 //       'Ekonomi': 'Buku-buku ekonomi dan bisnis',
 //       'Metodologi': 'Buku-buku metodologi penelitian'
 //     };
-    
+
 //     return descriptions[category] || `Buku-buku dalam kategori ${category}`;
 //   };
+
 //   const getFilteredResults = () => {
 //     switch (activeTab) {
 //       case 'books':
@@ -176,23 +164,22 @@
 //           Cari buku, pengarang, dan kategori dengan AI
 //         </p>
 //       </div>
-// <div className="flex w-full flex-col py-2">
-//         <div className="w-full rounded-lg bg-white p-4 shadow-sm border border-gray-200">
-//             <div className="relative">
-//         <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-//           <Search className="w-5 h-5 text-gray-400" />
-//         </div>
-//         <input
-//   type="text"
-//   className="w-full p-4 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-//   placeholder="Cari buku, pengarang, atau topik..."
-//   value={searchQuery}
-//   onChange={(e) => setSearchQuery(e.target.value)}
-// />
 
-//       </div>
+//       <div className="flex w-full flex-col py-2">
+//         <div className="w-full rounded-lg bg-white p-4 shadow-sm border border-gray-200">
+//           <div className="relative">
+//             <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+//               <Search className="w-5 h-5 text-gray-400" />
+//             </div>
+//             <input
+//               type="text"
+//               className="w-full p-4 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+//               placeholder="Cari buku, pengarang, atau topik..."
+//               value={searchQuery}
+//               onChange={(e) => setSearchQuery(e.target.value)}
+//             />
+//           </div>
 //         </div>
-      
 //       </div>
 
 //       {hasSearched && (
@@ -236,7 +223,7 @@
 //                     <BookOpen className="w-4 h-4" />
 //                     Buku ({bookCount})
 //                   </button>
-                  
+
 //                   <button
 //                     onClick={() => setActiveTab('authors')}
 //                     className={`flex items-center gap-2 py-4 px-1 border-b-2 font-medium text-sm transition-colors ${
@@ -248,7 +235,7 @@
 //                     <User className="w-4 h-4" />
 //                     Pengarang ({authorCount})
 //                   </button>
-                  
+
 //                   <button
 //                     onClick={() => setActiveTab('categories')}
 //                     className={`flex items-center gap-2 py-4 px-1 border-b-2 font-medium text-sm transition-colors ${
@@ -264,64 +251,64 @@
 //               </div>
 
 //               <div className="p-6">
-//   {activeTab === 'books' && (
-//     <div className="grid grid-cols-1 gap-4 pt-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-//       {searchResults.map((book) => (
-//         <div
-//           key={book.id}
-//           className="overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm transition-all duration-300 hover:border-blue-300 hover:shadow-xl hover:shadow-blue-100"
-//         >
-//           <div className="p-4 pb-3">
-//             <div className="mb-1 flex items-start justify-between">
-//               <div>
-//                 <BookOpen size={30} color="#113FF7" />
-//               </div>
-//               <div className="flex gap-1">
-//                 <button className="rounded-lg p-2 text-gray-400 transition-colors hover:bg-blue-50 hover:text-blue-600">
-//                   <Edit3 size={16} />
-//                 </button>
-//                 <button className="rounded-lg p-2 text-gray-400 transition-colors hover:bg-red-50 hover:text-red-600">
-//                   <Trash2 size={16} />
-//                 </button>
-//               </div>
-//             </div>
+//                 {activeTab === 'books' && (
+//                   <div className="grid grid-cols-1 gap-4 pt-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+//                     {searchResults.map((book) => (
+//                       <div
+//                         key={book.id}
+//                         className="overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm transition-all duration-300 hover:border-blue-300 hover:shadow-xl hover:shadow-blue-100"
+//                       >
+//                         <div className="p-4 pb-3">
+//                           <div className="mb-1 flex items-start justify-between">
+//                             <div>
+//                               <BookOpen size={30} color="#113FF7" />
+//                             </div>
+//                             <div className="flex gap-1">
+//                               <button className="rounded-lg p-2 text-gray-400 transition-colors hover:bg-blue-50 hover:text-blue-600">
+//                                 <Edit3 size={16} />
+//                               </button>
+//                               <button className="rounded-lg p-2 text-gray-400 transition-colors hover:bg-red-50 hover:text-red-600">
+//                                 <Trash2 size={16} />
+//                               </button>
+//                             </div>
+//                           </div>
 
-//             <div className="space-y-3">
-//               <h3 className="line-clamp-2 text-lg leading-tight font-bold text-gray-900">
-//                 {book.title}
-//               </h3>
-//               <p className="text-sm text-gray-600">oleh {book.author}</p>
+//                           <div className="space-y-3">
+//                             <h3 className="line-clamp-2 text-lg leading-tight font-bold text-gray-900">
+//                               {book.title}
+//                             </h3>
+//                             <p className="text-sm text-gray-600">oleh {book.author}</p>
 
-//               <span className="inline-block rounded-full bg-gray-100 px-3 text-xs font-medium text-gray-700">
-//                 {book.category}
-//               </span>
+//                             <span className="inline-block rounded-full bg-gray-100 px-3 text-xs font-medium text-gray-700">
+//                               {book.category}
+//                             </span>
 
-//               <p className="line-clamp-3 text-sm leading-relaxed text-gray-600">
-//                 {book.description}
-//               </p>
-//             </div>
-//           </div>
+//                             <p className="line-clamp-3 text-sm leading-relaxed text-gray-600">
+//                               {book.description}
+//                             </p>
+//                           </div>
+//                         </div>
 
-//           <div className="border-t border-gray-100 bg-gray-50 px-4 py-3">
-//             <div className="flex items-center justify-between">
-//               <span className="text-md text-gray-500">{book.year}</span>
-//               <span
-//                 className={`rounded-md px-2 py-1 text-sm font-semibold ${
-//                   book.available > 0
-//                     ? 'bg-green-50 text-green-600'
-//                     : 'bg-red-50 text-red-600'
-//                 }`}
-//               >
-//                 {book.available}/{book.total} tersedia
-//               </span>
-//             </div>
-//           </div>
-//         </div>
-//       ))}
-//     </div>
-//   )}
+//                         <div className="border-t border-gray-100 bg-gray-50 px-4 py-3">
+//                           <div className="flex items-center justify-between">
+//                             <span className="text-md text-gray-500">{book.year}</span>
+//                             <span
+//                               className={`rounded-md px-2 py-1 text-sm font-semibold ${
+//                                 book.available > 0
+//                                   ? 'bg-green-50 text-green-600'
+//                                   : 'bg-red-50 text-red-600'
+//                               }`}
+//                             >
+//                               {book.available}/{book.total} tersedia
+//                             </span>
+//                           </div>
+//                         </div>
+//                       </div>
+//                     ))}
+//                   </div>
+//                 )}
 
-//                {activeTab === 'authors' && (
+//                 {activeTab === 'authors' && (
 //                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
 //                     {(getFilteredResults() as [string, Buku[]][]).map(([author, books]) => (
 //                       <div key={author} className="border border-gray-200 rounded-lg p-4 bg-white hover:shadow-md transition-shadow duration-200">
@@ -340,26 +327,25 @@
 //                 )}
 
 //                 {activeTab === 'categories' && (
-//   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-//     {(getFilteredResults() as [string, Buku[]][]).map(([category, books]) => (
-//       <div
-//         key={category}
-//         className="border border-gray-200 rounded-md p-3 bg-white hover:shadow-sm transition-shadow duration-200"
-//       >
-//         <div className="flex items-start gap-2">
-//           <Tag size={20} className="mt-2" color='#8927B2' />
-//           <div className="flex-1 min-w-0">
-//             <h3 className="font-medium text-md text-gray-900 mb-0.5">{category}</h3>
-//             <p className="text-md text-gray-600 leading-snug line-clamp-3">
-//               {getCategoryDescription(category)}
-//             </p>
-//           </div>
-//         </div>
-//       </div>
-//     ))}
-//   </div>
-// )}
-
+//                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+//                     {(getFilteredResults() as [string, Buku[]][]).map(([category, books]) => (
+//                       <div
+//                         key={category}
+//                         className="border border-gray-200 rounded-md p-3 bg-white hover:shadow-sm transition-shadow duration-200"
+//                       >
+//                         <div className="flex items-start gap-2">
+//                           <Tag size={20} className="mt-2" color='#8927B2' />
+//                           <div className="flex-1 min-w-0">
+//                             <h3 className="font-medium text-md text-gray-900 mb-0.5">{category}</h3>
+//                             <p className="text-md text-gray-600 leading-snug line-clamp-3">
+//                               {getCategoryDescription(category)}
+//                             </p>
+//                           </div>
+//                         </div>
+//                       </div>
+//                     ))}
+//                   </div>
+//                 )}
 //               </div>
 //             </div>
 //           )}
@@ -389,3 +375,9 @@
 //     </div>
 //   );
 // }
+
+const SearchPage = () => {
+  return <div>SearchPage</div>;
+};
+
+export default SearchPage;
