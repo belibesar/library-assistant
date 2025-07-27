@@ -1,37 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-
-interface BookData {
-  _id: string;
-  judul: string;
-  count?: number;
-  pengarang?: {
-    nama: string;
-  };
-  penerbit?: {
-    nama: string;
-  };
-}
-
-interface JournalData {
-  _id: string;
-  judul: string;
-  count?: number;
-  publikasi?: {
-    nama: string;
-  };
-}
-
-interface ThesisData {
-  _id: string;
-  judul: string;
-  count?: number;
-  mahasiswa?: {
-    nama: string;
-  };
-  tahun: string;
-}
+import { BookData, JournalData, ThesisData } from '@/libs/types';
 
 export default function SettingsPage() {
   const [topBooks, setTopBooks] = useState<BookData[]>([]);
