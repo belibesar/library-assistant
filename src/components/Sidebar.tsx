@@ -84,7 +84,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, toggleSidebar }) => {
               </Link>
             </li> */}
             <li>
-              <Link href="#" className="flex items-center gap-2 px-3 py-2 hover:bg-gray-200 hover:text-gray-900 active:bg-gray-800 active:text-white transition-colors duration-200 rounded-lg">
+              <Link href="/dashboard/settings" className="flex items-center gap-2 px-3 py-2 hover:bg-gray-200 hover:text-gray-900 active:bg-gray-800 active:text-white transition-colors duration-200 rounded-lg">
                 <Settings size={20} color="#111d22" />
                 Pengaturan
               </Link>
