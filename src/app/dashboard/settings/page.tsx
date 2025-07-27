@@ -129,7 +129,7 @@ export default function SettingsPage() {
     <div className="min-h-screen bg-gray-50 p-6">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-3xl font-bold text-gray-800">📊 Analitic Perpus</h1>
-         <button className="button" type="button">
+         <button onClick={refreshData}  className="button" type="button">
     <span className="button__text">Refresh</span>
     <span className="button__icon">
       <svg
