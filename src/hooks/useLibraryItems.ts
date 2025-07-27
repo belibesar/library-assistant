@@ -7,6 +7,8 @@ import {
   Skripsi,
 } from "@/libs/types/libraryType";
 import { endpointMap } from "@/utils/libraryUtil";
+import { Book } from "@/libs/types/BookType";
+import { Journal } from "@/libs/types/JournalType";
 
 export const useLibraryItems = () => {
   const [search, setSearch] = useState("");

@@ -1,25 +1,29 @@
-import JournalModel from "@/db/models/JournalModel";
 import { NextRequest, NextResponse } from "next/server";
+import JournalModel from "@/db/models/JournalModel";
 
-export async function PATCH(
+export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } },
+  { params }: { params: Promise<{ id: string }> },
 ) {
   try {
     const { id } = await params;
-    const journal = await JournalModel.getJournalById(id);
-    if (!journal) {
-      throw new Error(`Journal not found!`);
+    const data = await JournalModel.getJournalById(id);
+    if (!data[0]) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: "Data not found!",
+        },
+        {
+          status: 404,
+        },
+      );
     }
-    const increaseCount = await JournalModel.countJournal(id);
-    return NextResponse.json(
-      {
-        success: true,
-        message: `Journal count with id ${id} has been updated`,
-        data: increaseCount,
-      },
-      { status: 200 },
-    );
+    return NextResponse.json({
+      success: true,
+      message: `Data for Journal ID ${id}`,
+      data: data[0],
+    });
   } catch (error) {
     console.log(error);
     return NextResponse.json({

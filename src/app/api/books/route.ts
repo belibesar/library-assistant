@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import BookModel from "@/db/models/BookModel";
 import bookSchema from "@/libs/schemas/BookSchema";
+import { Book } from "@/libs/types/BookType";
 
 export async function GET(request: NextRequest) {
   // Get search parameters from the URL
