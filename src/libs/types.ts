@@ -32,6 +32,8 @@ export interface ChatMessage {
   sender: "user" | "bot";
   message: string;
   timestamp: string;
+  books?: RepositoryType[];
+  racks?: [rak: string];
 }
 
 export interface ChatbotMessagesCardProps {
@@ -64,16 +66,16 @@ export type CustomError = {
   message: string;
   status: number;
 };
-
-export interface Book {
-  id: number;
-  title: string;
-  author: string;
-  year: string;
-  category: string;
-  description: string;
-  available: number;
-  total: number;
+export interface Buku {
+  id: string;
+  judul: string;
+  pengarang: string;
+  jumlah: string;
+  tersedia: number;
+  dipinjam: string;
+  penerbit_id: number;
+  pengarang_id: number;
+  deskripsi?: string;
 }
 
 export interface SidebarProps {
@@ -88,3 +90,31 @@ export type RepositoryType = {
   no_barcode: number;
   lokasi: string;
 };
+export interface Book {
+  id: string;
+  title: string;
+  call_number?: string;
+  no_invent?: string;
+  no_barcode?: string;
+  lokasi?: string;
+  available?: number;
+  total?: number;
+}
+
+export interface BookData {
+  _id: string;
+  judul: string;
+  count?: number;
+}
+
+export interface JournalData {
+  _id: string;
+  judul: string;
+  count?: number;
+}
+
+export interface ThesisData {
+  _id: string;
+  judul: string;
+  count?: number;
+}

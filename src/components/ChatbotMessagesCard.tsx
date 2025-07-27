@@ -1,8 +1,12 @@
-'use client';
+"use client";
 
-import React, { useRef, useEffect } from 'react';
-import { Bot } from 'lucide-react';
-import { ChatMessage, ChatbotMessagesCardProps } from '@/libs/types';
+import React, { useRef, useEffect } from "react";
+import { Bot } from "lucide-react";
+import {
+  ChatMessage,
+  ChatbotMessagesCardProps,
+  RepositoryType,
+} from "@/libs/types";
 
 const ChatbotMessagesCard: React.FC<ChatbotMessagesCardProps> = ({
   messages,
@@ -21,19 +25,22 @@ const ChatbotMessagesCard: React.FC<ChatbotMessagesCardProps> = ({
   }, [messages]);
 
   return (
-    <div className="bg-white text-sm p-6 rounded-lg border border-gray-200 flex flex-col flex-grow">
-      <div ref={chatAreaRef} className="p-4 rounded-lg mb-4 space-y-4">
+    <div className="flex flex-grow flex-col rounded-lg border border-gray-200 bg-white p-6 text-sm">
+      <div ref={chatAreaRef} className="mb-4 space-y-4 rounded-lg p-4">
         {messages.map((msg) => (
-<div
-  key={msg.id}
-  className={`flex mb-4 items-start w-full ${
-    msg.sender === 'user' ? 'justify-end' : 'justify-start'
-  } flex-row`}
->
-            <div className={`relative w-10 h-10 flex-shrink-0 ${msg.sender === 'user' ? 'order-2 ml-2' : 'order-1 mr-2'}`}>
-  <div className={`w-10 h-10 rounded-full flex items-center justify-center 
-    ${msg.sender === 'user' ? 'bg-blue-500 text-white' : 'bg-gray-200 text-black'}`}>
-                {msg.sender === 'bot' ? (
+          <div
+            key={msg.id}
+            className={`mb-4 flex w-full items-start ${
+              msg.sender === "user" ? "justify-end" : "justify-start"
+            } flex-row`}
+          >
+            <div
+              className={`relative h-10 w-10 flex-shrink-0 ${msg.sender === "user" ? "order-2 ml-2" : "order-1 mr-2"}`}
+            >
+              <div
+                className={`flex h-10 w-10 items-center justify-center rounded-full ${msg.sender === "user" ? "bg-blue-500 text-white" : "bg-gray-200 text-black"}`}
+              >
+                {msg.sender === "bot" ? (
                   <Bot size={20} color="#1d1b27" strokeWidth={2.25} />
                 ) : (
                   <svg
@@ -42,7 +49,7 @@ const ChatbotMessagesCard: React.FC<ChatbotMessagesCardProps> = ({
                     viewBox="0 0 24 24"
                     strokeWidth={1.5}
                     stroke="currentColor"
-                    className="w-5 h-5"
+                    className="h-5 w-5"
                   >
                     <path
                       strokeLinecap="round"
@@ -55,51 +62,66 @@ const ChatbotMessagesCard: React.FC<ChatbotMessagesCardProps> = ({
             </div>
 
             {/* Kontainer untuk pesan dan timestamp */}
-            <div className={`flex flex-col max-w-[80%] ${msg.sender === 'user' ? 'order-1 items-end' : 'order-2 items-start'}`}>
-  <div
-    className={`p-3 rounded-lg ${
-      msg.sender === 'user'
-        ? 'bg-blue-500 text-white rounded-br-none'
-        : 'bg-gray-200 text-black rounded-bl-none'
-    }`}
-    dangerouslySetInnerHTML={{ __html: msg.message }}
-  />
-  <div className="text-gray-500 text-sm mt-1">{msg.timestamp}</div>
+            <div
+              className={`flex max-w-[80%] flex-col ${msg.sender === "user" ? "order-1 items-end" : "order-2 items-start"}`}
+            >
+              <div
+                className={`rounded-lg p-3 ${
+                  msg.sender === "user"
+                    ? "rounded-br-none bg-blue-500 text-white"
+                    : "rounded-bl-none bg-gray-200 text-black"
+                }`}
+                dangerouslySetInnerHTML={{ __html: msg.message }}
+              />
+              <div>
+                {/* // Usage of BookDisplay component within the messages mapping */}
+                {/* kalo ada buku */}
+                {msg.books &&
+                  msg.books.map((book, index) => (
+                    <BookDisplay key={index} book={book} />
+                  ))}
+                {msg.racks &&
+                  msg.racks.map((rack, index) => (
+                    <RackDisplay key={index} rack={rack} />
+                  ))}
+              </div>
+              <div className="mt-1 text-sm text-gray-500">{msg.timestamp}</div>
             </div>
           </div>
         ))}
       </div>
       {/* hr nya di jadikan full */}
-<hr className="my-4 -mx-6 border-t border-gray-300" />
-{/* hr atas dijadikan full */}
+      <hr className="-mx-6 my-4 border-t border-gray-300" />
+      {/* hr atas dijadikan full */}
       <div className="form-control mb-4">
-  <label className="label cursor-pointer justify-start items-start flex-wrap">
-    <input
-      type="checkbox"
-      checked={agreePrivacy}
-      onChange={(e) => setAgreePrivacy(e.target.checked)}
-      className="checkbox checkbox-sm sm:checkbox-md text-white mr-2 mt-1 border-gray-300 checked:bg-blue-500 checked:border-blue-500 flex-shrink-0"
-    />
-    <span className="label-text text-xs sm:text-sm leading-tight break-words flex-1">
-      💡Setuju kebijakan privasi untuk menggunakan fitur chat
-    </span>
-  </label>
-</div>
+        <label className="label cursor-pointer flex-wrap items-start justify-start">
+          <input
+            type="checkbox"
+            checked={agreePrivacy}
+            onChange={(e) => setAgreePrivacy(e.target.checked)}
+            className="checkbox checkbox-sm sm:checkbox-md mt-1 mr-2 flex-shrink-0 border-gray-300 text-white checked:border-blue-500 checked:bg-blue-500"
+          />
+          <span className="label-text flex-1 text-xs leading-tight break-words sm:text-sm">
+            💡Setuju kebijakan privasi untuk menggunakan fitur chat
+          </span>
+        </label>
+      </div>
 
-      <div className="flex gap-2 flex-col sm:flex-row">
+      <div className="flex flex-col gap-2 sm:flex-row">
         <input
           type="text"
           placeholder="Tanya tentang buku, cari di rak, atau minta saran..."
-          className="input input-bordered border-blue-500 flex-grow rounded-sm text-xs sm:text-sm"
+          className="input input-bordered flex-grow rounded-sm text-xs focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none sm:text-sm"
           value={inputMessage}
           onChange={(e) => setInputMessage(e.target.value)}
-          onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
+          onKeyPress={(e) => e.key === "Enter" && sendMessage()}
           disabled={!agreePrivacy}
         />
+
         <button
-          className="btn btn-sm sm:btn-md bg-blue-500 text-white rounded-[10%] px-3 sm:px-4"
+          className="btn btn-sm sm:btn-md rounded-[10%] bg-blue-500 px-3 text-white sm:px-4"
           onClick={sendMessage}
-          disabled={!agreePrivacy || inputMessage.trim() === ''}
+          disabled={!agreePrivacy || inputMessage.trim() === ""}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -107,7 +129,7 @@ const ChatbotMessagesCard: React.FC<ChatbotMessagesCardProps> = ({
             viewBox="0 0 24 24"
             strokeWidth={1.5}
             stroke="currentColor"
-            className="w-4 h-4 sm:w-6 sm:h-6"
+            className="h-4 w-4 sm:h-6 sm:w-6"
           >
             <path
               strokeLinecap="round"
@@ -117,6 +139,39 @@ const ChatbotMessagesCard: React.FC<ChatbotMessagesCardProps> = ({
           </svg>
         </button>
       </div>
+    </div>
+  );
+};
+
+const BookDisplay: React.FC<{
+  book: {
+    judul: string;
+    call_number: string;
+    no_invent: string;
+    no_barcode: number;
+    lokasi: string;
+  };
+}> = ({ book }) => {
+  return (
+    <div className="mt-5 rounded-bl-none bg-blue-200 p-5 text-black">
+      <h3>
+        Judul: <span className="font-bold">{book.judul}</span>{" "}
+      </h3>
+      <p>Call Number: {book.call_number}</p>
+      <p>No Invent: {book.no_invent}</p>
+      <p>No Barcode: {book.no_barcode}</p>
+      <p>Lokasi: {book.lokasi}</p>
+    </div>
+  );
+};
+const RackDisplay: React.FC<{
+  rack: string;
+}> = ({ rack }) => {
+  return (
+    <div className="mt-5 rounded-bl-none bg-blue-200 p-5 text-black">
+      <h3>
+        <span className="font-bold">{rack}</span>{" "}
+      </h3>
     </div>
   );
 };

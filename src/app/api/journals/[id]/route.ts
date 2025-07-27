@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import BookModel from "@/db/models/BookModel";
-import bookSchema from "@/libs/schemas/BookSchema";
+import JournalModel from "@/db/models/JournalModel";
+import journlSchema from "@/libs/schemas/JournalSchema";
 
 export async function GET(
   request: NextRequest,
@@ -8,7 +8,7 @@ export async function GET(
 ) {
   try {
     const { id } = await params;
-    const data = await BookModel.getBookById(id);
+    const data = await JournalModel.getJournalById(id);
     if (!data[0]) {
       return NextResponse.json(
         {
@@ -22,7 +22,7 @@ export async function GET(
     }
     return NextResponse.json({
       success: true,
-      message: `Data for Book ID ${id}`,
+      message: `Data for Journal ID ${id}`,
       data: data[0],
     });
   } catch (error) {
@@ -40,32 +40,34 @@ export async function PUT(
 ) {
   try {
     const { id } = await params;
-    const currentBook = BookModel.getBookById(id);
+    const currentJournal = await JournalModel.getJournalById(id);
+    const timestamp = new Date().toISOString();
 
-    if (!currentBook) {
-      throw new Error(`Book not found!`);
+    if (!currentJournal) {
+      return NextResponse.json(
+        { success: false, message: `Journal with id ${id} not found` },
+        { status: 404 },
+      );
     }
 
     const requestData = await request.json();
-    const newData: Book = {
-      id: requestData.id || +new Date(),
+    const newData: Journal = {
+      id: requestData.id || id,
       judul: requestData.judul,
       abstrak: requestData.abstrak,
-      jumlah: Number(requestData.jumlah),
-      tersedia: Number(requestData.jumlah),
-      dipinjam: Number(requestData.dipinjam) || 0,
-      penerbit_id: requestData.penerbit_id,
-      pengarang_id: requestData.pengarang_id,
-      createdAt: requestData.createdAt, 
-      updatedAt: new Date().toISOString(), 
+      jurnal_id: requestData.jurnal_id,
+      createdAt: requestData.createdAt,
+      jumlah: Number(requestData.jumlah ?? currentJournal.jumlah),
+      dipinjam: Number(requestData.dipinjam ?? currentJournal.dipinjam),
+      tersedia: Number(requestData.tersedia ?? currentJournal.tersedia),
+      updatedAt: timestamp,
     };
-
-    const bookData = await bookSchema.parseAsync(newData);
-    const updatedBook = await BookModel.updateBook(id, bookData);
+    const journalData = await journlSchema.parseAsync(newData);
+    const updatedJournal = await JournalModel.updateJournal(id, journalData);
     return NextResponse.json({
       success: true,
-      message: `Book with id ${id} has been updated`,
-      data: updatedBook,
+      message: `Journal with id ${id} has been updated`,
+      data: updatedJournal,
     });
   } catch (error) {
     console.log(error);
@@ -82,18 +84,18 @@ export async function DELETE(
 ) {
   try {
     const { id } = await params;
-    const currentBook = await BookModel.getBookById(id);
-    console.log("current book", currentBook);
-    if (!currentBook) {
+    const currentJournal = await JournalModel.getJournalById(id);
+
+    if (!currentJournal) {
       throw new Error(`Book not found!`);
     }
 
-    const deleteBook = await BookModel.deleteBook(id);
+    const deletedJournal = await JournalModel.deleteJournal(id);
     return NextResponse.json(
       {
         success: true,
         message: `Book with id ${id} has been deleted`,
-        data: deleteBook,
+        data: deletedJournal,
       },
       { status: 200 },
     );
@@ -112,15 +114,17 @@ export async function PATCH(
 ) {
   try {
     const { id } = await params;
-    const book = await BookModel.getBookById(id);
-    if (!book) {
-      throw new Error(`Book not found!`);
+    const journal = await JournalModel.getJournalById(id);
+    console.log(journal);
+    console.log(id);
+    if (!journal) {
+      throw new Error(`Journal not found!`);
     }
-    const increaseCount = await BookModel.countBook(id);
+    const increaseCount = await JournalModel.countJournal(id);
     return NextResponse.json(
       {
         success: true,
-        message: `Book count with id ${id} has been updated`,
+        message: `Journal count with id ${id} has been updated`,
         data: increaseCount,
       },
       { status: 200 },
