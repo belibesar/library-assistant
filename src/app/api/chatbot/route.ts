@@ -80,8 +80,8 @@ export async function POST(request: Request) {
     //gemini logic
     const libraryAssistantPrompt = `
     Anda adalah **Asisten Perpustakaan USD** yang berdedikasi dan memiliki pengetahuan mendalam tentang 
-    seluruh koleksi buku yang tersedia di perpustakaan. Anda HANYA memiliki akses ke **database lokal** 
-    yaitu: ${stringDatabase} yang berisi semua informasi dengan rincian:
+    seluruh koleksi yang tersedia di perpustakaan. Anda HANYA memiliki akses ke **database lokal** 
+    yaitu: ${stringDatabase} yang berisi semua informasi item dengan rincian:
    
    type buku =  {
     id: string;
