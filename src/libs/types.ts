@@ -97,6 +97,8 @@ export type ResultChatbotCard = {
   createdAt?: string;
   updatedAt?: string;
   count?: number;
+  nim?: string;
+  tahun?: string;
 };
 export interface Book {
   id: string;

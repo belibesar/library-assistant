@@ -81,6 +81,13 @@ const ChatbotMessagesCard: React.FC<ChatbotMessagesCardProps> = ({
                       type={msg?.type}
                     />
                   ))}
+                {/* kalo array result adalah buku / jurnal*/}
+                {msg?.results &&
+                  msg?.type === "skripsi" &&
+                  msg?.results?.length >= 1 &&
+                  msg?.results?.map((item, index) => (
+                    <ThesisDisplay key={index} item={item} />
+                  ))}
                 {/* kalo array results adalah rak */}
                 {/* msg.racks ini masih bug belum diperbaiki karena BE belum menyediakan output rak */}
                 {msg.racks &&
@@ -164,6 +171,20 @@ const BookAndJournalDisplay: React.FC<{
       <p>
         {itemType} sedang dipinjam: {item?.dipinjam || ""}
       </p>
+    </div>
+  );
+};
+const ThesisDisplay: React.FC<{
+  item: ResultChatbotCard;
+}> = ({ item }) => {
+  return (
+    <div className="mt-5 rounded-bl-none bg-blue-200 p-5 text-black">
+      <h3>
+        Judul: <span className="font-bold">{item?.judul || ""}</span>{" "}
+      </h3>
+      <p>Sinopsis: {item?.abstrak || ""}</p>
+      <p>Nama Mahasiswa: John Doe</p>
+      <p>Tahun Skripsi: {item?.tahun || ""}</p>
     </div>
   );
 };
