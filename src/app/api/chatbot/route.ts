@@ -1,16 +1,8 @@
-import { bulkData } from "@/db/mockdata/bulkRepository";
 import BookModel from "@/db/models/BookModel";
 import JournalModel from "@/db/models/JournalModel";
 import ThesisModel from "@/db/models/ThesisModel";
-import bookSchema from "@/libs/schemas/BookSchema";
-import journlSchema from "@/libs/schemas/JournalSchema";
-import thesisSchema from "@/libs/schemas/ThesisSchema";
-import { Book } from "@/libs/types/BookType";
-import { Journal } from "@/libs/types/JournalType";
-import { Thesis } from "@/libs/types/ThesisType";
 import errHandler from "@/utils/errHandler";
 import { GoogleGenAI } from "@google/genai";
-import { BookType } from "lucide-react";
 
 const ai = new GoogleGenAI({});
 // const responseGetAllBook: any = await BookModel.getAllBook(1, 0, "");
