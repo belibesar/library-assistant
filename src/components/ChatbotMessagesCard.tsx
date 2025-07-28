@@ -3,6 +3,8 @@
 import React, { useRef, useEffect } from "react";
 import { Bot } from "lucide-react";
 import { ChatbotMessagesCardProps, ResultChatbotCard } from "@/libs/types";
+import BookAndJournalBubbleChat from "./library/BookAndJournalDisplayChat";
+import ThesisBubbleChat from "./library/ThesisBubbleChat";
 
 const ChatbotMessagesCard: React.FC<ChatbotMessagesCardProps> = ({
   messages,
@@ -75,7 +77,7 @@ const ChatbotMessagesCard: React.FC<ChatbotMessagesCardProps> = ({
                   (msg?.type === "buku" || msg?.type === "jurnal") &&
                   msg?.results?.length >= 1 &&
                   msg?.results?.map((item, index) => (
-                    <BookAndJournalDisplay
+                    <BookAndJournalBubbleChat
                       key={index}
                       item={item}
                       type={msg?.type}
@@ -86,7 +88,7 @@ const ChatbotMessagesCard: React.FC<ChatbotMessagesCardProps> = ({
                   msg?.type === "skripsi" &&
                   msg?.results?.length >= 1 &&
                   msg?.results?.map((item, index) => (
-                    <ThesisDisplay key={index} item={item} />
+                    <ThesisBubbleChat key={index} item={item} />
                   ))}
                 {/* kalo array results adalah rak */}
                 {/* msg.racks ini masih bug belum diperbaiki karena BE belum menyediakan output rak */}
@@ -153,41 +155,6 @@ const ChatbotMessagesCard: React.FC<ChatbotMessagesCardProps> = ({
   );
 };
 
-const BookAndJournalDisplay: React.FC<{
-  item: ResultChatbotCard;
-  type: string | undefined;
-}> = ({ item, type }) => {
-  const itemType = type === "buku" ? "Buku" : "Jurnal";
-  return (
-    <div className="mt-5 rounded-bl-none bg-blue-200 p-5 text-black">
-      <h3>
-        Judul: <span className="font-bold">{item?.judul || ""}</span>{" "}
-      </h3>
-      <p>Sinopsis: {item?.abstrak || ""}</p>
-      <p>Jumlah: {item?.jumlah || ""}</p>
-      <p>
-        {itemType} tersedia: {item?.tersedia || ""}
-      </p>
-      <p>
-        {itemType} sedang dipinjam: {item?.dipinjam || ""}
-      </p>
-    </div>
-  );
-};
-const ThesisDisplay: React.FC<{
-  item: ResultChatbotCard;
-}> = ({ item }) => {
-  return (
-    <div className="mt-5 rounded-bl-none bg-blue-200 p-5 text-black">
-      <h3>
-        Judul: <span className="font-bold">{item?.judul || ""}</span>{" "}
-      </h3>
-      <p>Sinopsis: {item?.abstrak || ""}</p>
-      <p>Nama Mahasiswa: John Doe</p>
-      <p>Tahun Skripsi: {item?.tahun || ""}</p>
-    </div>
-  );
-};
 const RackDisplay: React.FC<{
   rack: string;
 }> = ({ rack }) => {
