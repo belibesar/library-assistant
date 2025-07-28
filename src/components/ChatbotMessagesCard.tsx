@@ -2,11 +2,7 @@
 
 import React, { useRef, useEffect } from "react";
 import { Bot } from "lucide-react";
-import {
-  ChatMessage,
-  ChatbotMessagesCardProps,
-  RepositoryType,
-} from "@/libs/types";
+import { ChatbotMessagesCardProps, ResultChatbotCard } from "@/libs/types";
 
 const ChatbotMessagesCard: React.FC<ChatbotMessagesCardProps> = ({
   messages,
@@ -76,8 +72,9 @@ const ChatbotMessagesCard: React.FC<ChatbotMessagesCardProps> = ({
               <div>
                 {/* // Usage of BookDisplay component within the messages mapping */}
                 {/* kalo ada buku */}
-                {msg.books &&
-                  msg.books.map((book, index) => (
+                {msg?.results &&
+                  msg?.type === "buku" &&
+                  msg?.results?.map((book, index) => (
                     <BookDisplay key={index} book={book} />
                   ))}
                 {msg.racks &&
@@ -144,23 +141,17 @@ const ChatbotMessagesCard: React.FC<ChatbotMessagesCardProps> = ({
 };
 
 const BookDisplay: React.FC<{
-  book: {
-    judul: string;
-    call_number: string;
-    no_invent: string;
-    no_barcode: number;
-    lokasi: string;
-  };
+  book: ResultChatbotCard;
 }> = ({ book }) => {
   return (
     <div className="mt-5 rounded-bl-none bg-blue-200 p-5 text-black">
       <h3>
-        Judul: <span className="font-bold">{book.judul}</span>{" "}
+        Judul: <span className="font-bold">{book?.judul || ""}</span>{" "}
       </h3>
-      <p>Call Number: {book.call_number}</p>
-      <p>No Invent: {book.no_invent}</p>
-      <p>No Barcode: {book.no_barcode}</p>
-      <p>Lokasi: {book.lokasi}</p>
+      <p>Sinopsis: {book?.abstrak || ""}</p>
+      <p>Jumlah: {book?.jumlah || ""}</p>
+      <p>Buku tersedia: {book?.tersedia || ""}</p>
+      <p>Buku sedang dipinjam: {book?.dipinjam || ""}</p>
     </div>
   );
 };

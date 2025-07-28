@@ -10,16 +10,20 @@ const ChatbotSection: React.FC = () => {
     {
       id: 1,
       sender: "bot",
-      message: `Selamat datang di Perpustakaan USD! 👋
-      Saya siap membantu Anda mencari buku dan koleksi perpustakaan. Berikut beberapa contoh yang bisa Anda tanyakan:
+      message: `
+      Selamat datang di Perpustakaan USD! 👋
       <ul>
-        <li>"Carikan buku tentang filsafat"</li>
-        <li>"Rangkum sinopsis buku psikologi"</li>
-        <li>"Dimana letak buku teologi?"</li>
-        <li>"Rekomendasi buku teknologi terbaru"</li>
+        <li>Saya siap membantu Anda mencari buku dan koleksi perpustakaan. Berikut beberapa contoh yang bisa Anda tanyakan:</li>
+        <li>"Rekomendasikan skripsi tentang pendidikan, dong!"</li>
+        <li>"Rekomendasikan saya buku tentang luka"</li>
+        <li>"Apakah disini ada jurnal terkait teknologi?"</li>
+        <li>"Rekomendasikan saya jurnal terkait material bangunan"</li>
       </ul>
       Silakan ketik pertanyaan Anda!`,
-      timestamp: "16.00",
+      timestamp: new Date().toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit",
+      }),
     },
   ]);
   const [inputMessage, setInputMessage] = useState<string>("");
@@ -92,12 +96,12 @@ const ChatbotSection: React.FC = () => {
         id: prevMessages.length + 1,
         sender: "bot",
         message: botReply.response.message || botReply.response,
-        books: botReply.response.books || [],
-        racks: botReply.response.results || "",
+        results: botReply.response.result || [],
         timestamp: new Date().toLocaleTimeString([], {
           hour: "2-digit",
           minute: "2-digit",
         }),
+        type: botReply.response.type || "unidentified",
       },
     ]);
 
