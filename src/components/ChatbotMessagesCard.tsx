@@ -70,13 +70,19 @@ const ChatbotMessagesCard: React.FC<ChatbotMessagesCardProps> = ({
                 dangerouslySetInnerHTML={{ __html: msg.message }}
               />
               <div>
-                {/* // Usage of BookDisplay component within the messages mapping */}
-                {/* kalo ada buku */}
+                {/* kalo array result adalah buku / jurnal*/}
                 {msg?.results &&
-                  msg?.type === "buku" &&
-                  msg?.results?.map((book, index) => (
-                    <BookDisplay key={index} book={book} />
+                  (msg?.type === "buku" || msg?.type === "jurnal") &&
+                  msg?.results?.length >= 1 &&
+                  msg?.results?.map((item, index) => (
+                    <BookAndJournalDisplay
+                      key={index}
+                      item={item}
+                      type={msg?.type}
+                    />
                   ))}
+                {/* kalo array results adalah rak */}
+                {/* msg.racks ini masih bug belum diperbaiki karena BE belum menyediakan output rak */}
                 {msg.racks &&
                   msg.racks.map((rack, index) => (
                     <RackDisplay key={index} rack={rack} />
@@ -140,18 +146,24 @@ const ChatbotMessagesCard: React.FC<ChatbotMessagesCardProps> = ({
   );
 };
 
-const BookDisplay: React.FC<{
-  book: ResultChatbotCard;
-}> = ({ book }) => {
+const BookAndJournalDisplay: React.FC<{
+  item: ResultChatbotCard;
+  type: string | undefined;
+}> = ({ item, type }) => {
+  const itemType = type === "buku" ? "Buku" : "Jurnal";
   return (
     <div className="mt-5 rounded-bl-none bg-blue-200 p-5 text-black">
       <h3>
-        Judul: <span className="font-bold">{book?.judul || ""}</span>{" "}
+        Judul: <span className="font-bold">{item?.judul || ""}</span>{" "}
       </h3>
-      <p>Sinopsis: {book?.abstrak || ""}</p>
-      <p>Jumlah: {book?.jumlah || ""}</p>
-      <p>Buku tersedia: {book?.tersedia || ""}</p>
-      <p>Buku sedang dipinjam: {book?.dipinjam || ""}</p>
+      <p>Sinopsis: {item?.abstrak || ""}</p>
+      <p>Jumlah: {item?.jumlah || ""}</p>
+      <p>
+        {itemType} tersedia: {item?.tersedia || ""}
+      </p>
+      <p>
+        {itemType} sedang dipinjam: {item?.dipinjam || ""}
+      </p>
     </div>
   );
 };
