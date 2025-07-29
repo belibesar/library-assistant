@@ -2,11 +2,9 @@
 
 import React, { useRef, useEffect } from "react";
 import { Bot } from "lucide-react";
-import {
-  ChatMessage,
-  ChatbotMessagesCardProps,
-  RepositoryType,
-} from "@/libs/types";
+import { ChatbotMessagesCardProps, ResultChatbotCard } from "@/libs/types";
+import BookAndJournalBubbleChat from "./library/BookAndJournalDisplayChat";
+import ThesisBubbleChat from "./library/ThesisBubbleChat";
 
 const ChatbotMessagesCard: React.FC<ChatbotMessagesCardProps> = ({
   messages,
@@ -74,12 +72,26 @@ const ChatbotMessagesCard: React.FC<ChatbotMessagesCardProps> = ({
                 dangerouslySetInnerHTML={{ __html: msg.message }}
               />
               <div>
-                {/* // Usage of BookDisplay component within the messages mapping */}
-                {/* kalo ada buku */}
-                {msg.books &&
-                  msg.books.map((book, index) => (
-                    <BookDisplay key={index} book={book} />
+                {/* kalo array result adalah buku / jurnal*/}
+                {msg?.results &&
+                  (msg?.type === "buku" || msg?.type === "jurnal") &&
+                  msg?.results?.length >= 1 &&
+                  msg?.results?.map((item, index) => (
+                    <BookAndJournalBubbleChat
+                      key={index}
+                      item={item}
+                      type={msg?.type}
+                    />
                   ))}
+                {/* kalo array result adalah buku / jurnal*/}
+                {msg?.results &&
+                  msg?.type === "skripsi" &&
+                  msg?.results?.length >= 1 &&
+                  msg?.results?.map((item, index) => (
+                    <ThesisBubbleChat key={index} item={item} />
+                  ))}
+                {/* kalo array results adalah rak */}
+                {/* msg.racks ini masih bug belum diperbaiki karena BE belum menyediakan output rak */}
                 {msg.racks &&
                   msg.racks.map((rack, index) => (
                     <RackDisplay key={index} rack={rack} />
@@ -143,27 +155,6 @@ const ChatbotMessagesCard: React.FC<ChatbotMessagesCardProps> = ({
   );
 };
 
-const BookDisplay: React.FC<{
-  book: {
-    judul: string;
-    call_number: string;
-    no_invent: string;
-    no_barcode: number;
-    lokasi: string;
-  };
-}> = ({ book }) => {
-  return (
-    <div className="mt-5 rounded-bl-none bg-blue-200 p-5 text-black">
-      <h3>
-        Judul: <span className="font-bold">{book.judul}</span>{" "}
-      </h3>
-      <p>Call Number: {book.call_number}</p>
-      <p>No Invent: {book.no_invent}</p>
-      <p>No Barcode: {book.no_barcode}</p>
-      <p>Lokasi: {book.lokasi}</p>
-    </div>
-  );
-};
 const RackDisplay: React.FC<{
   rack: string;
 }> = ({ rack }) => {

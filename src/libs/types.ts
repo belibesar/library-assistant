@@ -1,3 +1,5 @@
+import { LibraryItem } from "./types/libraryType";
+
 export type CardOnboardingFeatureProps = {
   icon: React.ReactElement;
   cardTitle: string;
@@ -32,8 +34,9 @@ export interface ChatMessage {
   sender: "user" | "bot";
   message: string;
   timestamp: string;
-  books?: RepositoryType[];
+  results?: ResultChatbotCard[];
   racks?: [rak: string];
+  type?: "buku" | "skripsi" | "jurnal";
 }
 
 export interface ChatbotMessagesCardProps {
@@ -83,12 +86,19 @@ export interface SidebarProps {
   toggleSidebar: () => void;
 }
 
-export type RepositoryType = {
+export type ResultChatbotCard = {
+  _id?: { $oid: string } | string;
+  id: string;
   judul: string;
-  call_number: string;
-  no_invent: string;
-  no_barcode: number;
-  lokasi: string;
+  abstrak?: string;
+  jumlah?: number;
+  tersedia?: number;
+  dipinjam?: number;
+  createdAt?: string;
+  updatedAt?: string;
+  count?: number;
+  nim?: string;
+  tahun?: string;
 };
 export interface Book {
   id: string;
