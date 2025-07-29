@@ -24,11 +24,47 @@ class BookModel {
     // Get total count for pagination
     const totalCount = await collection.countDocuments(searchQuery);
 
-    // Get paginated results
+    // Get paginated results with aggregation
     const books = await collection
-      .find(searchQuery)
-      .limit(currentLimit)
-      .skip(skip)
+      .aggregate([
+        {
+          $match: searchQuery,
+        },
+        {
+          $lookup: {
+            from: "pengarang",
+            localField: "pengarang_id",
+            foreignField: "id",
+            as: "pengarang",
+          },
+        },
+        {
+          $lookup: {
+            from: "penerbit",
+            localField: "penerbit_id",
+            foreignField: "id",
+            as: "penerbit",
+          },
+        },
+        {
+          $unwind: {
+            path: "$pengarang",
+            preserveNullAndEmptyArrays: true,
+          },
+        },
+        {
+          $unwind: {
+            path: "$penerbit",
+            preserveNullAndEmptyArrays: true,
+          },
+        },
+        {
+          $skip: skip, // Apply pagination
+        },
+        {
+          $limit: currentLimit, // Apply limit
+        },
+      ])
       .toArray();
 
     return {
@@ -81,7 +117,7 @@ class BookModel {
         },
       ])
       .toArray();
-    console.log("ini boook di find one",book[0]);
+    console.log("ini boook di find one", book[0]);
     return book[0] || null;
   }
 
@@ -128,7 +164,7 @@ class BookModel {
 
   static async getTop5MostBorrowedBooks() {
     const collection = await this.collection();
-    
+
     const books = await collection
       .aggregate([
         {
@@ -160,11 +196,11 @@ class BookModel {
           },
         },
         {
-          $sort: { count: -1 }
+          $sort: { count: -1 },
         },
         {
-          $limit: 5
-        }
+          $limit: 5,
+        },
       ])
       .toArray();
 
