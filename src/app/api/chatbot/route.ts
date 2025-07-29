@@ -49,19 +49,23 @@ export async function POST(request: Request) {
 
     // data dari db
     // mendapatkan data buku
-    const responseGetAllBook: any = await BookModel.getAllBook(1, 0, "");
+    const responseGetAllBook: any = await BookModel.getAllBook(1, 1000, "");
     const booksCollection = await responseGetAllBook?.books;
     // console.log(booksCollection, "<-------- ALLLL BOOKS");
 
     // mendapatkan data skripsi
-    const responseGetAllThesis: any = await ThesisModel.getAllThesis(1, 0, "");
+    const responseGetAllThesis: any = await ThesisModel.getAllThesis(
+      1,
+      1000,
+      "",
+    );
     const thesisCollection = await responseGetAllThesis?.thesis;
     // console.log(thesisCollection, '<--------- All THESIS')
 
     // mendapatkan data jurnal
     const responseGetAllJournal: any = await JournalModel.getAllJournal(
       1,
-      0,
+      1000,
       "",
     );
     const journalCollection = await responseGetAllJournal?.journals;
