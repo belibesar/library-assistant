@@ -99,6 +99,15 @@ export type ResultChatbotCard = {
   count?: number;
   nim?: string;
   tahun?: string;
+  pengarang: Pengarang;
+  penerbit: Penerbit;
+};
+
+export type Pengarang = {
+  name: string;
+};
+export type Penerbit = {
+  name: string;
 };
 export interface Book {
   id: string;
