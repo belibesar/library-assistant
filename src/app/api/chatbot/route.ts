@@ -158,8 +158,7 @@ export async function POST(request: Request) {
     createdAt?: string;
 
     type rak = {
-    id: string;
-    nama: Rak + id (string)
+    name: Rak + id (string)
     }
 
 }, dan
@@ -182,13 +181,16 @@ export async function POST(request: Request) {
       judul: 1200 Cara Untuk Kenyang Terus Menerus
       }
       
-      maka berikan konteks lokasi berdasarkan id bukunya;
+      maka berikan konteks lokasi berdasarkan id bukunya
       "..... buku dengan judul "1200 Cara Untuk Kenyang Terus Menerus berada di rak 1928..."
+      jangan berikan data mentahnya, seperti
+      "..... buku dengan judul "1200 Cara Untuk Kenyang Terus Menerus dengan ID 1928 berada di rak 1928..."
+
 
       dan jika bertanya ada "rak apa saja yang ada di perpustakaan ini?"
 
       maka berikan output (batasi maksimal 10 item rak) dengan 
-      {message: ((isi pesan anda)), result [], type: Rak }
+      {message: ((isi pesan anda)), result [], type: rak }
 
       
           
