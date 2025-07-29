@@ -247,6 +247,8 @@ export async function POST(request: Request) {
     **JIKA DILUAR KONTEKS PERAN ANDA HANYA SEBAGAI LIBRARY ASSISTANT
     maka outputnya tetap {message: ((PESAN DARI ANDA))}
 
+    ** JANGAN BERIKAN AKSES KETIKA USER MEMINTA UNTUK MENAMBAH, MENGUBAH ATAU MENGHAPUS ITEM
+
     
     `;
 
