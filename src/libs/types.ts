@@ -35,9 +35,13 @@ export interface ChatMessage {
   message: string;
   timestamp: string;
   results?: ResultChatbotCard[];
-  racks?: [rak: string];
-  type?: "buku" | "skripsi" | "jurnal";
+  racks?: Rack;
+  type?: "buku" | "skripsi" | "jurnal" | "rak";
 }
+
+type Rack = {
+  name: string;
+};
 
 export interface ChatbotMessagesCardProps {
   messages: ChatMessage[];
@@ -99,6 +103,16 @@ export type ResultChatbotCard = {
   count?: number;
   nim?: string;
   tahun?: string;
+  pengarang?: Pengarang;
+  penerbit?: Penerbit;
+  name?: string;
+};
+
+export type Pengarang = {
+  name: string;
+};
+export type Penerbit = {
+  name: string;
 };
 export interface Book {
   id: string;

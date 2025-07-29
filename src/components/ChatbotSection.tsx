@@ -16,8 +16,9 @@ const ChatbotSection: React.FC = () => {
         <li>Saya siap membantu Anda mencari buku dan koleksi perpustakaan. Berikut beberapa contoh yang bisa Anda tanyakan:</li>
         <li>"Rekomendasikan skripsi tentang pendidikan, dong!"</li>
         <li>"Rekomendasikan saya buku tentang luka"</li>
-        <li>"Apakah disini ada jurnal terkait teknologi?"</li>
+        <li>"Apakah buku Negeri 5 Menara masih tersedia untuk dipinjam?"</li>
         <li>"Rekomendasikan saya jurnal terkait material bangunan"</li>
+        <li>"Dimana letak buku Cantik itu Luka?"</li>
       </ul>
       Silakan ketik pertanyaan Anda!`,
       timestamp: new Date().toLocaleTimeString([], {

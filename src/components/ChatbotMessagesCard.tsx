@@ -92,9 +92,10 @@ const ChatbotMessagesCard: React.FC<ChatbotMessagesCardProps> = ({
                   ))}
                 {/* kalo array results adalah rak */}
                 {/* msg.racks ini masih bug belum diperbaiki karena BE belum menyediakan output rak */}
-                {msg.racks &&
-                  msg.racks.map((rack, index) => (
-                    <RackDisplay key={index} rack={rack} />
+                {msg?.results &&
+                  msg?.type === "rak" &&
+                  msg?.results?.map((item, index) => (
+                    <RackDisplay key={index} rackName={item?.name} />
                   ))}
               </div>
               <div className="mt-1 text-sm text-gray-500">{msg.timestamp}</div>
@@ -156,12 +157,12 @@ const ChatbotMessagesCard: React.FC<ChatbotMessagesCardProps> = ({
 };
 
 const RackDisplay: React.FC<{
-  rack: string;
-}> = ({ rack }) => {
+  rackName: string | undefined;
+}> = ({ rackName }) => {
   return (
     <div className="mt-5 rounded-bl-none bg-blue-200 p-5 text-black">
       <h3>
-        <span className="font-bold">{rack}</span>{" "}
+        <span className="font-bold">{rackName || ""}</span>{" "}
       </h3>
     </div>
   );

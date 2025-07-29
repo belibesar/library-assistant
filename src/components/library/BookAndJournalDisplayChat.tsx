@@ -18,6 +18,13 @@ const BookAndJournalBubbleChat: React.FC<{
       <p>
         {itemType} sedang dipinjam: {item?.dipinjam || ""}
       </p>
+      {type === "buku" && (
+        <>
+          <p>Pengarang: {item?.pengarang?.name || ""}</p>
+          <p>Penerbit: {item?.penerbit?.name || ""}</p>
+          <p>Lokasi buku: Rak {item?.id || ""}</p>
+        </>
+      )}
     </div>
   );
 };

@@ -49,19 +49,23 @@ export async function POST(request: Request) {
 
     // data dari db
     // mendapatkan data buku
-    const responseGetAllBook: any = await BookModel.getAllBook(1, 0, "");
+    const responseGetAllBook: any = await BookModel.getAllBook(1, 1000, "");
     const booksCollection = await responseGetAllBook?.books;
     // console.log(booksCollection, "<-------- ALLLL BOOKS");
 
     // mendapatkan data skripsi
-    const responseGetAllThesis: any = await ThesisModel.getAllThesis(1, 0, "");
+    const responseGetAllThesis: any = await ThesisModel.getAllThesis(
+      1,
+      1000,
+      "",
+    );
     const thesisCollection = await responseGetAllThesis?.thesis;
     // console.log(thesisCollection, '<--------- All THESIS')
 
     // mendapatkan data jurnal
     const responseGetAllJournal: any = await JournalModel.getAllJournal(
       1,
-      0,
+      1000,
       "",
     );
     const journalCollection = await responseGetAllJournal?.journals;
@@ -154,8 +158,7 @@ export async function POST(request: Request) {
     createdAt?: string;
 
     type rak = {
-    id: string;
-    nama: Rak + id (string)
+    name: Rak + id (string)
     }
 
 }, dan
@@ -178,13 +181,16 @@ export async function POST(request: Request) {
       judul: 1200 Cara Untuk Kenyang Terus Menerus
       }
       
-      maka berikan konteks lokasi berdasarkan id bukunya;
+      maka berikan konteks lokasi berdasarkan id bukunya
       "..... buku dengan judul "1200 Cara Untuk Kenyang Terus Menerus berada di rak 1928..."
+      jangan berikan data mentahnya, seperti
+      "..... buku dengan judul "1200 Cara Untuk Kenyang Terus Menerus dengan ID 1928 berada di rak 1928..."
+
 
       dan jika bertanya ada "rak apa saja yang ada di perpustakaan ini?"
 
       maka berikan output (batasi maksimal 10 item rak) dengan 
-      {message: ((isi pesan anda)), result [], type: Rak }
+      {message: ((isi pesan anda)), result [], type: rak }
 
       
           
@@ -240,6 +246,8 @@ export async function POST(request: Request) {
 
     **JIKA DILUAR KONTEKS PERAN ANDA HANYA SEBAGAI LIBRARY ASSISTANT
     maka outputnya tetap {message: ((PESAN DARI ANDA))}
+
+    ** JANGAN BERIKAN AKSES KETIKA USER MEMINTA UNTUK MENAMBAH, MENGUBAH ATAU MENGHAPUS ITEM
 
     
     `;
