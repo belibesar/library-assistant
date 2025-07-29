@@ -152,6 +152,12 @@ export async function POST(request: Request) {
     jurnal_id: string;
     updatedAt?: string;
     createdAt?: string;
+
+    type rak = {
+    id: string;
+    nama: Rak + id (string)
+    }
+
 }, dan
     type skripsi = {
     id: string;
@@ -162,7 +168,26 @@ export async function POST(request: Request) {
     tahun: string;
     updatedAt?: string;
     createdAt?: string;
-          (informasi ini ada di database).
+
+    (informasi ini ada di database).
+
+    * ** KHUSUS UNTUK ITEM TIPE BUKU, Lokasi buku merujuk pada id buku
+      contoh:
+      buku = {
+      id: 1928,
+      judul: 1200 Cara Untuk Kenyang Terus Menerus
+      }
+      
+      maka berikan konteks lokasi berdasarkan id bukunya;
+      "..... buku dengan judul "1200 Cara Untuk Kenyang Terus Menerus berada di rak 1928..."
+
+      dan jika bertanya ada "rak apa saja yang ada di perpustakaan ini?"
+
+      maka berikan output (batasi maksimal 10 item rak) dengan 
+      {message: ((isi pesan anda)), result [], type: Rak }
+
+      
+          
     * **Informasi Total Semua dari Item dan Semua item dalam Suatu Rak:** Jumlahkan semua item, 
         item dalam suatu rak, dan total rak yang ada.
     * **Panduan Navigasi:** Arahkan pengguna ke lokasi fisik item yang akurat di dalam perpustakaan.
