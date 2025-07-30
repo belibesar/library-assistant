@@ -63,8 +63,11 @@ export const useLibraryItems = () => {
 
       if (json.success && Array.isArray(json.data)) {
         const mappedItems: LibraryItem[] = json.data.map((item: any) => {
+          console.log(item);
+
           const base: BaseItem = {
-            id: item._id?.$oid || item._id || item.id,
+            _id: String(item._id),
+            id: item.id || item._id,
             judul: item.judul || "",
             abstrak: item.abstrak || "",
             jumlah: Number(item.jumlah) || 0,
@@ -80,6 +83,8 @@ export const useLibraryItems = () => {
               ...base,
               penerbit_id: item.penerbit_id || "",
               pengarang_id: item.pengarang_id || "",
+              pengarang: item.pengarang || "",
+              penerbit: item.penerbit || "",
               type: "book",
             } as Book;
           } else if (item.jurnal_id) {

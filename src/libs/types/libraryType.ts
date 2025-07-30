@@ -1,3 +1,5 @@
+import { Penerbit, Pengarang } from "../types";
+
 export interface BaseItem {
   _id?: { $oid: string } | string;
   id: string;
@@ -14,6 +16,8 @@ export interface BaseItem {
 export interface Book extends BaseItem {
   penerbit_id: string;
   pengarang_id: string;
+  penerbit?: Penerbit;
+  pengarang?: Pengarang;
   type: "book";
 }
 
