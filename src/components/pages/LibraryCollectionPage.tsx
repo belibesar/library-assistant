@@ -468,7 +468,7 @@ export default function LibraryCollectionPage() {
             if (item.type === "book") {
               return (
                 <BookCard
-                  key={item.id}
+                  key={item?._id as string}
                   book={item}
                   onEdit={handleEditItem}
                   onDelete={handleDeleteItem}
