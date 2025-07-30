@@ -59,16 +59,16 @@ export const BookCard = ({
 
           <p className="text-sm text-gray-600">
             {/* ID Buku: { book.id} */}
-            Lokasi Buku: Rak 0004
+            Lokasi Buku: Rak {book.id}
           </p>
           <p className="text-sm text-gray-600">
             {/* Pengarang id:  book.pengarang_id */}
-            Pengarang: "Ahmad Fuadi"
+            Pengarang: {book?.pengarang?.name}
           </p>
 
           <span className="inline-block rounded-full bg-gray-100 px-3 text-xs font-medium text-gray-700">
             {/* Penerbit id: book.penerbit_id */}
-            Penerbit: "Bentang Pustaka"
+            Penerbit: {book?.penerbit?.name}
           </span>
           <div className="min-h-20">
             <p className="line-clamp-3 text-sm leading-relaxed text-gray-600">
