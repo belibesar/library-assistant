@@ -25,10 +25,39 @@ class JournalModel {
 
     // Get paginated results
     const journals = await collection
-      .find(searchQuery)
-      .limit(currentLimit)
-      .skip(skip)
+      .aggregate([
+        {
+          $match: searchQuery,
+        },
+        {
+          $lookup: {
+            from: "publikasi",
+            localField: "jurnal_id",
+            foreignField: "id",
+            as: "publikasi",
+          },
+        },
+        {
+          $unwind: {
+            path: "$publikasi",
+            preserveNullAndEmptyArrays: true,
+          },
+        },
+        {
+          $skip: skip, // Apply pagination
+        },
+        {
+          $limit: currentLimit, // Apply limit
+        },
+      ])
       .toArray();
+
+    // Get paginated results
+    // const journal = await collection
+    //   .find(searchQuery)
+    //   .limit(currentLimit)
+    //   .skip(skip)
+    //   .toArray();
 
     return {
       journals,
@@ -112,7 +141,7 @@ class JournalModel {
 
   static async getTop5MostAccessedJournals() {
     const collection = await this.collection();
-    
+
     const journals = await collection
       .aggregate([
         {
@@ -130,11 +159,11 @@ class JournalModel {
           },
         },
         {
-          $sort: { count: -1 }
+          $sort: { count: -1 },
         },
         {
-          $limit: 5
-        }
+          $limit: 5,
+        },
       ])
       .toArray();
 

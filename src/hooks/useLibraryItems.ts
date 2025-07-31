@@ -1,14 +1,14 @@
 import { useState, useEffect } from "react";
 import {
   BaseItem,
+  Book,
+  Journal,
   LibraryItem,
   LibraryItemType,
   Notification,
   Skripsi,
 } from "@/libs/types/libraryType";
 import { endpointMap } from "@/utils/libraryUtil";
-import { Book } from "@/libs/types/BookType";
-import { Journal } from "@/libs/types/JournalType";
 
 export const useLibraryItems = () => {
   const [search, setSearch] = useState("");
@@ -92,6 +92,7 @@ export const useLibraryItems = () => {
               ...base,
               jurnal_id: item.jurnal_id || "",
               type: "journal",
+              publikasi: item.publikasi,
             } as Journal;
           } else if (item.tahun || item.nim) {
             return {
@@ -99,6 +100,7 @@ export const useLibraryItems = () => {
               tahun: item.tahun || "",
               nim: item.nim || "",
               type: "skripsi",
+              mahasiswa: item.mahasiswa,
             } as Skripsi;
           }
           return base as LibraryItem;
