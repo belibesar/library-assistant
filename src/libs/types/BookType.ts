@@ -4,6 +4,9 @@ export type Book = {
   _id?: string;
   id: string;
   judul: string;
+  rak?: string; //field baru
+  sinopsis?: string; //field baru
+  lokasi?: string; //field baru
   abstrak?: string;
   jumlah: number;
   tersedia: number;
