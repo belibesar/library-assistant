@@ -14,6 +14,9 @@ export interface BaseItem {
 }
 
 export interface Book extends BaseItem {
+  rak?: string; //field baru
+  sinopsis?: string; //field baru
+  lokasi?: string; //field baru
   penerbit_id: string;
   pengarang_id: string;
   penerbit?: Penerbit;
