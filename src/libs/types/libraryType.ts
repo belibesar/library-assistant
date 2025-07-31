@@ -1,4 +1,4 @@
-import { Penerbit, Pengarang } from "../types";
+import { Mahasiswa, Penerbit, Pengarang, Publikasi } from "../types";
 
 export interface BaseItem {
   _id?: { $oid: string } | string;
@@ -24,12 +24,14 @@ export interface Book extends BaseItem {
 export interface Journal extends BaseItem {
   jurnal_id: string;
   type: "journal";
+  publikasi: Publikasi;
 }
 
 export interface Skripsi extends BaseItem {
   tahun: string;
   nim: string;
   type: "skripsi";
+  mahasiswa: Mahasiswa;
 }
 
 export type LibraryItem = Book | Journal | Skripsi;
