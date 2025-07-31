@@ -46,6 +46,9 @@ export async function POST(request: NextRequest) {
       id: requestData.id || +new Date(),
       judul: requestData.judul,
       abstrak: requestData.abstrak,
+      rak: requestData.rak, //field baru
+      sinopsis: requestData.sinopsis, //field baru
+      lokasi: requestData.lokasi, //field baru
       jumlah: Number(requestData.jumlah),
       tersedia: Number(requestData.jumlah),
       dipinjam: 0,
