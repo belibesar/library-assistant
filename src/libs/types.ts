@@ -114,6 +114,21 @@ export type Pengarang = {
 export type Penerbit = {
   name: string;
 };
+
+export type Mahasiswa = {
+  id: string;
+  name: string;
+  masuk: string;
+  lulus: string;
+  ipk: string;
+};
+
+export type Publikasi = {
+  id: string;
+  name: string;
+  volume: string;
+  tahun: string;
+};
 export interface Book {
   id: string;
   title: string;

@@ -25,12 +25,41 @@ class ThesisModel {
     // Get total count for pagination
     const totalCount = await collection.countDocuments(searchQuery);
 
-    // Get paginated results
+    // Get paginated results (new)
     const thesis = await collection
-      .find(searchQuery)
-      .limit(currentLimit)
-      .skip(skip)
+      .aggregate([
+        {
+          $match: searchQuery,
+        },
+        {
+          $lookup: {
+            from: "mahasiswa",
+            localField: "nim",
+            foreignField: "id",
+            as: "mahasiswa",
+          },
+        },
+        {
+          $unwind: {
+            path: "$mahasiswa",
+            preserveNullAndEmptyArrays: true,
+          },
+        },
+        {
+          $skip: skip, // Apply pagination
+        },
+        {
+          $limit: currentLimit, // Apply limit
+        },
+      ])
       .toArray();
+
+    // Get paginated results (old)
+    // const thesis = await collection
+    //   .find(searchQuery)
+    //   .limit(currentLimit)
+    //   .skip(skip)
+    //   .toArray();
 
     return {
       thesis,

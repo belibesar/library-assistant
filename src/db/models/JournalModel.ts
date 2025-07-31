@@ -26,10 +26,39 @@ class JournalModel {
 
     // Get paginated results
     const journals = await collection
-      .find(searchQuery)
-      .limit(currentLimit)
-      .skip(skip)
+      .aggregate([
+        {
+          $match: searchQuery,
+        },
+        {
+          $lookup: {
+            from: "publikasi",
+            localField: "jurnal_id",
+            foreignField: "id",
+            as: "publikasi",
+          },
+        },
+        {
+          $unwind: {
+            path: "$publikasi",
+            preserveNullAndEmptyArrays: true,
+          },
+        },
+        {
+          $skip: skip, // Apply pagination
+        },
+        {
+          $limit: currentLimit, // Apply limit
+        },
+      ])
       .toArray();
+
+    // Get paginated results
+    // const journal = await collection
+    //   .find(searchQuery)
+    //   .limit(currentLimit)
+    //   .skip(skip)
+    //   .toArray();
 
     return {
       journals,
