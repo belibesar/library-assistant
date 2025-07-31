@@ -2,6 +2,7 @@ import bookSchema from "@/libs/schemas/BookSchema";
 import { db } from "../config/mongodb";
 import { ObjectId } from "mongodb";
 import { Book } from "@/libs/types/BookType";
+import { calculateSimilarity } from "@/utils/similarity";
 
 class BookModel {
   static async collection() {
@@ -205,6 +206,25 @@ class BookModel {
       .toArray();
 
     return books;
+  }
+
+  static async findSimilarBooks(query: string) {
+    const collection = await this.collection();
+    const allBooks = await collection.find({}).toArray();
+
+    const results = allBooks.map((book: Book) => {
+      const text = `${book.judul} ${book.abstrak || ""}`;
+      const score = calculateSimilarity(query, text);
+      return { ...book, score };
+    });
+
+    return results
+      .filter((b: Book & { score: number }) => b.score > 0)
+      .sort(
+        (a: Book & { score: number }, b: Book & { score: number }) =>
+          b.score - a.score,
+      )
+      .slice(0, 10);
   }
 }
 

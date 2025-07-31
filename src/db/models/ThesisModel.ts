@@ -2,6 +2,7 @@ import thesisSchema from "@/libs/schemas/ThesisSchema";
 import { db } from "../config/mongodb";
 import { ObjectId } from "mongodb";
 import { Thesis } from "@/libs/types/ThesisType";
+import { calculateSimilarity } from "@/utils/similarity";
 
 class ThesisModel {
   static async collection() {
@@ -88,7 +89,7 @@ class ThesisModel {
     try {
       const collection = await this.collection();
       const identifier = { _id: new ObjectId(id) };
-      
+
       return await collection.updateOne(identifier, { $set: data });
     } catch (error) {
       throw error;
@@ -122,7 +123,7 @@ class ThesisModel {
 
   static async getTop5MostAccessedThesis() {
     const collection = await this.collection();
-    
+
     const thesis = await collection
       .aggregate([
         {
@@ -140,15 +141,34 @@ class ThesisModel {
           },
         },
         {
-          $sort: { count: -1 } 
+          $sort: { count: -1 },
         },
         {
-          $limit: 5 
-        }
+          $limit: 5,
+        },
       ])
       .toArray();
 
     return thesis;
+  }
+
+  static async findSimilarThesis(query: string) {
+    const collection = await this.collection();
+    const all = await collection.find({}).toArray();
+
+    const results = all.map((thesis: Thesis) => {
+      const text = `${thesis.judul} ${thesis.abstrak || ""}`;
+      const score = calculateSimilarity(query, text);
+      return { ...thesis, score };
+    });
+
+    return results
+      .filter((b: Thesis & { score: number }) => b.score > 0)
+      .sort(
+        (a: Thesis & { score: number }, b: Thesis & { score: number }) =>
+          b.score - a.score,
+      )
+      .slice(0, 10);
   }
 }
 

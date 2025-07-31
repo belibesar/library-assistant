@@ -1,6 +1,7 @@
 import { ObjectId } from "mongodb";
 import { db } from "../config/mongodb";
 import { Journal } from "@/libs/types/JournalType";
+import { calculateSimilarity } from "@/utils/similarity";
 
 class JournalModel {
   static async collection() {
@@ -112,7 +113,7 @@ class JournalModel {
 
   static async getTop5MostAccessedJournals() {
     const collection = await this.collection();
-    
+
     const journals = await collection
       .aggregate([
         {
@@ -130,15 +131,34 @@ class JournalModel {
           },
         },
         {
-          $sort: { count: -1 }
+          $sort: { count: -1 },
         },
         {
-          $limit: 5
-        }
+          $limit: 5,
+        },
       ])
       .toArray();
 
     return journals;
+  }
+
+  static async findSimilarJournals(query: string) {
+    const collection = await this.collection();
+    const allJournals = await collection.find({}).toArray();
+
+    const results = allJournals.map((journal: Journal) => {
+      const text = `${journal.judul} ${journal.abstrak || ""}`;
+      const score = calculateSimilarity(query, text);
+      return { ...journal, score };
+    });
+
+    return results
+      .filter((b: Journal & { score: number }) => b.score > 0)
+      .sort(
+        (a: Journal & { score: number }, b: Journal & { score: number }) =>
+          b.score - a.score,
+      )
+      .slice(0, 10);
   }
 }
 
