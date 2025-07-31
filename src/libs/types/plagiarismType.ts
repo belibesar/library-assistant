@@ -11,4 +11,5 @@ export interface PlagiarismResult {
   sources: PlagiarismSource[];
   checkedAt: string;
   warning: string;
+  recommendation: string;
 }

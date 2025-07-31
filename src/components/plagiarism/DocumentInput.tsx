@@ -40,7 +40,11 @@ export function DocumentInput({
 
       {activeTab === "file" && (
         <div className="space-y-4">
-          <FileUpload uploadedFile={uploadedFile} onFileChange={onFileChange} />
+          <FileUpload
+            onExtractedText={onTextChange}
+            uploadedFile={uploadedFile}
+            onFileChange={onFileChange}
+          />
         </div>
       )}
 

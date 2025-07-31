@@ -17,8 +17,7 @@ export default function PlagiarismPage() {
     setResult(null);
 
     try {
-      const content =
-        activeTab === "text" ? textContent : await uploadedFile?.text();
+      const content = activeTab === "text" ? textContent : textContent;
 
       if (!content || content.trim() === "") {
         alert("Konten tidak boleh kosong");
@@ -40,6 +39,7 @@ export default function PlagiarismPage() {
         const data = await res.json();
         return data as PlagiarismResult;
       };
+      console.log("contetsct", content);
 
       const resultFromServer = await checkTextPlagiarism(content);
       setResult(resultFromServer);
@@ -51,9 +51,8 @@ export default function PlagiarismPage() {
     }
   };
 
-
   return (
-    <div className="mx-auto mt-[-20px] max-w-7xl">
+    <div className="mx-auto mt-[-20px] max-w-7xl py-8 px-4">
       <div className="mt[-20px]">
         <h1 className="text-3xl font-bold text-gray-900">Cek Plagiat</h1>
         <p className="mb-6 text-gray-600">

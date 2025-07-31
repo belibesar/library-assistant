@@ -1,7 +1,10 @@
 "use client";
 
-import { PlagiarismResult, PlagiarismSource } from "@/libs/types/plagiarismType";
-import { AlertCircle } from "lucide-react";
+import {
+  PlagiarismResult,
+  PlagiarismSource,
+} from "@/libs/types/plagiarismType";
+import { AlertCircle, CheckCircle2, XCircle } from "lucide-react";
 
 interface PlagiarismResultsProps {
   result: PlagiarismResult;
@@ -29,18 +32,66 @@ function SourceCard({ source }: { source: PlagiarismSource }) {
 }
 
 export function PlagiarismResults({ result }: PlagiarismResultsProps) {
+  const getColor = () => {
+    switch (result.status) {
+      case "success":
+        return {
+          bg: "bg-green-50",
+          border: "border-green-200",
+          icon: <CheckCircle2 className="h-5 w-5 text-green-600" />,
+          text: "text-green-800",
+          ring: "ring-green-100 text-green-700",
+        };
+      case "warning":
+        return {
+          bg: "bg-yellow-50",
+          border: "border-yellow-200",
+          icon: <AlertCircle className="h-5 w-5 text-yellow-600" />,
+          text: "text-yellow-800",
+          ring: "ring-yellow-100 text-yellow-700",
+        };
+      case "error":
+        return {
+          bg: "bg-red-50",
+          border: "border-red-200",
+          icon: <XCircle className="h-5 w-5 text-red-600" />,
+          text: "text-red-800",
+          ring: "ring-red-100 text-red-700",
+        };
+      default:
+        return {
+          bg: "bg-gray-50",
+          border: "border-gray-200",
+          icon: <AlertCircle className="h-5 w-5 text-gray-500" />,
+          text: "text-gray-800",
+          ring: "ring-gray-100 text-gray-700",
+        };
+    }
+  };
+
+  const color = getColor();
+
   return (
     <div className="space-y-6">
-      <div className="flex items-start gap-3 rounded-lg border border-yellow-200 bg-yellow-50 p-4">
-        <AlertCircle className="mt-0.5 h-5 w-5 flex-shrink-0 text-yellow-600" />
+      {/* Alert Section */}
+      <div
+        className={`flex items-start gap-3 rounded-lg ${color.border} ${color.bg} p-4`}
+      >
+        <div className="mt-0.5 flex-shrink-0">{color.icon}</div>
         <div>
-          <p className="font-medium text-yellow-800">Perlu Perhatian</p>
-          <p className="mt-1 text-sm text-yellow-700">{result.warning}</p>
+          <p className={`font-medium ${color.text}`}>Status Pemeriksaan</p>
+          <p className={`mt-1 text-sm ${color.text}`}>{result.warning}</p>
+          <p className={`mt-1 text-sm font-medium ${color.text}`}>
+            {result.recommendation}
+          </p>
         </div>
       </div>
 
+      {/* Similarity Score */}
       <div className="text-center">
-        <div className="mb-3 inline-flex h-20 w-20 items-center justify-center rounded-full bg-yellow-100 text-xl font-bold text-yellow-700">
+        <div
+          className={`mb-3 inline-flex h-20 w-20 items-center justify-center rounded-full text-xl font-bold ${color.ring}`}
+        >
           {result.similarity}%
         </div>
         <h3 className="mb-1 text-lg font-semibold text-gray-900">
@@ -48,6 +99,7 @@ export function PlagiarismResults({ result }: PlagiarismResultsProps) {
         </h3>
       </div>
 
+      {/* Source List */}
       <div>
         <h4 className="mb-4 text-lg font-semibold text-gray-900">
           Sumber yang Terdeteksi:
