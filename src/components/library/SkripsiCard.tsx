@@ -62,6 +62,13 @@ export const SkripsiCard = ({
           <div className="flex flex-col gap-1">
             <p className="text-sm text-gray-600">ID Skripsi: {skripsi.id}</p>
             <p className="text-sm text-gray-600">NIM: {skripsi.nim}</p>
+            {/* {skripsi.mahasiswa && (
+              <>
+                <p className="text-sm text-gray-600">Mahasiswa: {skripsi.mahasiswa.name}</p>
+                <p className="text-sm text-gray-600">Fakultas: {skripsi.mahasiswa.fakultas}</p>
+                <p className="text-sm text-gray-600">Program Studi: {skripsi.mahasiswa.program_studi}</p>
+              </>
+            )} */}
           </div>
 
           <span className="inline-block rounded-full bg-gray-100 px-3 py-1 text-xs font-medium text-gray-700">

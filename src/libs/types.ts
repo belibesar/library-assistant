@@ -121,6 +121,8 @@ export type Mahasiswa = {
   masuk: string;
   lulus: string;
   ipk: string;
+  fakultas?: string;
+  program_studi?: string;
 };
 
 export type Publikasi = {

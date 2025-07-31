@@ -79,7 +79,7 @@ class ThesisModel {
       const journal = await collection
         .aggregate([
           {
-            $match: { _id: new ObjectId(id) }, // Filter dokumen berdasarkan id thesis
+            $match: { id: id },
           },
           {
             $lookup: {
@@ -116,7 +116,7 @@ class ThesisModel {
   static async updateThesis(id: string, data: Thesis) {
     try {
       const collection = await this.collection();
-      const identifier = { _id: new ObjectId(id) };
+      const identifier = { id: id };
 
       return await collection.updateOne(identifier, { $set: data });
     } catch (error) {
@@ -136,7 +136,7 @@ class ThesisModel {
 
   static async countThesis(id: string) {
     const collection = await this.collection();
-    const identifier = { _id: new ObjectId(id) };
+    const identifier = { id: id };
     const currentThesis = await collection.findOne(identifier);
     const thesisCount = currentThesis?.count || 0;
     if (!currentThesis) {
