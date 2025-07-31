@@ -18,9 +18,15 @@ const bookSchema = z.object({
   pengarang_id: z.string({
     required_error: "Pengarang harus diisi!",
   }),
-  lokasi: z.string().optional(), //field baru
-  rak: z.string().optional(), //field baru
-  sinopsis: z.string().optional(), //field baru
+  lokasi: z.string({
+    required_error: "Lokasi harus diisi",
+  }), //field baru
+  rak: z.string({
+    required_error: "Rak harus diisi",
+  }), //field baru
+  sinopsis: z.string({
+    required_error: "Sinopsis harus diisi",
+  }), //field baru
   createdAt: z.string(),
   updatedAt: z.string(),
 });
