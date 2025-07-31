@@ -86,7 +86,7 @@ class BookModel {
     const book = await collection
       .aggregate([
         {
-          $match: { _id: new ObjectId(id) }, // Filter dokumen berdasarkan id buku
+          $match: { id: id }, // Filter dokumen berdasarkan id buku
         },
         {
           $lookup: {
@@ -130,7 +130,7 @@ class BookModel {
 
   static async updateBook(id: string, data: Book) {
     const collection = await this.collection();
-    const identifier = { _id: new ObjectId(id) };
+    const identifier = { id: id };
     const currentBook = await collection.findOne(identifier);
     if (!currentBook) {
       throw new Error("Book not found");
@@ -140,7 +140,7 @@ class BookModel {
 
   static async deleteBook(id: string) {
     const collection = await this.collection();
-    const query = { _id: new ObjectId(id) };
+    const query = { id: id };
     const currentBook = await collection.findOne(query);
     if (!currentBook) {
       throw new Error("Book not found");
@@ -150,7 +150,7 @@ class BookModel {
 
   static async countBook(id: string) {
     const collection = await this.collection();
-    const identifier = { _id: new ObjectId(id) };
+    const identifier = { id: id };
     const currentBook = await collection.findOne(identifier);
     const bookCount = currentBook?.count || 0;
     if (!currentBook) {

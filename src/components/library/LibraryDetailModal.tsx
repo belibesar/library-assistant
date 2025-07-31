@@ -61,9 +61,24 @@ export const LibraryDetailModal = ({
             </>
           )}
           {item.type === "journal" && (
-            <p className="text-gray-700">
-              <strong>Jurnal ID:</strong> {(item as any).jurnal_id}
-            </p>
+            <>
+              <p className="text-gray-700">
+                <strong>Jurnal ID:</strong> {(item as any).jurnal_id}
+              </p>
+              {(item as any).publikasi && (
+                <>
+                  <p className="text-gray-700">
+                    <strong>Publikasi:</strong> {(item as any).publikasi.name}
+                  </p>
+                  <p className="text-gray-700">
+                    <strong>Tahun Publikasi:</strong> {(item as any).publikasi.tahun || "Tidak tersedia"}
+                  </p>
+                  <p className="text-gray-700">
+                    <strong>Volume:</strong> {(item as any).publikasi.volume || "Tidak tersedia"}
+                  </p>
+                </>
+              )}
+            </>
           )}
           {item.type === "skripsi" && (
             <>
@@ -73,6 +88,22 @@ export const LibraryDetailModal = ({
               <p className="text-gray-700">
                 <strong>Tahun:</strong> {(item as any).tahun}
               </p>
+              {(item as any).mahasiswa && (
+                <>
+                  <p className="text-gray-700">
+                    <strong>Mahasiswa:</strong> {(item as any).mahasiswa.name}
+                  </p>
+                  <p className="text-gray-700">
+                    <strong>Fakultas:</strong> {(item as any).mahasiswa.fakultas || "Tidak tersedia"}
+                  </p>
+                  <p className="text-gray-700">
+                    <strong>Program Studi:</strong> {(item as any).mahasiswa.program_studi || "Tidak tersedia"}
+                  </p>
+                  <p className="text-gray-700">
+                    <strong>IPK:</strong> {(item as any).mahasiswa.ipk || "Tidak tersedia"}
+                  </p>
+                </>
+              )}
             </>
           )}
 

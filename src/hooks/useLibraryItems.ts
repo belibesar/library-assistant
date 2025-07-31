@@ -85,6 +85,9 @@ export const useLibraryItems = () => {
               pengarang_id: item.pengarang_id || "",
               pengarang: item.pengarang || "",
               penerbit: item.penerbit || "",
+              lokasi: item.lokasi || "",
+              rak: item.rak || "",
+              sinopsis: item.sinopsis || "",
               type: "book",
             } as Book;
           } else if (item.jurnal_id) {

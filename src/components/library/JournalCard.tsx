@@ -54,6 +54,17 @@ export const JournalCard = ({
           {journal.judul}
         </h3>
         <p className="text-sm text-gray-600">ID Jurnal: {journal.id}</p>
+        {/* {(journal as any).publikasi && (
+          <div className="text-sm text-gray-600">
+            <p>Publikasi: {(journal as any).publikasi.name}</p>
+            {(journal as any).publikasi.volume && (
+              <p>Volume: {(journal as any).publikasi.volume}</p>
+            )}
+            {(journal as any).publikasi.tahun && (
+              <p>Tahun: {(journal as any).publikasi.tahun}</p>
+            )}
+          </div>
+        )} */}
         <span className="inline-block rounded-full bg-gray-100 px-3 text-xs font-medium text-gray-700">
           Jurnal ID: {journal.jurnal_id}
         </span>

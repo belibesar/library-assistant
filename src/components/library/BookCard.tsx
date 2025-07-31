@@ -59,7 +59,7 @@ export const BookCard = ({
 
           <p className="text-sm text-gray-600">
             {/* ID Buku: { book.id} */}
-            Lokasi Buku: Rak {book.id}
+            Lokasi Buku: Rak {book.lokasi}
           </p>
           <p className="text-sm text-gray-600">
             {/* Pengarang id:  book.pengarang_id */}
