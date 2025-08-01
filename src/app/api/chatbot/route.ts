@@ -241,7 +241,7 @@ export async function POST(request: Request) {
       contents: messageRequestFromClient,
       config: {
         thinkingConfig: {
-          thinkingBudget: 0,
+          thinkingBudget: 0, // AI time allocation for thinking
         },
         systemInstruction: libraryAssistantInstructions,
         responseMimeType: "application/json",
