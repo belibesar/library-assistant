@@ -2,9 +2,8 @@
 
 import React, { useRef, useEffect } from "react";
 import { Bot } from "lucide-react";
-import { ChatbotMessagesCardProps, ResultChatbotCard } from "@/libs/types";
-import BookAndJournalBubbleChat from "./library/BookAndJournalDisplayChat";
-import ThesisBubbleChat from "./library/ThesisBubbleChat";
+import { ChatbotMessagesCardProps } from "@/libs/types";
+import LibraryItemBubbleChat from "./library/LibraryItemBubbleChat";
 
 const ChatbotMessagesCard: React.FC<ChatbotMessagesCardProps> = ({
   messages,
@@ -72,30 +71,18 @@ const ChatbotMessagesCard: React.FC<ChatbotMessagesCardProps> = ({
                 dangerouslySetInnerHTML={{ __html: msg.message }}
               />
               <div>
-                {/* kalo array result adalah buku / jurnal*/}
+                {/* kalo array result adalah buku | jurnal | skripsi*/}
                 {msg?.results &&
-                  (msg?.type === "buku" || msg?.type === "jurnal") &&
+                  (msg?.type === "buku" ||
+                    msg?.type === "jurnal" ||
+                    msg?.type === "skripsi") &&
                   msg?.results?.length >= 1 &&
                   msg?.results?.map((item, index) => (
-                    <BookAndJournalBubbleChat
+                    <LibraryItemBubbleChat
                       key={index}
                       item={item}
                       type={msg?.type}
                     />
-                  ))}
-                {/* kalo array result adalah buku / jurnal*/}
-                {msg?.results &&
-                  msg?.type === "skripsi" &&
-                  msg?.results?.length >= 1 &&
-                  msg?.results?.map((item, index) => (
-                    <ThesisBubbleChat key={index} item={item} />
-                  ))}
-                {/* kalo array results adalah rak */}
-                {/* msg.racks ini masih bug belum diperbaiki karena BE belum menyediakan output rak */}
-                {msg?.results &&
-                  msg?.type === "rak" &&
-                  msg?.results?.map((item, index) => (
-                    <RackDisplay key={index} rackName={item?.name} />
                   ))}
               </div>
               <div className="mt-1 text-sm text-gray-500">{msg.timestamp}</div>
