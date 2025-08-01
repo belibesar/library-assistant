@@ -90,24 +90,7 @@ export interface SidebarProps {
   toggleSidebar: () => void;
 }
 
-export type ResultChatbotCard = {
-  _id?: { $oid: string } | string;
-  id: string;
-  judul: string;
-  abstrak?: string;
-  jumlah?: number;
-  tersedia?: number;
-  dipinjam?: number;
-  createdAt?: string;
-  updatedAt?: string;
-  count?: number;
-  nim?: string;
-  tahun?: string;
-  pengarang?: Pengarang;
-  penerbit?: Penerbit;
-  name?: string;
-};
-
+export type ResultChatbotCard = LibraryItem;
 export type Pengarang = {
   name: string;
 };
@@ -131,16 +114,16 @@ export type Publikasi = {
   volume: string;
   tahun: string;
 };
-export interface Book {
-  id: string;
-  title: string;
-  call_number?: string;
-  no_invent?: string;
-  no_barcode?: string;
-  lokasi?: string;
-  available?: number;
-  total?: number;
-}
+// export interface Book {
+//   id: string;
+//   title: string;
+//   call_number?: string;
+//   no_invent?: string;
+//   no_barcode?: string;
+//   lokasi?: string;
+//   available?: number;
+//   total?: number;
+// }
 
 export interface BookData {
   _id: string;
