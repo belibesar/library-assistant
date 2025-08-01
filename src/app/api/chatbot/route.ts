@@ -69,7 +69,7 @@ export async function POST(request: Request) {
       "",
     );
     const journalCollection = await responseGetAllJournal?.journals;
-    console.log(journalCollection, "<-------- journalCollection");
+    // console.log(journalCollection, "<-------- journalCollection");
 
     // output
     const dataFromDatabase = [
@@ -79,15 +79,17 @@ export async function POST(request: Request) {
         jurnal: journalCollection,
       },
     ];
+    // console.log({ dataFromDatabase }, "<------- dataFromDatabase");
+
     const stringDatabase = JSON.stringify(dataFromDatabase);
 
     //gemini logic
-    const libraryAssistantPrompt = `
+    const libraryAssistantInstructions = `
     Anda adalah **Asisten Perpustakaan USD** yang berdedikasi dan memiliki pengetahuan mendalam tentang 
     seluruh koleksi yang tersedia di perpustakaan. Anda HANYA memiliki akses ke **database lokal** 
     yaitu: ${stringDatabase} yang berisi semua informasi item dengan rincian:
    
-   type buku =  {
+   type Buku =  {
     id: string;
     judul: string;
     abstrak?: string;
@@ -97,10 +99,27 @@ export async function POST(request: Request) {
     count?: number;
     penerbit_id: string;
     pengarang_id: string;
+    penerbit: Penerbit;
+    pengarang: Pengarang;
+    rak: string;
+    sinopsis: string;
+    lokasi: string;
     updatedAt?: string;
     createdAt?: string;
   },
-   type jurnal = {
+
+  type Penerbit= {
+    id: string;
+    name: string;
+  }
+
+  type Pengarang= {
+    id: string;
+    name: string;
+    nationality: string;
+  }
+
+   type Jurnal = {
     id: string;
     judul: string;
     abstrak?: string;
@@ -109,10 +128,18 @@ export async function POST(request: Request) {
     dipinjam: number;
     count?: number;
     jurnal_id: string;
+    publikasi: Publikasi;
     updatedAt?: string;
     createdAt?: string;
-}, dan
-    type skripsi = {
+  }
+    type Publikasi= {
+    id: string;
+    name: string;
+    volume: string;
+    tahun: string;
+  }
+, dan
+    type Skripsi = {
     id: string;
     judul: string;
     abstrak?: string;
@@ -121,7 +148,18 @@ export async function POST(request: Request) {
     tahun: string;
     updatedAt?: string;
     createdAt?: string;
+    mahasiswa: Mahasiswa;
 }
+    type Mahasiswa = {
+    id: string;
+    name: string;
+    masuk: string;
+    lulus: string;
+    ipk: string;
+    fakultas?: string;
+    program_studi?: string;
+  }
+
       **TIDAK AKAN MENCARI DI INTERNET**.
       **JIKA DATA YANG DIMINTA TIDAK ADA, MAKA JANGAN CARI DATA DILUAR DATABASE LOKAL, 
         OUTPUT NYA MAAF DATA TERSEBUT TIDAK DITEMUKAN **
@@ -131,68 +169,13 @@ export async function POST(request: Request) {
     * **Pencarian Cerdas:** Bantu pengguna menemukan item yang mereka cari. Sesuaikan abstrak sebagai sinopsis dari item yang dicari user.
     * **Rekomendasi Relevan:** Berikan rekomendasi item yang sesuai dengan minat pengguna. Ini bisa berdasarkan genre, 
       penulis yang serupa, atau tema yang berkaitan dengan item yang sedang atau pernah mereka cari.
-    * **Informasi Detail:** Setelah menemukan atau merekomendasikan item, berikan detail penting seperti
-     type buku =  {
-    id: string;
-    judul: string;
-    abstrak?: string;
-    jumlah: number;
-    tersedia: number;
-    dipinjam: number;
-    count?: number;
-    penerbit_id: string;
-    pengarang_id: string;
-    updatedAt?: string;
-    createdAt?: string;
-  },
-   type jurnal = {
-    id: string;
-    judul: string;
-    abstrak?: string;
-    jumlah: number;
-    tersedia: number;
-    dipinjam: number;
-    count?: number;
-    jurnal_id: string;
-    updatedAt?: string;
-    createdAt?: string;
-
-    type rak = {
-    name: Rak + id (string)
-    }
-
-}, dan
-    type skripsi = {
-    id: string;
-    judul: string;
-    abstrak?: string;
-    count?: number;
-    nim: string;
-    tahun: string;
-    updatedAt?: string;
-    createdAt?: string;
-
+    * **Informasi Detail:** Setelah menemukan atau merekomendasikan item, berikan detail pentingnya kecuali id
     (informasi ini ada di database).
 
-    * ** KHUSUS UNTUK ITEM TIPE BUKU, Lokasi buku merujuk pada id buku
-      contoh:
-      buku = {
-      id: 1928,
-      judul: 1200 Cara Untuk Kenyang Terus Menerus
-      }
-      
-      maka berikan konteks lokasi berdasarkan id bukunya
-      "..... buku dengan judul "1200 Cara Untuk Kenyang Terus Menerus berada di rak 1928..."
-      jangan berikan data mentahnya, seperti
-      "..... buku dengan judul "1200 Cara Untuk Kenyang Terus Menerus dengan ID 1928 berada di rak 1928..."
-
-
-      dan jika bertanya ada "rak apa saja yang ada di perpustakaan ini?"
+    * ** dan jika bertanya ada "rak apa saja yang ada di perpustakaan ini?"
 
       maka berikan output (batasi maksimal 10 item rak) dengan 
       {message: ((isi pesan anda)), result [], type: rak }
-
-      
           
     * **Informasi Total Semua dari Item dan Semua item dalam Suatu Rak:** Jumlahkan semua item, 
         item dalam suatu rak, dan total rak yang ada.
@@ -222,20 +205,19 @@ export async function POST(request: Request) {
     Apakah Anda ingin mencari buku lain, atau ada yang bisa saya bantu terkait buku ini?"
     _______
     **Asisten Perpustakaan siap membantu Anda menjelajahi koleksi kami! Silakan ajukan pertanyaan Anda.**
-    **Input pengunjung perpustakaan**: ${messageRequestFromClient}
 
     **1. JIKA JUMLAH ITEMNYA DITENTUKAN OLEH USER,
-    contoh: berikan saya 2 buku tentang sejarah
-        MAKA BERIKAN HANYA 2 BUKU TENTANG SEJARAH
+    contoh: berikan saya 2 item tentang sejarah
+        MAKA BERIKAN HANYA 2 item TENTANG SEJARAH
     dengan output
-        {message: ((PESAN DARI ANDA)), result: [], type: "jurnal" / "skripsi" / "buku"}
+        {message: ((PESAN DARI ANDA)), result < Jurnal[] | Skripsi[] | Buku[] >:  [], type: "jurnal" / "skripsi" / "buku"}
 
     **JIKA JUMLAH ITEMNYA TIDAK DITENTUKAN OLEH USER
     contoh: rekomendasikan jurnal kepada saya
       jika itemnya lebih dari 5, maka batasi HANYA 5 JURNAL PILIHAN,
     tetap dengan output
-      {message: ((PESAN DARI ANDA)), result: [], type: "jurnal" / "skripsi" / "buku"}
-      jika itemnya hanya satu outputnya tetap {message: ((PESAN DARI ANDA)), result: [], type: "jurnal" / "skripsi" / "buku"}
+      {message: ((PESAN DARI ANDA)), result < Jurnal[] | Skripsi[] | Buku[] >:  [], type: "jurnal" / "skripsi" / "buku"}
+      jika itemnya hanya satu outputnya tetap {message: ((PESAN DARI ANDA)), result < Jurnal[] | Skripsi[] | Buku[] >:  [], type: "jurnal" / "skripsi" / "buku"}
 
     **JIKA ITEM YANG DICARI TIDAK ADA
     KONTEKS: di database lokal tidak ada jurnal dengan judul "Otomotif Terbarukan";
@@ -252,15 +234,16 @@ export async function POST(request: Request) {
     
     `;
 
-    console.log(libraryAssistantPrompt);
+    console.log("processing instructions: " + messageRequestFromClient);
 
     const response = await ai.models.generateContent({
       model: "gemini-2.5-flash",
-      contents: libraryAssistantPrompt,
+      contents: messageRequestFromClient,
       config: {
         thinkingConfig: {
           thinkingBudget: 0,
         },
+        systemInstruction: libraryAssistantInstructions,
         responseMimeType: "application/json",
       },
     });
