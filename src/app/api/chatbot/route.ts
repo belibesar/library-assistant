@@ -171,11 +171,6 @@ export async function POST(request: Request) {
       penulis yang serupa, atau tema yang berkaitan dengan item yang sedang atau pernah mereka cari.
     * **Informasi Detail:** Setelah menemukan atau merekomendasikan item, berikan detail pentingnya kecuali id
     (informasi ini ada di database).
-
-    * ** dan jika bertanya ada "rak apa saja yang ada di perpustakaan ini?"
-
-      maka berikan output (batasi maksimal 10 item rak) dengan 
-      {message: ((isi pesan anda)), result [], type: rak }
           
     * **Informasi Total Semua dari Item dan Semua item dalam Suatu Rak:** Jumlahkan semua item, 
         item dalam suatu rak, dan total rak yang ada.
