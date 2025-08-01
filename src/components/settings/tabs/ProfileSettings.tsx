@@ -1,19 +1,94 @@
-import { useState, ChangeEvent } from "react";
+import { useState, ChangeEvent, useEffect } from "react";
 import { User, Upload, Save, Eye, EyeOff } from "lucide-react";
 import FormInput from "../forms/FormInput";
 import FormSelect from "../forms/FormSelect";
+import { useAuth } from "@/contexts/AuthContext";
 
 const ProfileSettings = () => {
+  const { user } = useAuth();
+  const [isLoading, setIsLoading] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+  
   const [profile, setProfile] = useState({
-    name: "Ahmad Rizki",
-    email: "ahmad.rizki@email.com",
-    phone: "+62 812-3456-7890",
-    address: "Jl. Merdeka No. 123, Jakarta",
-    institution: "Universitas Indonesia",
-    studentId: "1234567890",
+    name: "",
+    email: "",
+    phone: "",
+    address: "",
+    institution: "",
+    studentId: "",
     role: "Mahasiswa",
-    bio: "Mahasiswa Teknik Informatika semester 6, tertarik dengan AI dan Machine Learning.",
+    bio: "",
   });
+
+  useEffect(() => {
+    const fetchProfile = async () => {
+      if (!user) return;
+      
+      setIsLoading(true);
+      try {
+        const token = localStorage.getItem("token");
+        const response = await fetch("/api/profile", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          if (data.success) {
+            setProfile(prev => ({
+              ...prev,
+              name: data.data.name || "",
+              email: data.data.email || "",
+              phone: data.data.phone || "",
+              address: data.data.address || "",
+              institution: data.data.institution || "",
+              studentId: data.data.studentId || "",
+              role: data.data.role || "Mahasiswa",
+              bio: data.data.bio || "",
+            }));
+          }
+        }
+      } catch (error) {
+        console.error("Error fetching profile:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchProfile();
+  }, [user]);
+
+  const handleSave = async () => {
+    setIsSaving(true);
+    try {
+      const token = localStorage.getItem("token");
+      const response = await fetch("/api/profile", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(profile),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        if (data.success) {
+          alert("Profil berhasil diperbarui!");
+        } else {
+          alert("Gagal memperbarui profil: " + data.message);
+        }
+      } else {
+        alert("Gagal memperbarui profil");
+      }
+    } catch (error) {
+      console.error("Error saving profile:", error);
+      alert("Terjadi kesalahan saat menyimpan profil");
+    } finally {
+      setIsSaving(false);
+    }
+  };
 
   const [showPassword, setShowPassword] = useState(false);
 
@@ -161,9 +236,13 @@ const ProfileSettings = () => {
       </div>
 
       <div className="flex justify-end">
-        <button className="inline-flex items-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700">
+        <button 
+          onClick={handleSave}
+          disabled={isSaving || isLoading}
+          className="inline-flex items-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
+        >
           <Save className="mr-2 h-4 w-4" />
-          Simpan Perubahan
+          {isSaving ? "Menyimpan..." : "Simpan Perubahan"}
         </button>
       </div>
     </div>

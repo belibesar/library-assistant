@@ -57,10 +57,17 @@ export interface ChatbotHeaderCardProps {
 }
 
 export type userType = {
+  id?: string;
   email: string;
   username: string;
   name: string;
-  password: string;
+  password?: string;
+  phone?: string;
+  address?: string;
+  institution?: string;
+  studentId?: string;
+  role?: string;
+  bio?: string;
 };
 export type NewUser = {
   email: string;
