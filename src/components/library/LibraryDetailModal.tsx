@@ -97,19 +97,19 @@ export const LibraryDetailModal = ({
               {(item as any).mahasiswa && (
                 <>
                   <p className="text-gray-700">
-                    <strong>Mahasiswa:</strong> {(item as any).mahasiswa.name}
+                    <strong>Mahasiswa:</strong> {(item as any).mahasiswa?.name || 'N/A'}
                   </p>
                   <p className="text-gray-700">
                     <strong>Fakultas:</strong>{" "}
-                    {(item as any).mahasiswa.fakultas || "Tidak tersedia"}
+                    {(item as any).mahasiswa?.fakultas || "Tidak tersedia"}
                   </p>
                   <p className="text-gray-700">
                     <strong>Program Studi:</strong>{" "}
-                    {(item as any).mahasiswa.program_studi || "Tidak tersedia"}
+                    {(item as any).mahasiswa?.program_studi || "Tidak tersedia"}
                   </p>
                   <p className="text-gray-700">
                     <strong>IPK:</strong>{" "}
-                    {(item as any).mahasiswa.ipk || "Tidak tersedia"}
+                    {(item as any).mahasiswa?.ipk || "Tidak tersedia"}
                   </p>
                 </>
               )}

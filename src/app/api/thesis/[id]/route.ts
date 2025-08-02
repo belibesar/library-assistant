@@ -10,8 +10,7 @@ export async function GET(
   try {
     const { id } = await params;
     const foundedThesis = await ThesisModel.getThesisById(id);
-    const dataThesis = foundedThesis[0];
-    if (!dataThesis) {
+    if (!foundedThesis) {
       return NextResponse.json(
         {
           success: false,
@@ -24,9 +23,9 @@ export async function GET(
     }
 
     return NextResponse.json({
-      status: true,
+      success: true,
       message: `Thesis with id ${id} found!`,
-      data: dataThesis,
+      data: foundedThesis,
     });
   } catch (error) {
     return NextResponse.json(
@@ -51,7 +50,7 @@ export async function PUT(
     const timestamp = new Date().toISOString();
 
     const foundedThesis = await ThesisModel.getThesisById(id);
-    if (!foundedThesis[0]) {
+    if (!foundedThesis) {
       return NextResponse.json(
         {
           success: false,
@@ -62,13 +61,17 @@ export async function PUT(
         },
       );
     }
-    const existing = foundedThesis[0]; // dari database
+    const existing = foundedThesis;
     const newThesis: Thesis = {
       id: requestData.id || existing.id,
       judul: requestData.judul || existing.judul,
       abstrak: requestData.abstrak ?? existing.abstrak,
       nim: requestData.nim || existing.nim,
       tahun: requestData.tahun || existing.tahun,
+      jumlah: Number(requestData.jumlah) || existing.jumlah,
+      tersedia: Number(requestData.tersedia) || existing.tersedia,
+      dipinjam: Number(requestData.dipinjam) || existing.dipinjam,
+      count: existing.count || 0,
       createdAt: existing.createdAt,
       updatedAt: timestamp,
     };
@@ -102,7 +105,7 @@ export async function DELETE(
   try {
     const { id } = await params;
     const foundedThesis = await ThesisModel.getThesisById(id);
-    if (!foundedThesis[0]) {
+    if (!foundedThesis) {
       return NextResponse.json(
         {
           success: false,
@@ -128,5 +131,33 @@ export async function DELETE(
         status: 500,
       },
     );
+  }
+}
+
+export async function PATCH(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> },
+) {
+  try {
+    const { id } = await params;
+    const thesis = await ThesisModel.getThesisById(id);
+    if (!thesis) {
+      throw new Error(`Thesis not found!`);
+    }
+    const increaseCount = await ThesisModel.countThesis(id);
+    return NextResponse.json(
+      {
+        success: true,
+        message: `Thesis count with id ${id} has been updated`,
+        data: increaseCount,
+      },
+      { status: 200 },
+    );
+  } catch (error) {
+    console.log(error);
+    return NextResponse.json({
+      success: false,
+      error,
+    });
   }
 }
