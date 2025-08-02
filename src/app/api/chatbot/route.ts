@@ -232,20 +232,24 @@ export async function POST(request: Request) {
 
     console.log("processing instructions: " + messageRequestFromClient);
 
-    const response = await ai.models.generateContent({
+    const response = ai.chats.create({
       model: "gemini-2.5-flash",
-      contents: messageRequestFromClient,
+      history: [],
       config: {
         thinkingConfig: {
-          thinkingBudget: 0, // AI time allocation for thinking
+          thinkingBudget: -1, // AI time allocation for thinking
         },
         systemInstruction: libraryAssistantInstructions,
         responseMimeType: "application/json",
       },
     });
 
+    const responseChat = await response.sendMessage({
+      message: messageRequestFromClient,
+    }); // multimodal chat configuration
+
     // Extract text from Gemini response (handle both .text and .content?.parts?.[0]?.text)
-    const rawText = extractText(response);
+    const rawText = extractText(responseChat);
 
     console.log(rawText);
 
