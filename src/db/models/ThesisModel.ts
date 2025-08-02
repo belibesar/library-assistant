@@ -77,7 +77,7 @@ class ThesisModel {
   static async getThesisById(id: string) {
     try {
       const collection = await this.collection();
-      const journal = await collection
+      const thesis = await collection
         .aggregate([
           {
             $match: { id: id },
@@ -98,7 +98,7 @@ class ThesisModel {
           },
         ])
         .toArray();
-      return journal[0] || null;
+      return thesis[0] || null;
     } catch (error) {
       throw error;
     }

@@ -5,6 +5,9 @@ export type Thesis = {
   count?: number;
   nim: string;
   tahun: string;
+  jumlah: number;
+  tersedia: number;
+  dipinjam: number;
   updatedAt?: string;
   createdAt?: string;
 };
