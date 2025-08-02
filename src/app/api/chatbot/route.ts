@@ -236,7 +236,7 @@ export async function POST(request: Request) {
       model: "gemini-2.5-flash",
       config: {
         thinkingConfig: {
-          thinkingBudget: -1, // AI time allocation for thinking
+          thinkingBudget: 0, // AI time allocation for unlimited thinking
         },
         systemInstruction: libraryAssistantInstructions,
         responseMimeType: "application/json",
