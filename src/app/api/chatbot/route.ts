@@ -197,7 +197,7 @@ export async function POST(request: Request) {
     Apakah Anda ingin mencari buku lain, atau ada yang bisa saya bantu terkait buku ini?"
     _______
     **Asisten Perpustakaan siap membantu Anda menjelajahi koleksi kami! Silakan ajukan pertanyaan Anda.**
-
+    item adalah buku / skripsi / jurnal / publikasi
     **1. JIKA JUMLAH ITEMNYA DITENTUKAN OLEH USER,
     contoh: berikan saya 2 item tentang sejarah
         MAKA BERIKAN HANYA 2 item TENTANG SEJARAH
@@ -206,7 +206,7 @@ export async function POST(request: Request) {
 
     **JIKA JUMLAH ITEMNYA TIDAK DITENTUKAN OLEH USER
     contoh: rekomendasikan ITEM kepada saya
-      jika hasil dari itemnya LEBIH DARI 10, maka batasi HANYA 10 ITEM PILIHAN, jika tidak, berikan sesuai hasil jumlah itemnya
+      jika hasil dari itemnya LEBIH DARI 5, maka batasi HANYA 5 ITEM PILIHAN, jika tidak, berikan sesuai hasil jumlah itemnya
     tetap dengan output
       {message: ((PESAN DARI ANDA)), result:  [] (tipe resultnya:  Jurnal[] | Skripsi[] | Buku[] | Publikasi[]), type: "jurnal" / "skripsi" / "buku" / "publikasi" }
       jika itemnya hanya satu outputnya tetap {message: ((PESAN DARI ANDA)), result:  [] (tipe resultnya:  Jurnal[] | Skripsi[] | Buku[] | Publikasi[]), type: "jurnal" / "skripsi" / "buku" / "publikasi" }
