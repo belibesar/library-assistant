@@ -20,7 +20,6 @@ const LibraryItemBubbleChat: React.FC<{
           <p>Pengarang: {(item as Book)?.pengarang?.name || ""}</p>
           <p>Penerbit: {(item as Book)?.penerbit?.name || ""}</p>
           <p>Lokasi buku: {(item as Book)?.lokasi || ""}</p>
-          <p>Rak: {(item as Book)?.rak || ""}</p>
         </>
       )}
 
@@ -40,9 +39,7 @@ const LibraryItemBubbleChat: React.FC<{
             {(item as Journal)?.publikasi?.tahun || ""},{" "}
             {(item as Journal)?.publikasi?.volume || ""}
           </p>
-          <p>Jumlah: {(item as Journal)?.jumlah || ""}</p>
           <p>Jurnal tersedia: {(item as Journal)?.tersedia || ""}</p>
-          <p>Jurnal sedang dipinjam: {(item as Journal)?.dipinjam || ""}</p>
         </>
       )}
 
