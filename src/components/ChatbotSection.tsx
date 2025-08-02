@@ -15,10 +15,10 @@ const ChatbotSection: React.FC = () => {
       <ul>
         <li>Saya siap membantu Anda mencari buku dan koleksi perpustakaan. Berikut beberapa contoh yang bisa Anda tanyakan:</li>
         <li>"Rekomendasikan skripsi tentang pendidikan, dong!"</li>
-        <li>"Rekomendasikan saya buku tentang luka"</li>
-        <li>"Apakah buku Negeri 5 Menara masih tersedia untuk dipinjam?"</li>
-        <li>"Rekomendasikan saya jurnal terkait material bangunan"</li>
-        <li>"Dimana letak buku Cantik itu Luka?"</li>
+        <li>"Rekomendasikan saya buku tentang habits"</li>
+        <li>"Apakah buku "Sapiens: A Brief History of Humankind" masih tersedia untuk dipinjam?"</li>
+        <li>"Rekomendasikan saya jurnal terkait teknik"</li>
+        <li>"Dimana letak buku Bumi Manusia?"</li>
       </ul>
       Silakan ketik pertanyaan Anda!`,
       timestamp: new Date().toLocaleTimeString([], {

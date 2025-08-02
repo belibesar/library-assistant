@@ -171,9 +171,6 @@ export async function POST(request: Request) {
       penulis yang serupa, atau tema yang berkaitan dengan item yang sedang atau pernah mereka cari.
     * **Informasi Detail:** Setelah menemukan atau merekomendasikan item, berikan detail pentingnya kecuali id
     (informasi ini ada di database).
-          
-    * **Informasi Total Semua dari Item dan Semua item dalam Suatu Rak:** Jumlahkan semua item, 
-        item dalam suatu rak, dan total rak yang ada.
     * **Panduan Navigasi:** Arahkan pengguna ke lokasi fisik item yang akurat di dalam perpustakaan.
     ---
         ## Cara Anda Berinteraksi:
@@ -200,19 +197,23 @@ export async function POST(request: Request) {
     Apakah Anda ingin mencari buku lain, atau ada yang bisa saya bantu terkait buku ini?"
     _______
     **Asisten Perpustakaan siap membantu Anda menjelajahi koleksi kami! Silakan ajukan pertanyaan Anda.**
-
+    item adalah buku / skripsi / jurnal / publikasi
     **1. JIKA JUMLAH ITEMNYA DITENTUKAN OLEH USER,
     contoh: berikan saya 2 item tentang sejarah
         MAKA BERIKAN HANYA 2 item TENTANG SEJARAH
     dengan output
-        {message: ((PESAN DARI ANDA)), result < Jurnal[] | Skripsi[] | Buku[] >:  [], type: "jurnal" / "skripsi" / "buku"}
+        {message: ((PESAN DARI ANDA)), result:  [] (tipe resultnya:  Jurnal[] | Skripsi[] | Buku[] | Publikasi[] ), type: "jurnal" / "skripsi" / "buku" / "publikasi" }
 
     **JIKA JUMLAH ITEMNYA TIDAK DITENTUKAN OLEH USER
-    contoh: rekomendasikan jurnal kepada saya
-      jika itemnya lebih dari 5, maka batasi HANYA 5 JURNAL PILIHAN,
+    contoh: rekomendasikan ITEM kepada saya
+      jika hasil dari itemnya LEBIH DARI 5, maka batasi HANYA 5 ITEM PILIHAN, jika tidak, berikan sesuai hasil jumlah itemnya
     tetap dengan output
-      {message: ((PESAN DARI ANDA)), result < Jurnal[] | Skripsi[] | Buku[] >:  [], type: "jurnal" / "skripsi" / "buku"}
-      jika itemnya hanya satu outputnya tetap {message: ((PESAN DARI ANDA)), result < Jurnal[] | Skripsi[] | Buku[] >:  [], type: "jurnal" / "skripsi" / "buku"}
+      {message: ((PESAN DARI ANDA)), result:  [] (tipe resultnya:  Jurnal[] | Skripsi[] | Buku[] | Publikasi[]), type: "jurnal" / "skripsi" / "buku" / "publikasi" }
+      jika itemnya hanya satu outputnya tetap {message: ((PESAN DARI ANDA)), result:  [] (tipe resultnya:  Jurnal[] | Skripsi[] | Buku[] | Publikasi[]), type: "jurnal" / "skripsi" / "buku" / "publikasi" }
+
+    **JIKA MENANYAKAN ... apa aja penerbit / apa aja pengarang ... 
+    jawab dengan output
+    {message: ((PESAN DARI ANDA))}
 
     **JIKA ITEM YANG DICARI TIDAK ADA
     KONTEKS: di database lokal tidak ada jurnal dengan judul "Otomotif Terbarukan";
@@ -231,20 +232,23 @@ export async function POST(request: Request) {
 
     console.log("processing instructions: " + messageRequestFromClient);
 
-    const response = await ai.models.generateContent({
+    const chat = ai.chats.create({
       model: "gemini-2.5-flash",
-      contents: messageRequestFromClient,
       config: {
         thinkingConfig: {
-          thinkingBudget: 0, // AI time allocation for thinking
+          thinkingBudget: 0, // AI time allocation for unlimited thinking
         },
         systemInstruction: libraryAssistantInstructions,
         responseMimeType: "application/json",
       },
     });
 
+    const responseChat = await chat.sendMessage({
+      message: messageRequestFromClient,
+    }); // multimodal chat configuration
+
     // Extract text from Gemini response (handle both .text and .content?.parts?.[0]?.text)
-    const rawText = extractText(response);
+    const rawText = extractText(responseChat);
 
     console.log(rawText);
 

@@ -35,13 +35,10 @@ export interface ChatMessage {
   message: string;
   timestamp: string;
   results?: ResultChatbotCard[];
-  racks?: Rack;
-  type?: "buku" | "skripsi" | "jurnal" | "rak";
+  type?: LibraryBubbleItemType;
 }
 
-type Rack = {
-  name: string;
-};
+export type LibraryBubbleItemType = "buku" | "skripsi" | "jurnal" | "publikasi";
 
 export interface ChatbotMessagesCardProps {
   messages: ChatMessage[];
