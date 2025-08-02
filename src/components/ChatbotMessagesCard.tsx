@@ -71,11 +71,9 @@ const ChatbotMessagesCard: React.FC<ChatbotMessagesCardProps> = ({
                 dangerouslySetInnerHTML={{ __html: msg.message }}
               />
               <div>
-                {/* kalo array result adalah buku | jurnal | skripsi*/}
+                {/* kalo array result adalah array dan punya tipe*/}
                 {msg?.results &&
-                  (msg?.type === "buku" ||
-                    msg?.type === "jurnal" ||
-                    msg?.type === "skripsi") &&
+                  msg?.type &&
                   msg?.results?.length >= 1 &&
                   msg?.results?.map((item, index) => (
                     <LibraryItemBubbleChat
@@ -139,18 +137,6 @@ const ChatbotMessagesCard: React.FC<ChatbotMessagesCardProps> = ({
           </svg>
         </button>
       </div>
-    </div>
-  );
-};
-
-const RackDisplay: React.FC<{
-  rackName: string | undefined;
-}> = ({ rackName }) => {
-  return (
-    <div className="mt-5 rounded-bl-none bg-blue-200 p-5 text-black">
-      <h3>
-        <span className="font-bold">{rackName || ""}</span>{" "}
-      </h3>
     </div>
   );
 };
