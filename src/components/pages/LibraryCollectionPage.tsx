@@ -99,8 +99,6 @@ export default function LibraryCollectionPage() {
     if (category !== "journal" && (!formInput.id || !formInput.id.trim())) 
       newErrors.id = "ID wajib diisi";
     if (!formInput.judul.trim()) newErrors.judul = "Judul wajib diisi";
-    if (category !== "journal" && (!formInput.abstrak || !formInput.abstrak.trim())) 
-      newErrors.abstrak = "Abstrak wajib diisi";
     if (!formInput.jumlah || Number(formInput.jumlah) < 1)
       newErrors.jumlah = "Jumlah harus minimal 1";
     if (!formInput.tersedia || Number(formInput.tersedia) < 0)
@@ -177,7 +175,7 @@ export default function LibraryCollectionPage() {
       payload = {
         id: skripsiFormInput.id.trim(),
         judul: skripsiFormInput.judul.trim(),
-        abstrak: skripsiFormInput.abstrak.trim(),
+        abstrak: skripsiFormInput.abstrak?.trim() || "",
         jumlah: jumlahNum,
         tersedia: tersediaNum,
         dipinjam: dipinjamNum,

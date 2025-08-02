@@ -118,7 +118,6 @@ export const LibraryFormModal = ({
 
             {category === "book" && (
               <div className="space-y-4">
-                {/* Lokasi */}
                 <div>
                   <label
                     htmlFor="book-lokasi-input"
@@ -137,7 +136,6 @@ export const LibraryFormModal = ({
                   />
                 </div>
 
-                {/* Sinopsis dan Rak */}
                 <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                   <div>
                     <label
@@ -175,7 +173,6 @@ export const LibraryFormModal = ({
                   </div>
                 </div>
 
-                {/* Pengarang */}
                 <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                   <div>
                     <label
@@ -222,7 +219,6 @@ export const LibraryFormModal = ({
                   </div>
                 </div>
 
-                {/* Penerbit */}
                 <div>
                   <label
                     htmlFor="book-penerbit-name-input"
@@ -536,14 +532,14 @@ export const LibraryFormModal = ({
               </div>
             </div>
 
-            {/* cek apakah bisa... */}
-            {/* {category !== "book" && (
+            {/* dijadikan opsional sementara */}
+            {category !== "book" && (
               <div>
                 <label
                   htmlFor={`${category}-abstrak-input`}
                   className="mb-2 block text-sm font-medium text-gray-700"
                 >
-                  Abstrak <span className="text-red-500">*</span>
+                  Abstrak
                 </label>
                 <textarea
                   id={`${category}-abstrak-input`}
@@ -556,7 +552,7 @@ export const LibraryFormModal = ({
                       ? "border-red-500 bg-red-50"
                       : "border-gray-300"
                   }`}
-                  placeholder={`Masukkan abstrak ${category}`}
+                  placeholder={`Masukkan abstrak ${category} (opsional)`}
                 />
                 {formErrors.abstrak && (
                   <p className="mt-1 text-xs text-red-500">
@@ -564,7 +560,7 @@ export const LibraryFormModal = ({
                   </p>
                 )}
               </div>
-            )} */}
+            )}
 
             <div className="mt-2 flex justify-end gap-3">
               <button
