@@ -44,7 +44,11 @@ export const LibraryDetailModal = ({
           <div>
             <h3 className="text-2xl font-bold text-gray-900">{item.judul}</h3>
             {item.type === "book" ? (
-              <p className="text-sm text-gray-500">Rak: {item.id}</p>
+              <>
+                <p className="text-sm text-gray-500">Lokasi: {item.lokasi}</p>
+                <p className="text-sm text-gray-500">Call Number: {item.id}</p>
+                <p className="text-sm text-gray-500">Rak: {item.rak}</p>
+              </>
             ) : (
               <p className="text-sm text-gray-500">ID: {item.id}</p>
             )}
@@ -71,10 +75,12 @@ export const LibraryDetailModal = ({
                     <strong>Publikasi:</strong> {(item as any).publikasi.name}
                   </p>
                   <p className="text-gray-700">
-                    <strong>Tahun Publikasi:</strong> {(item as any).publikasi.tahun || "Tidak tersedia"}
+                    <strong>Tahun Publikasi:</strong>{" "}
+                    {(item as any).publikasi.tahun || "Tidak tersedia"}
                   </p>
                   <p className="text-gray-700">
-                    <strong>Volume:</strong> {(item as any).publikasi.volume || "Tidak tersedia"}
+                    <strong>Volume:</strong>{" "}
+                    {(item as any).publikasi.volume || "Tidak tersedia"}
                   </p>
                 </>
               )}
@@ -94,13 +100,16 @@ export const LibraryDetailModal = ({
                     <strong>Mahasiswa:</strong> {(item as any).mahasiswa.name}
                   </p>
                   <p className="text-gray-700">
-                    <strong>Fakultas:</strong> {(item as any).mahasiswa.fakultas || "Tidak tersedia"}
+                    <strong>Fakultas:</strong>{" "}
+                    {(item as any).mahasiswa.fakultas || "Tidak tersedia"}
                   </p>
                   <p className="text-gray-700">
-                    <strong>Program Studi:</strong> {(item as any).mahasiswa.program_studi || "Tidak tersedia"}
+                    <strong>Program Studi:</strong>{" "}
+                    {(item as any).mahasiswa.program_studi || "Tidak tersedia"}
                   </p>
                   <p className="text-gray-700">
-                    <strong>IPK:</strong> {(item as any).mahasiswa.ipk || "Tidak tersedia"}
+                    <strong>IPK:</strong>{" "}
+                    {(item as any).mahasiswa.ipk || "Tidak tersedia"}
                   </p>
                 </>
               )}

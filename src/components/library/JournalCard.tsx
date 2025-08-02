@@ -66,7 +66,10 @@ export const JournalCard = ({
           </div>
         )} */}
         <span className="inline-block rounded-full bg-gray-100 px-3 text-xs font-medium text-gray-700">
-          Jurnal ID: {journal.jurnal_id}
+          {journal.publikasi.name}
+        </span>
+        <span className="inline-block rounded-full bg-gray-100 px-3 text-xs font-medium text-gray-700">
+          Volume: {journal.publikasi.volume}
         </span>
         <p className="line-clamp-3 text-sm leading-relaxed text-gray-600">
           {journal.abstrak}
@@ -76,19 +79,19 @@ export const JournalCard = ({
 
     <div className="border-t border-gray-100 bg-gray-50 px-4 py-3">
       <div className="mb-2 flex items-center justify-between">
-        <span className="text-sm text-gray-500">Total: {journal.jumlah}</span>
+        {/* <span className="text-sm text-gray-500">Total: {journal.jumlah}</span> */}
         <div className="flex gap-2">
-          <span className="rounded-md bg-green-50 px-2 py-1 text-xs font-semibold text-green-600">
+          {/* <span className="rounded-md bg-green-50 px-2 py-1 text-xs font-semibold text-green-600">
             Tersedia: {journal.tersedia}
           </span>
           <span className="rounded-md bg-yellow-50 px-2 py-1 text-xs font-semibold text-yellow-600">
             Dipinjam: {journal.dipinjam}
-          </span>
+          </span> */}
         </div>
       </div>
       <div className="flex items-center justify-between text-xs text-gray-500">
-        <span>Dibuat: {formatDateForInput(journal.createdAt)}</span>
-        <span>Diperbarui: {formatDateForInput(journal.updatedAt)}</span>
+        {/* <span>Dibuat: {formatDateForInput(journal.createdAt)}</span>
+        <span>Diperbarui: {formatDateForInput(journal.updatedAt)}</span> */}
       </div>
       {journal.count !== undefined && (
         <div className="mt-2 text-right text-xs text-gray-500">

@@ -60,7 +60,10 @@ export const SkripsiCard = ({
           </h3>
 
           <div className="flex flex-col gap-1">
-            <p className="text-sm text-gray-600">ID Skripsi: {skripsi.id}</p>
+            <p className="text-sm text-gray-600">ID: {skripsi.id}</p>
+            <p className="text-sm text-gray-600">
+              Author: {skripsi.mahasiswa.name}
+            </p>
             <p className="text-sm text-gray-600">NIM: {skripsi.nim}</p>
             {/* {skripsi.mahasiswa && (
               <>
@@ -84,20 +87,20 @@ export const SkripsiCard = ({
       {/* Card Footer with Stats */}
       <div className="border-t border-gray-100 bg-gray-50 px-4 py-3">
         <div className="mb-2 flex items-center justify-between">
-          <span className="text-sm text-gray-500">Total: {skripsi.jumlah}</span>
+          {/* <span className="text-sm text-gray-500">Total: {skripsi.jumlah}</span> */}
           <div className="flex gap-2">
-            <span className="rounded-md bg-green-50 px-2 py-1 text-xs font-semibold text-green-600">
+            {/* <span className="rounded-md bg-green-50 px-2 py-1 text-xs font-semibold text-green-600">
               Tersedia: {skripsi.tersedia}
             </span>
             <span className="rounded-md bg-yellow-50 px-2 py-1 text-xs font-semibold text-yellow-600">
               Dipinjam: {skripsi.dipinjam}
-            </span>
+            </span> */}
           </div>
         </div>
 
         <div className="flex items-center justify-between text-xs text-gray-500">
-          <span>Dibuat: {formatDateForInput(skripsi.createdAt)}</span>
-          <span>Diperbarui: {formatDateForInput(skripsi.updatedAt)}</span>
+          {/* <span>Dibuat: {formatDateForInput(skripsi.createdAt)}</span>
+          <span>Diperbarui: {formatDateForInput(skripsi.updatedAt)}</span> */}
         </div>
 
         {skripsi.count !== undefined && (
