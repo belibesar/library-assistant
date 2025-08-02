@@ -174,31 +174,89 @@ export const LibraryFormModal = ({
             )}
 
             {category === "journal" && (
-              <div>
-                <label
-                  htmlFor="journal-jurnalid-input"
-                  className="mb-2 block text-sm font-medium text-gray-700"
-                >
-                  Jurnal ID <span className="text-red-500">*</span>
-                </label>
-                <input
-                  id="journal-jurnalid-input"
-                  type="text"
-                  name="jurnal_id"
-                  value={(formInput as any).jurnal_id || ""}
-                  onChange={onChange}
-                  className={`w-full rounded-md border px-3 py-2 focus:border-transparent focus:ring-2 focus:ring-blue-500 focus:outline-none ${
-                    formErrors.jurnal_id
-                      ? "border-red-500 bg-red-50"
-                      : "border-gray-300"
-                  }`}
-                  placeholder="Masukkan ID jurnal"
-                />
-                {formErrors.jurnal_id && (
-                  <p className="mt-1 text-xs text-red-500">
-                    {formErrors.jurnal_id}
-                  </p>
-                )}
+              <div className="space-y-4">
+                <div>
+                  <label
+                    htmlFor="journal-publikasi-name-input"
+                    className="mb-2 block text-sm font-medium text-gray-700"
+                  >
+                    Nama Publikasi <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    id="journal-publikasi-name-input"
+                    type="text"
+                    name="publikasi_name"
+                    value={(formInput as any).publikasi_name || ""}
+                    onChange={onChange}
+                    className={`w-full rounded-md border px-3 py-2 focus:border-transparent focus:ring-2 focus:ring-blue-500 focus:outline-none ${
+                      formErrors.publikasi_name
+                        ? "border-red-500 bg-red-50"
+                        : "border-gray-300"
+                    }`}
+                    placeholder="Masukkan nama publikasi"
+                  />
+                  {formErrors.publikasi_name && (
+                    <p className="mt-1 text-xs text-red-500">
+                      {formErrors.publikasi_name}
+                    </p>
+                  )}
+                </div>
+
+                <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                  <div>
+                    <label
+                      htmlFor="journal-publikasi-volume-input"
+                      className="mb-2 block text-sm font-medium text-gray-700"
+                    >
+                      Volume Publikasi
+                    </label>
+                    <input
+                      id="journal-publikasi-volume-input"
+                      type="text"
+                      name="publikasi_volume"
+                      value={(formInput as any).publikasi_volume || ""}
+                      onChange={onChange}
+                      className="w-full rounded-md border border-gray-300 px-3 py-2 focus:border-transparent focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                      placeholder="Contoh: Vol. 15"
+                    />
+                  </div>
+
+                  <div>
+                    <label
+                      htmlFor="journal-publikasi-tahun-input"
+                      className="mb-2 block text-sm font-medium text-gray-700"
+                    >
+                      Tahun Publikasi
+                    </label>
+                    <input
+                      id="journal-publikasi-tahun-input"
+                      type="text"
+                      name="publikasi_tahun"
+                      value={(formInput as any).publikasi_tahun || ""}
+                      onChange={onChange}
+                      className="w-full rounded-md border border-gray-300 px-3 py-2 focus:border-transparent focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                      placeholder="Contoh: 2024"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label
+                    htmlFor="journal-jurnalid-input"
+                    className="mb-2 block text-sm font-medium text-gray-700"
+                  >
+                    Jurnal ID <span className="text-xs text-gray-500">(Opsional - akan di-generate otomatis)</span>
+                  </label>
+                  <input
+                    id="journal-jurnalid-input"
+                    type="text"
+                    name="jurnal_id"
+                    value={(formInput as any).jurnal_id || ""}
+                    onChange={onChange}
+                    className="w-full rounded-md border border-gray-300 px-3 py-2 focus:border-transparent focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                    placeholder="Kosongkan untuk auto-generate"
+                  />
+                </div>
               </div>
             )}
 

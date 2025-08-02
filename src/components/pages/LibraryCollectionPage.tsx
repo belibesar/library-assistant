@@ -96,9 +96,11 @@ export default function LibraryCollectionPage() {
     let isUpdating = false;
     let itemId = (formInput as any).id;
 
-    if (!formInput.id.trim()) newErrors.id = "ID wajib diisi";
+    if (category !== "journal" && (!formInput.id || !formInput.id.trim())) 
+      newErrors.id = "ID wajib diisi";
     if (!formInput.judul.trim()) newErrors.judul = "Judul wajib diisi";
-    if (!formInput.abstrak.trim()) newErrors.abstrak = "Abstrak wajib diisi";
+    if (category !== "journal" && (!formInput.abstrak || !formInput.abstrak.trim())) 
+      newErrors.abstrak = "Abstrak wajib diisi";
     if (!formInput.jumlah || Number(formInput.jumlah) < 1)
       newErrors.jumlah = "Jumlah harus minimal 1";
     if (!formInput.tersedia || Number(formInput.tersedia) < 0)
@@ -144,16 +146,19 @@ export default function LibraryCollectionPage() {
       );
     } else if (category === "journal") {
       const journalFormInput = formInput as JournalFormInput;
-      if (!journalFormInput.jurnal_id.trim())
-        newErrors.jurnal_id = "Jurnal ID wajib diisi";
+      if (!journalFormInput.publikasi_name?.trim())
+        newErrors.publikasi_name = "Nama publikasi wajib diisi";
       payload = {
-        id: journalFormInput.id.trim(),
+        id: journalFormInput.id?.trim() || undefined,
         judul: journalFormInput.judul.trim(),
-        abstrak: journalFormInput.abstrak.trim(),
+        abstrak: journalFormInput.abstrak?.trim(),
         jumlah: jumlahNum,
         tersedia: tersediaNum,
         dipinjam: dipinjamNum,
-        jurnal_id: journalFormInput.jurnal_id.trim(),
+        jurnal_id: journalFormInput.jurnal_id?.trim() || undefined,
+        publikasi_name: journalFormInput.publikasi_name?.trim(),
+        publikasi_volume: journalFormInput.publikasi_volume?.trim(),
+        publikasi_tahun: journalFormInput.publikasi_tahun?.trim(),
         createdAt: journalFormInput.createdAt,
         updatedAt: journalFormInput.updatedAt,
       };
@@ -282,7 +287,6 @@ export default function LibraryCollectionPage() {
       });
 
       if (!res.ok) {
-        // Error handling remains the same...
       }
 
       const json = await res.json();
@@ -347,6 +351,9 @@ export default function LibraryCollectionPage() {
         tersedia: item.tersedia.toString(),
         dipinjam: item.dipinjam.toString(),
         jurnal_id: (item as any).jurnal_id,
+        publikasi_name: (item as any).publikasi?.name || "",
+        publikasi_volume: (item as any).publikasi?.volume || "",
+        publikasi_tahun: (item as any).publikasi?.tahun || "",
         createdAt: item.createdAt,
         updatedAt: item.updatedAt,
       } as any);
