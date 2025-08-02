@@ -42,12 +42,18 @@ export type LibraryItem = Book | Journal | Skripsi;
 export interface BookFormInput {
   id: string;
   judul: string;
-  abstrak: string;
+  abstrak?: string;
+  lokasi?: string;
+  sinopsis?: string;
+  rak?: string;
   jumlah: number | string;
   tersedia: number | string;
   dipinjam: number | string;
-  penerbit_id: string;
-  pengarang_id: string;
+  penerbit_id?: string;
+  pengarang_id?: string;
+  penerbit_name?: string;
+  pengarang_name?: string;
+  pengarang_nationality?: string;
   createdAt?: string;
   updatedAt?: string;
 }

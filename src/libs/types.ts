@@ -96,9 +96,12 @@ export interface SidebarProps {
 
 export type ResultChatbotCard = LibraryItem;
 export type Pengarang = {
+  id: string;
   name: string;
+  nationality: string;
 };
 export type Penerbit = {
+  id: string;
   name: string;
 };
 

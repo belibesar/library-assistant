@@ -3,6 +3,8 @@ import { db } from "../config/mongodb";
 import { ObjectId } from "mongodb";
 import { Book } from "@/libs/types/BookType";
 import { calculateSimilarity } from "@/utils/similarity";
+import PengarangModel from "./PengarangModel";
+import PenerbitModel from "./PenerbitModel";
 
 class BookModel {
   static async collection() {
@@ -16,16 +18,13 @@ class BookModel {
 
     const collection = await this.collection();
 
-    // Build search query
     const searchQuery =
       search && search.trim() !== ""
         ? { judul: { $regex: search, $options: "i" } }
         : {};
 
-    // Get total count for pagination
     const totalCount = await collection.countDocuments(searchQuery);
 
-    // Get paginated results with aggregation
     const books = await collection
       .aggregate([
         {
@@ -86,7 +85,7 @@ class BookModel {
     const book = await collection
       .aggregate([
         {
-          $match: { id: id }, // Filter dokumen berdasarkan id buku
+          $match: { id: id },
         },
         {
           $lookup: {
@@ -124,7 +123,34 @@ class BookModel {
 
   static async createBook(data: Book) {
     const collection = await this.collection();
-    const book = await collection.insertOne(data);
+    
+    // Handle pengarang
+    if ((data as any).pengarang_name) {
+      const pengarangId = await PengarangModel.findOrCreatePengarang({
+        name: (data as any).pengarang_name,
+        nationality: (data as any).pengarang_nationality
+      });
+      data.pengarang_id = pengarangId;
+    }
+    
+    // Handle penerbit
+    if ((data as any).penerbit_name) {
+      const penerbitId = await PenerbitModel.findOrCreatePenerbit({
+        name: (data as any).penerbit_name
+      });
+      data.penerbit_id = penerbitId;
+    }
+    
+    // Set default abstrak for books
+    data.abstrak = "karena buku hanya ada sinopsis";
+    
+    // Clean up temporary fields
+    const bookDataToSave = { ...data };
+    delete (bookDataToSave as any).pengarang_name;
+    delete (bookDataToSave as any).pengarang_nationality;
+    delete (bookDataToSave as any).penerbit_name;
+    
+    const book = await collection.insertOne(bookDataToSave);
     return book;
   }
 
@@ -135,7 +161,38 @@ class BookModel {
     if (!currentBook) {
       throw new Error("Book not found");
     }
-    return await collection.updateOne(identifier, { $set: data });
+    
+    // Handle pengarang
+    if ((data as any).pengarang_name) {
+      const pengarangId = await PengarangModel.findOrCreatePengarang({
+        name: (data as any).pengarang_name,
+        nationality: (data as any).pengarang_nationality
+      });
+      data.pengarang_id = pengarangId;
+    } else if (!data.pengarang_id) {
+      data.pengarang_id = currentBook.pengarang_id;
+    }
+    
+    // Handle penerbit
+    if ((data as any).penerbit_name) {
+      const penerbitId = await PenerbitModel.findOrCreatePenerbit({
+        name: (data as any).penerbit_name
+      });
+      data.penerbit_id = penerbitId;
+    } else if (!data.penerbit_id) {
+      data.penerbit_id = currentBook.penerbit_id;
+    }
+    
+    // Set default abstrak for books
+    data.abstrak = "karena buku hanya ada sinopsis";
+    
+    // Clean up temporary fields
+    const bookDataToSave = { ...data };
+    delete (bookDataToSave as any).pengarang_name;
+    delete (bookDataToSave as any).pengarang_nationality;
+    delete (bookDataToSave as any).penerbit_name;
+    
+    return await collection.updateOne(identifier, { $set: bookDataToSave });
   }
 
   static async deleteBook(id: string) {

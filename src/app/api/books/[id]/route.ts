@@ -41,28 +41,35 @@ export async function PUT(
 ) {
   try {
     const { id } = await params;
-    const currentBook = BookModel.getBookById(id);
+    const currentBook = await BookModel.getBookById(id);
 
     if (!currentBook) {
       throw new Error(`Book not found!`);
     }
 
     const requestData = await request.json();
-    const newData: Book = {
-      id: requestData.id || +new Date(),
+    const newData = {
+      id: requestData.id || currentBook.id,
       judul: requestData.judul,
-      abstrak: requestData.abstrak,
+      abstrak: "karena buku hanya ada sinopsis", // Default value as specified
+      rak: requestData.rak,
+      sinopsis: requestData.sinopsis,
+      lokasi: requestData.lokasi,
       jumlah: Number(requestData.jumlah),
-      tersedia: Number(requestData.jumlah),
+      tersedia: Number(requestData.tersedia),
       dipinjam: Number(requestData.dipinjam) || 0,
-      penerbit_id: requestData.penerbit_id,
-      pengarang_id: requestData.pengarang_id,
-      createdAt: requestData.createdAt,
+      penerbit_id: currentBook.penerbit_id, // Will be updated by model if needed
+      pengarang_id: currentBook.pengarang_id, // Will be updated by model if needed
+      // Pass additional data for model processing
+      pengarang_name: requestData.pengarang_name,
+      pengarang_nationality: requestData.pengarang_nationality,
+      penerbit_name: requestData.penerbit_name,
+      createdAt: requestData.createdAt || currentBook.createdAt,
       updatedAt: new Date().toISOString(),
     };
 
-    const bookData = await bookSchema.parseAsync(newData);
-    const updatedBook = await BookModel.updateBook(id, bookData);
+    // Let BookModel handle the update and pengarang/penerbit processing
+    const updatedBook = await BookModel.updateBook(id, newData);
     return NextResponse.json({
       success: true,
       message: `Book with id ${id} has been updated`,

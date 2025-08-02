@@ -42,24 +42,29 @@ export async function POST(request: NextRequest) {
   try {
     const requestData = await request.json();
     const timestamp = new Date();
-    const newData: Book = {
-      id: requestData.id || +new Date(),
+    const newData = {
+      id: requestData.id || `B${Date.now()}`,
       judul: requestData.judul,
-      abstrak: requestData.abstrak,
-      rak: requestData.rak, //field baru
-      sinopsis: requestData.sinopsis, //field baru
-      lokasi: requestData.lokasi, //field baru
+      abstrak: "karena buku hanya ada sinopsis", // Default value as specified
+      rak: requestData.rak,
+      sinopsis: requestData.sinopsis,
+      lokasi: requestData.lokasi,
       jumlah: Number(requestData.jumlah),
-      tersedia: Number(requestData.jumlah),
-      dipinjam: 0,
-      penerbit_id: requestData.penerbit_id,
-      pengarang_id: requestData.pengarang_id,
+      tersedia: Number(requestData.tersedia || requestData.jumlah),
+      dipinjam: Number(requestData.dipinjam || 0),
+      penerbit_id: "", // Will be set by model
+      pengarang_id: "", // Will be set by model
+      // Pass additional data for model processing
+      pengarang_name: requestData.pengarang_name,
+      pengarang_nationality: requestData.pengarang_nationality,
+      penerbit_name: requestData.penerbit_name,
       createdAt: timestamp.toISOString(),
       updatedAt: timestamp.toISOString(),
     };
 
-    const bookData = await bookSchema.parseAsync(newData);
-    const insertBook = await BookModel.createBook(bookData);
+    // Let BookModel handle the creation and pengarang/penerbit processing
+    const insertBook = await BookModel.createBook(newData);
+    
     return NextResponse.json(
       {
         success: true,

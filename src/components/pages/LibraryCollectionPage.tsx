@@ -124,19 +124,23 @@ export default function LibraryCollectionPage() {
 
     if (category === "book") {
       const bookFormInput = formInput as BookFormInput;
-      if (!bookFormInput.penerbit_id.trim())
-        newErrors.penerbit_id = "Penerbit ID wajib diisi";
-      if (!bookFormInput.pengarang_id.trim())
-        newErrors.pengarang_id = "Pengarang ID wajib diisi";
+      if (!bookFormInput.pengarang_name?.trim())
+        newErrors.pengarang_name = "Nama pengarang wajib diisi";
+      if (!bookFormInput.penerbit_name?.trim())
+        newErrors.penerbit_name = "Nama penerbit wajib diisi";
       payload = {
         id: bookFormInput.id.trim(),
         judul: bookFormInput.judul.trim(),
-        abstrak: bookFormInput.abstrak.trim(),
+        abstrak: "karena buku hanya ada sinopsis",
+        lokasi: bookFormInput.lokasi?.trim(),
+        sinopsis: bookFormInput.sinopsis?.trim(),
+        rak: bookFormInput.rak?.trim(),
         jumlah: jumlahNum,
         tersedia: tersediaNum,
         dipinjam: dipinjamNum,
-        penerbit_id: bookFormInput.penerbit_id.trim(),
-        pengarang_id: bookFormInput.pengarang_id.trim(),
+        pengarang_name: bookFormInput.pengarang_name?.trim(),
+        pengarang_nationality: bookFormInput.pengarang_nationality?.trim(),
+        penerbit_name: bookFormInput.penerbit_name?.trim(),
         createdAt: bookFormInput.createdAt,
         updatedAt: bookFormInput.updatedAt,
       };
@@ -333,12 +337,18 @@ export default function LibraryCollectionPage() {
       setFormInput({
         id: item.id || "",
         judul: item.judul,
-        abstrak: item.abstrak,
+        abstrak: "karena buku hanya ada sinopsis",
+        lokasi: (item as any).lokasi || "",
+        sinopsis: (item as any).sinopsis || "",
+        rak: (item as any).rak || "",
         jumlah: item.jumlah.toString(),
         tersedia: item.tersedia.toString(),
         dipinjam: item.dipinjam.toString(),
         penerbit_id: (item as any).penerbit_id,
         pengarang_id: (item as any).pengarang_id,
+        pengarang_name: (item as any).pengarang?.name || "",
+        pengarang_nationality: (item as any).pengarang?.nationality || "",
+        penerbit_name: (item as any).penerbit?.name || "",
         createdAt: item.createdAt,
         updatedAt: item.updatedAt,
       } as any);

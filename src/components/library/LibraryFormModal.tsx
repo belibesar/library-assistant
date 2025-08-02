@@ -117,56 +117,135 @@ export const LibraryFormModal = ({
             </div>
 
             {category === "book" && (
-              <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+              <div className="space-y-4">
+                {/* Lokasi */}
                 <div>
                   <label
-                    htmlFor="book-pengarang-input"
+                    htmlFor="book-lokasi-input"
                     className="mb-2 block text-sm font-medium text-gray-700"
                   >
-                    Pengarang ID <span className="text-red-500">*</span>
+                    Lokasi
                   </label>
                   <input
-                    id="book-pengarang-input"
+                    id="book-lokasi-input"
                     type="text"
-                    name="pengarang_id"
-                    value={(formInput as any).pengarang_id || ""}
+                    name="lokasi"
+                    value={(formInput as any).lokasi || ""}
                     onChange={onChange}
-                    className={`w-full rounded-md border px-3 py-2 focus:border-transparent focus:ring-2 focus:ring-blue-500 focus:outline-none ${
-                      formErrors.pengarang_id
-                        ? "border-red-500 bg-red-50"
-                        : "border-gray-300"
-                    }`}
-                    placeholder="Masukkan ID pengarang"
+                    className="w-full rounded-md border border-gray-300 px-3 py-2 focus:border-transparent focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                    placeholder="Masukkan lokasi buku"
                   />
-                  {formErrors.pengarang_id && (
-                    <p className="mt-1 text-xs text-red-500">
-                      {formErrors.pengarang_id}
-                    </p>
-                  )}
                 </div>
+
+                {/* Sinopsis dan Rak */}
+                <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                  <div>
+                    <label
+                      htmlFor="book-sinopsis-input"
+                      className="mb-2 block text-sm font-medium text-gray-700"
+                    >
+                      Sinopsis
+                    </label>
+                    <textarea
+                      id="book-sinopsis-input"
+                      name="sinopsis"
+                      value={(formInput as any).sinopsis || ""}
+                      onChange={onChange}
+                      rows={3}
+                      className="w-full rounded-md border border-gray-300 px-3 py-2 focus:border-transparent focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                      placeholder="Masukkan sinopsis buku"
+                    />
+                  </div>
+                  <div>
+                    <label
+                      htmlFor="book-rak-input"
+                      className="mb-2 block text-sm font-medium text-gray-700"
+                    >
+                      Rak
+                    </label>
+                    <input
+                      id="book-rak-input"
+                      type="text"
+                      name="rak"
+                      value={(formInput as any).rak || ""}
+                      onChange={onChange}
+                      className="w-full rounded-md border border-gray-300 px-3 py-2 focus:border-transparent focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                      placeholder="Masukkan nomor rak"
+                    />
+                  </div>
+                </div>
+
+                {/* Pengarang */}
+                <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                  <div>
+                    <label
+                      htmlFor="book-pengarang-name-input"
+                      className="mb-2 block text-sm font-medium text-gray-700"
+                    >
+                      Nama Pengarang <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      id="book-pengarang-name-input"
+                      type="text"
+                      name="pengarang_name"
+                      value={(formInput as any).pengarang_name || ""}
+                      onChange={onChange}
+                      className={`w-full rounded-md border px-3 py-2 focus:border-transparent focus:ring-2 focus:ring-blue-500 focus:outline-none ${
+                        formErrors.pengarang_name
+                          ? "border-red-500 bg-red-50"
+                          : "border-gray-300"
+                      }`}
+                      placeholder="Masukkan nama pengarang"
+                    />
+                    {formErrors.pengarang_name && (
+                      <p className="mt-1 text-xs text-red-500">
+                        {formErrors.pengarang_name}
+                      </p>
+                    )}
+                  </div>
+                  <div>
+                    <label
+                      htmlFor="book-pengarang-nationality-input"
+                      className="mb-2 block text-sm font-medium text-gray-700"
+                    >
+                      Nationality Pengarang
+                    </label>
+                    <input
+                      id="book-pengarang-nationality-input"
+                      type="text"
+                      name="pengarang_nationality"
+                      value={(formInput as any).pengarang_nationality || ""}
+                      onChange={onChange}
+                      className="w-full rounded-md border border-gray-300 px-3 py-2 focus:border-transparent focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                      placeholder="Masukkan nationality pengarang"
+                    />
+                  </div>
+                </div>
+
+                {/* Penerbit */}
                 <div>
                   <label
-                    htmlFor="book-penerbit-input"
+                    htmlFor="book-penerbit-name-input"
                     className="mb-2 block text-sm font-medium text-gray-700"
                   >
-                    Penerbit ID <span className="text-red-500">*</span>
+                    Nama Penerbit <span className="text-red-500">*</span>
                   </label>
                   <input
-                    id="book-penerbit-input"
+                    id="book-penerbit-name-input"
                     type="text"
-                    name="penerbit_id"
-                    value={(formInput as any).penerbit_id || ""}
+                    name="penerbit_name"
+                    value={(formInput as any).penerbit_name || ""}
                     onChange={onChange}
                     className={`w-full rounded-md border px-3 py-2 focus:border-transparent focus:ring-2 focus:ring-blue-500 focus:outline-none ${
-                      formErrors.penerbit_id
+                      formErrors.penerbit_name
                         ? "border-red-500 bg-red-50"
                         : "border-gray-300"
                     }`}
-                    placeholder="Masukkan ID penerbit"
+                    placeholder="Masukkan nama penerbit"
                   />
-                  {formErrors.penerbit_id && (
+                  {formErrors.penerbit_name && (
                     <p className="mt-1 text-xs text-red-500">
-                      {formErrors.penerbit_id}
+                      {formErrors.penerbit_name}
                     </p>
                   )}
                 </div>
@@ -457,32 +536,35 @@ export const LibraryFormModal = ({
               </div>
             </div>
 
-            <div>
-              <label
-                htmlFor={`${category}-abstrak-input`}
-                className="mb-2 block text-sm font-medium text-gray-700"
-              >
-                Abstrak <span className="text-red-500">*</span>
-              </label>
-              <textarea
-                id={`${category}-abstrak-input`}
-                rows={4}
-                name="abstrak"
-                value={formInput.abstrak}
-                onChange={onChange}
-                className={`w-full resize-none rounded-md border px-3 py-2 focus:border-transparent focus:ring-2 focus:ring-blue-500 focus:outline-none ${
-                  formErrors.abstrak
-                    ? "border-red-500 bg-red-50"
-                    : "border-gray-300"
-                }`}
-                placeholder={`Masukkan abstrak ${category}`}
-              />
-              {formErrors.abstrak && (
-                <p className="mt-1 text-xs text-red-500">
-                  {formErrors.abstrak}
-                </p>
-              )}
-            </div>
+            {/* cek apakah bisa... */}
+            {/* {category !== "book" && (
+              <div>
+                <label
+                  htmlFor={`${category}-abstrak-input`}
+                  className="mb-2 block text-sm font-medium text-gray-700"
+                >
+                  Abstrak <span className="text-red-500">*</span>
+                </label>
+                <textarea
+                  id={`${category}-abstrak-input`}
+                  rows={4}
+                  name="abstrak"
+                  value={formInput.abstrak || ""}
+                  onChange={onChange}
+                  className={`w-full resize-none rounded-md border px-3 py-2 focus:border-transparent focus:ring-2 focus:ring-blue-500 focus:outline-none ${
+                    formErrors.abstrak
+                      ? "border-red-500 bg-red-50"
+                      : "border-gray-300"
+                  }`}
+                  placeholder={`Masukkan abstrak ${category}`}
+                />
+                {formErrors.abstrak && (
+                  <p className="mt-1 text-xs text-red-500">
+                    {formErrors.abstrak}
+                  </p>
+                )}
+              </div>
+            )} */}
 
             <div className="mt-2 flex justify-end gap-3">
               <button
