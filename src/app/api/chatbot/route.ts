@@ -232,9 +232,8 @@ export async function POST(request: Request) {
 
     console.log("processing instructions: " + messageRequestFromClient);
 
-    const response = ai.chats.create({
+    const chat = ai.chats.create({
       model: "gemini-2.5-flash",
-      history: [],
       config: {
         thinkingConfig: {
           thinkingBudget: -1, // AI time allocation for thinking
@@ -244,7 +243,7 @@ export async function POST(request: Request) {
       },
     });
 
-    const responseChat = await response.sendMessage({
+    const responseChat = await chat.sendMessage({
       message: messageRequestFromClient,
     }); // multimodal chat configuration
 
