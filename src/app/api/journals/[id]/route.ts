@@ -41,23 +41,37 @@ export async function PUT(
 ) {
   try {
     const { id } = await params;
-    const currentJournal = JournalModel.getJournalById(id);
+    const currentJournal = await JournalModel.getJournalById(id);
 
     if (!currentJournal) {
-      throw new Error(`Journal not found!`);
+      return NextResponse.json(
+        {
+          success: false,
+          message: `Journal with id ${id} not found!`,
+        },
+        {
+          status: 404,
+        },
+      );
     }
 
     const requestData = await request.json();
+    const timestamp = new Date().toISOString();
+
     const newData: Journal = {
-      id: requestData.id || +new Date(),
-      judul: requestData.judul,
-      abstrak: requestData.abstrak,
-      jumlah: Number(requestData.jumlah),
-      tersedia: Number(requestData.jumlah),
-      dipinjam: Number(requestData.dipinjam) || 0,
-      jurnal_id: requestData.jurnal_id,
-      createdAt: requestData.createdAt,
-      updatedAt: new Date().toISOString(),
+      id: requestData.id || currentJournal.id,
+      judul: requestData.judul || currentJournal.judul,
+      abstrak: requestData.abstrak ?? currentJournal.abstrak,
+      jumlah: Number(requestData.jumlah) || currentJournal.jumlah,
+      tersedia: Number(requestData.tersedia) || currentJournal.tersedia,
+      dipinjam: Number(requestData.dipinjam) || currentJournal.dipinjam,
+      jurnal_id: requestData.jurnal_id || currentJournal.jurnal_id,
+      publikasi_name: requestData.publikasi_name,
+      publikasi_volume: requestData.publikasi_volume,
+      publikasi_tahun: requestData.publikasi_tahun,
+      count: currentJournal.count || 0,
+      createdAt: currentJournal.createdAt,
+      updatedAt: timestamp,
     };
 
     const journalData = await journalSchema.parseAsync(newData);

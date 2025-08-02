@@ -13,7 +13,7 @@ import AppearanceSettings from "../settings/tabs/AppearanceSettings";
 
 export default function SettingsPage() {
   const [activeTab, setActiveTab] = useState("profile");
-  const [userRole] = useState("admin"); // This would come from auth context
+  const [userRole] = useState("admin");
 
   const tabs = [
     { id: "profile", name: "Profil", icon: <User className="h-4 w-4" /> },

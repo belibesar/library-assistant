@@ -53,45 +53,44 @@ export const JournalCard = ({
         <h3 className="line-clamp-2 text-lg leading-tight font-bold text-gray-900">
           {journal.judul}
         </h3>
-        <p className="text-sm text-gray-600">ID Jurnal: {journal.id}</p>
-        {/* {(journal as any).publikasi && (
-          <div className="text-sm text-gray-600">
-            <p>Publikasi: {(journal as any).publikasi.name}</p>
-            {(journal as any).publikasi.volume && (
-              <p>Volume: {(journal as any).publikasi.volume}</p>
-            )}
-            {(journal as any).publikasi.tahun && (
-              <p>Tahun: {(journal as any).publikasi.tahun}</p>
-            )}
+        <p className="text-sm text-gray-600">ID: {journal.id || 'N/A'}</p>
+        <p className="text-sm text-gray-600">Jurnal ID: {journal.jurnal_id || 'N/A'}</p>
+        {journal.publikasi && (
+          <div className="space-y-1">
+            <span className="inline-block rounded-full bg-purple-100 px-3 py-1 text-xs font-medium text-purple-700">
+              {journal.publikasi.name}
+            </span>
+            <div className="flex gap-2">
+              <span className="inline-block rounded-full bg-gray-100 px-2 py-1 text-xs font-medium text-gray-700">
+                Vol: {journal.publikasi.volume}
+              </span>
+              <span className="inline-block rounded-full bg-gray-100 px-2 py-1 text-xs font-medium text-gray-700">
+                Tahun: {journal.publikasi.tahun}
+              </span>
+            </div>
           </div>
-        )} */}
-        <span className="inline-block rounded-full bg-gray-100 px-3 text-xs font-medium text-gray-700">
-          {journal.publikasi.name}
-        </span>
-        <span className="inline-block rounded-full bg-gray-100 px-3 text-xs font-medium text-gray-700">
-          Volume: {journal.publikasi.volume}
-        </span>
+        )}
         <p className="line-clamp-3 text-sm leading-relaxed text-gray-600">
-          {journal.abstrak}
+          {journal.abstrak || 'Tidak ada abstrak'}
         </p>
       </div>
     </div>
 
     <div className="border-t border-gray-100 bg-gray-50 px-4 py-3">
       <div className="mb-2 flex items-center justify-between">
-        {/* <span className="text-sm text-gray-500">Total: {journal.jumlah}</span> */}
+        <span className="text-sm text-gray-500">Total: {journal.jumlah}</span>
         <div className="flex gap-2">
-          {/* <span className="rounded-md bg-green-50 px-2 py-1 text-xs font-semibold text-green-600">
+          <span className="rounded-md bg-green-50 px-2 py-1 text-xs font-semibold text-green-600">
             Tersedia: {journal.tersedia}
           </span>
           <span className="rounded-md bg-yellow-50 px-2 py-1 text-xs font-semibold text-yellow-600">
             Dipinjam: {journal.dipinjam}
-          </span> */}
+          </span>
         </div>
       </div>
       <div className="flex items-center justify-between text-xs text-gray-500">
-        {/* <span>Dibuat: {formatDateForInput(journal.createdAt)}</span>
-        <span>Diperbarui: {formatDateForInput(journal.updatedAt)}</span> */}
+        <span>Dibuat: {formatDateForInput(journal.createdAt)}</span>
+        <span>Diperbarui: {formatDateForInput(journal.updatedAt)}</span>
       </div>
       {journal.count !== undefined && (
         <div className="mt-2 text-right text-xs text-gray-500">
