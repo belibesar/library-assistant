@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Plus, BookOpen } from "lucide-react";
 import { BookCard } from "@/components/library/BookCard";
 import { JournalCard } from "@/components/library/JournalCard";
+import { SkripsiCard } from "@/components/library/SkripsiCard";
 import { LibraryFilter } from "@/components/library/LibraryFilter";
 import { LibraryFormModal } from "@/components/library/LibraryFormModal";
 import { LibraryDetailModal } from "@/components/library/LibraryDetailModal";
@@ -20,7 +21,6 @@ import {
 } from "@/libs/types/libraryType";
 import { getInitialFormInput, endpointMap } from "@/utils/libraryUtil";
 import { useLibraryItems } from "@/hooks/useLibraryItems";
-import { SkripsiCard } from "@/components/library/SkripsiCard";
 import LibrarySkeletonLoading from "../library/LibrarySkeletonLoading";
 import { ZodError } from "zod";
 
@@ -96,7 +96,7 @@ export default function LibraryCollectionPage() {
     let isUpdating = false;
     let itemId = (formInput as any).id;
 
-    if (category !== "journal" && (!formInput.id || !formInput.id.trim())) 
+    if (category !== "journal" && (!formInput.id || !formInput.id.trim()))
       newErrors.id = "ID wajib diisi";
     if (!formInput.judul.trim()) newErrors.judul = "Judul wajib diisi";
     if (!formInput.jumlah || Number(formInput.jumlah) < 1)
