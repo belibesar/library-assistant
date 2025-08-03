@@ -47,6 +47,7 @@ export interface ChatbotMessagesCardProps {
   agreePrivacy: boolean;
   setAgreePrivacy: React.Dispatch<React.SetStateAction<boolean>>;
   sendMessage: () => void;
+  loading: boolean;
 }
 
 export interface ChatbotHeaderCardProps {

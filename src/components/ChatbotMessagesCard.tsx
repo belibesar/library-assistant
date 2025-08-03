@@ -4,6 +4,7 @@ import React, { useRef, useEffect } from "react";
 import { Bot } from "lucide-react";
 import { ChatbotMessagesCardProps } from "@/libs/types";
 import LibraryItemBubbleChat from "./library/LibraryItemBubbleChat";
+import LoadingBotBubbleComponent from "./LoadingBotBubbleComponent";
 
 const ChatbotMessagesCard: React.FC<ChatbotMessagesCardProps> = ({
   messages,
@@ -12,6 +13,7 @@ const ChatbotMessagesCard: React.FC<ChatbotMessagesCardProps> = ({
   agreePrivacy,
   setAgreePrivacy,
   sendMessage,
+  loading,
 }) => {
   const chatAreaRef = useRef<HTMLDivElement>(null);
 
@@ -87,6 +89,7 @@ const ChatbotMessagesCard: React.FC<ChatbotMessagesCardProps> = ({
             </div>
           </div>
         ))}
+        {loading && <LoadingBotBubbleComponent />}
       </div>
       {/* hr nya di jadikan full */}
       <hr className="-mx-6 my-4 border-t border-gray-300" />
