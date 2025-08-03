@@ -1,3 +1,5 @@
+import { LibraryItem } from "./types/libraryType";
+
 export type CardOnboardingFeatureProps = {
   icon: React.ReactElement;
   cardTitle: string;
@@ -32,9 +34,11 @@ export interface ChatMessage {
   sender: "user" | "bot";
   message: string;
   timestamp: string;
-  books?: RepositoryType[];
-  racks?: [rak: string];
+  results?: ResultChatbotCard[];
+  type?: LibraryBubbleItemType;
 }
+
+export type LibraryBubbleItemType = "buku" | "skripsi" | "jurnal" | "publikasi";
 
 export interface ChatbotMessagesCardProps {
   messages: ChatMessage[];
@@ -43,6 +47,7 @@ export interface ChatbotMessagesCardProps {
   agreePrivacy: boolean;
   setAgreePrivacy: React.Dispatch<React.SetStateAction<boolean>>;
   sendMessage: () => void;
+  loading: boolean;
 }
 
 export interface ChatbotHeaderCardProps {
@@ -50,10 +55,17 @@ export interface ChatbotHeaderCardProps {
 }
 
 export type userType = {
+  id?: string;
   email: string;
   username: string;
   name: string;
-  password: string;
+  password?: string;
+  phone?: string;
+  address?: string;
+  institution?: string;
+  studentId?: string;
+  role?: string;
+  bio?: string;
 };
 export type NewUser = {
   email: string;
@@ -83,23 +95,43 @@ export interface SidebarProps {
   toggleSidebar: () => void;
 }
 
-export type RepositoryType = {
-  judul: string;
-  call_number: string;
-  no_invent: string;
-  no_barcode: number;
-  lokasi: string;
-};
-export interface Book {
+export type ResultChatbotCard = LibraryItem;
+export type Pengarang = {
   id: string;
-  title: string;
-  call_number?: string;
-  no_invent?: string;
-  no_barcode?: string;
-  lokasi?: string;
-  available?: number;
-  total?: number;
-}
+  name: string;
+  nationality: string;
+};
+export type Penerbit = {
+  id: string;
+  name: string;
+};
+
+export type Mahasiswa = {
+  id: string;
+  name: string;
+  masuk: string;
+  lulus: string;
+  ipk: string;
+  fakultas?: string;
+  program_studi?: string;
+};
+
+export type Publikasi = {
+  id: string;
+  name: string;
+  volume: string;
+  tahun: string;
+};
+// export interface Book {
+//   id: string;
+//   title: string;
+//   call_number?: string;
+//   no_invent?: string;
+//   no_barcode?: string;
+//   lokasi?: string;
+//   available?: number;
+//   total?: number;
+// }
 
 export interface BookData {
   _id: string;

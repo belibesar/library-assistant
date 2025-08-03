@@ -96,9 +96,9 @@ export default function LibraryCollectionPage() {
     let isUpdating = false;
     let itemId = (formInput as any).id;
 
-    if (!formInput.id.trim()) newErrors.id = "ID wajib diisi";
+    if (category !== "journal" && (!formInput.id || !formInput.id.trim())) 
+      newErrors.id = "ID wajib diisi";
     if (!formInput.judul.trim()) newErrors.judul = "Judul wajib diisi";
-    if (!formInput.abstrak.trim()) newErrors.abstrak = "Abstrak wajib diisi";
     if (!formInput.jumlah || Number(formInput.jumlah) < 1)
       newErrors.jumlah = "Jumlah harus minimal 1";
     if (!formInput.tersedia || Number(formInput.tersedia) < 0)
@@ -122,19 +122,23 @@ export default function LibraryCollectionPage() {
 
     if (category === "book") {
       const bookFormInput = formInput as BookFormInput;
-      if (!bookFormInput.penerbit_id.trim())
-        newErrors.penerbit_id = "Penerbit ID wajib diisi";
-      if (!bookFormInput.pengarang_id.trim())
-        newErrors.pengarang_id = "Pengarang ID wajib diisi";
+      if (!bookFormInput.pengarang_name?.trim())
+        newErrors.pengarang_name = "Nama pengarang wajib diisi";
+      if (!bookFormInput.penerbit_name?.trim())
+        newErrors.penerbit_name = "Nama penerbit wajib diisi";
       payload = {
         id: bookFormInput.id.trim(),
         judul: bookFormInput.judul.trim(),
-        abstrak: bookFormInput.abstrak.trim(),
+        abstrak: "karena buku hanya ada sinopsis",
+        lokasi: bookFormInput.lokasi?.trim(),
+        sinopsis: bookFormInput.sinopsis?.trim(),
+        rak: bookFormInput.rak?.trim(),
         jumlah: jumlahNum,
         tersedia: tersediaNum,
         dipinjam: dipinjamNum,
-        penerbit_id: bookFormInput.penerbit_id.trim(),
-        pengarang_id: bookFormInput.pengarang_id.trim(),
+        pengarang_name: bookFormInput.pengarang_name?.trim(),
+        pengarang_nationality: bookFormInput.pengarang_nationality?.trim(),
+        penerbit_name: bookFormInput.penerbit_name?.trim(),
         createdAt: bookFormInput.createdAt,
         updatedAt: bookFormInput.updatedAt,
       };
@@ -144,16 +148,19 @@ export default function LibraryCollectionPage() {
       );
     } else if (category === "journal") {
       const journalFormInput = formInput as JournalFormInput;
-      if (!journalFormInput.jurnal_id.trim())
-        newErrors.jurnal_id = "Jurnal ID wajib diisi";
+      if (!journalFormInput.publikasi_name?.trim())
+        newErrors.publikasi_name = "Nama publikasi wajib diisi";
       payload = {
-        id: journalFormInput.id.trim(),
+        id: journalFormInput.id?.trim() || undefined,
         judul: journalFormInput.judul.trim(),
-        abstrak: journalFormInput.abstrak.trim(),
+        abstrak: journalFormInput.abstrak?.trim(),
         jumlah: jumlahNum,
         tersedia: tersediaNum,
         dipinjam: dipinjamNum,
-        jurnal_id: journalFormInput.jurnal_id.trim(),
+        jurnal_id: journalFormInput.jurnal_id?.trim() || undefined,
+        publikasi_name: journalFormInput.publikasi_name?.trim(),
+        publikasi_volume: journalFormInput.publikasi_volume?.trim(),
+        publikasi_tahun: journalFormInput.publikasi_tahun?.trim(),
         createdAt: journalFormInput.createdAt,
         updatedAt: journalFormInput.updatedAt,
       };
@@ -168,7 +175,7 @@ export default function LibraryCollectionPage() {
       payload = {
         id: skripsiFormInput.id.trim(),
         judul: skripsiFormInput.judul.trim(),
-        abstrak: skripsiFormInput.abstrak.trim(),
+        abstrak: skripsiFormInput.abstrak?.trim() || "",
         jumlah: jumlahNum,
         tersedia: tersediaNum,
         dipinjam: dipinjamNum,
@@ -282,7 +289,6 @@ export default function LibraryCollectionPage() {
       });
 
       if (!res.ok) {
-        // Error handling remains the same...
       }
 
       const json = await res.json();
@@ -329,12 +335,18 @@ export default function LibraryCollectionPage() {
       setFormInput({
         id: item.id || "",
         judul: item.judul,
-        abstrak: item.abstrak,
+        abstrak: "karena buku hanya ada sinopsis",
+        lokasi: (item as any).lokasi || "",
+        sinopsis: (item as any).sinopsis || "",
+        rak: (item as any).rak || "",
         jumlah: item.jumlah.toString(),
         tersedia: item.tersedia.toString(),
         dipinjam: item.dipinjam.toString(),
         penerbit_id: (item as any).penerbit_id,
         pengarang_id: (item as any).pengarang_id,
+        pengarang_name: (item as any).pengarang?.name || "",
+        pengarang_nationality: (item as any).pengarang?.nationality || "",
+        penerbit_name: (item as any).penerbit?.name || "",
         createdAt: item.createdAt,
         updatedAt: item.updatedAt,
       } as any);
@@ -347,6 +359,9 @@ export default function LibraryCollectionPage() {
         tersedia: item.tersedia.toString(),
         dipinjam: item.dipinjam.toString(),
         jurnal_id: (item as any).jurnal_id,
+        publikasi_name: (item as any).publikasi?.name || "",
+        publikasi_volume: (item as any).publikasi?.volume || "",
+        publikasi_tahun: (item as any).publikasi?.tahun || "",
         createdAt: item.createdAt,
         updatedAt: item.updatedAt,
       } as any);
@@ -468,7 +483,7 @@ export default function LibraryCollectionPage() {
             if (item.type === "book") {
               return (
                 <BookCard
-                  key={item.id}
+                  key={item?._id as string}
                   book={item}
                   onEdit={handleEditItem}
                   onDelete={handleDeleteItem}

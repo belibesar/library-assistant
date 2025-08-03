@@ -53,12 +53,25 @@ export const JournalCard = ({
         <h3 className="line-clamp-2 text-lg leading-tight font-bold text-gray-900">
           {journal.judul}
         </h3>
-        <p className="text-sm text-gray-600">ID Jurnal: {journal.id}</p>
-        <span className="inline-block rounded-full bg-gray-100 px-3 text-xs font-medium text-gray-700">
-          Jurnal ID: {journal.jurnal_id}
-        </span>
+        <p className="text-sm text-gray-600">ID: {journal.id || 'N/A'}</p>
+        <p className="text-sm text-gray-600">Jurnal ID: {journal.jurnal_id || 'N/A'}</p>
+        {journal.publikasi && (
+          <div className="space-y-1">
+            <span className="inline-block rounded-full bg-purple-100 px-3 py-1 text-xs font-medium text-purple-700">
+              {journal.publikasi.name}
+            </span>
+            <div className="flex gap-2">
+              <span className="inline-block rounded-full bg-gray-100 px-2 py-1 text-xs font-medium text-gray-700">
+                Vol: {journal.publikasi.volume}
+              </span>
+              <span className="inline-block rounded-full bg-gray-100 px-2 py-1 text-xs font-medium text-gray-700">
+                Tahun: {journal.publikasi.tahun}
+              </span>
+            </div>
+          </div>
+        )}
         <p className="line-clamp-3 text-sm leading-relaxed text-gray-600">
-          {journal.abstrak}
+          {journal.abstrak || 'Tidak ada abstrak'}
         </p>
       </div>
     </div>

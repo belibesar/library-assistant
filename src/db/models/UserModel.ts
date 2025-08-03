@@ -2,6 +2,7 @@ import { NewUser, userType } from "@/libs/types";
 import {client} from "@/db/config/mongodb"
 import { z } from "zod";
 import { hashPassword } from "@/utils/hashPassword";
+import { ObjectId } from "mongodb";
 
 const userSchema = z.object({
     username: z
@@ -50,6 +51,25 @@ class UserModel {
     static async findByEmail(email: string) {
         const collection = await this.collection();
         return await collection.findOne({ email });
+    }
+
+    static async getUserById(id: string) {
+        const collection = await this.collection();
+        return await collection.findOne({ id });
+    }
+
+    static async updateUser(id: string, userData: Partial<userType>) {
+        const collection = await this.collection();
+        const result = await collection.updateOne(
+            { id },
+            { $set: userData }
+        );
+        
+        if (result.matchedCount === 0) {
+            throw new Error("User not found");
+        }
+
+        return await collection.findOne({ id });
     }
 }
 

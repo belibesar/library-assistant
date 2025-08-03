@@ -53,15 +53,23 @@ export const SkripsiCard = ({
           </div>
         </div>
 
-        {/* Skripsi Content */}
         <div className="space-y-3">
           <h3 className="line-clamp-2 text-lg leading-tight font-bold text-gray-900">
             {skripsi.judul}
           </h3>
 
           <div className="flex flex-col gap-1">
-            <p className="text-sm text-gray-600">ID Skripsi: {skripsi.id}</p>
+            <p className="text-sm text-gray-600">ID: {skripsi.id}</p>
+            {/* <p className="text-sm text-gray-600">
+              Author: {skripsi.mahasiswa?.name || 'N/A'}
+            </p> */}
             <p className="text-sm text-gray-600">NIM: {skripsi.nim}</p>
+            {/* {skripsi.mahasiswa && (
+              <>
+                <p className="text-sm text-gray-600">Fakultas: {skripsi.mahasiswa?.fakultas || 'N/A'}</p>
+                <p className="text-sm text-gray-600">Program Studi: {skripsi.mahasiswa?.program_studi || 'N/A'}</p>
+              </>
+            )} */}
           </div>
 
           <span className="inline-block rounded-full bg-gray-100 px-3 py-1 text-xs font-medium text-gray-700">

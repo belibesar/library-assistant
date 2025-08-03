@@ -32,3 +32,43 @@ export async function GET(
     });
   }
 }
+
+export async function PATCH(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> },
+) {
+  try {
+    const { id } = await params;
+    const result = await JournalModel.countJournal(id);
+    
+    if (result.matchedCount === 0) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: "Journal not found!",
+        },
+        {
+          status: 404,
+        },
+      );
+    }
+
+    return NextResponse.json({
+      success: true,
+      message: `View count incremented for Journal ID ${id}`,
+      data: { modified: result.modifiedCount },
+    });
+  } catch (error) {
+    console.error("Error incrementing view count:", error);
+    return NextResponse.json(
+      {
+        success: false,
+        message: "Failed to increment view count",
+        error: error instanceof Error ? error.message : "Unknown error",
+      },
+      {
+        status: 500,
+      },
+    );
+  }
+}

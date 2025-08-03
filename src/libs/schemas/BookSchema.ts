@@ -12,12 +12,11 @@ const bookSchema = z.object({
   tersedia: z.number(),
   dipinjam: z.number(),
   count: z.number().optional(),
-  penerbit_id: z.string({
-    required_error: "Penerbit harus diisi!",
-  }),
-  pengarang_id: z.string({
-    required_error: "Pengarang harus diisi!",
-  }),
+  penerbit_id: z.string(),
+  pengarang_id: z.string(),
+  lokasi: z.string().optional(),
+  rak: z.string().optional(),
+  sinopsis: z.string().optional(),
   createdAt: z.string(),
   updatedAt: z.string(),
 });

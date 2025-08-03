@@ -2,6 +2,9 @@ import bookSchema from "@/libs/schemas/BookSchema";
 import { db } from "../config/mongodb";
 import { ObjectId } from "mongodb";
 import { Book } from "@/libs/types/BookType";
+import { calculateSimilarity } from "@/utils/similarity";
+import PengarangModel from "./PengarangModel";
+import PenerbitModel from "./PenerbitModel";
 
 class BookModel {
   static async collection() {
@@ -15,20 +18,53 @@ class BookModel {
 
     const collection = await this.collection();
 
-    // Build search query
     const searchQuery =
       search && search.trim() !== ""
         ? { judul: { $regex: search, $options: "i" } }
         : {};
 
-    // Get total count for pagination
     const totalCount = await collection.countDocuments(searchQuery);
 
-    // Get paginated results
     const books = await collection
-      .find(searchQuery)
-      .limit(currentLimit)
-      .skip(skip)
+      .aggregate([
+        {
+          $match: searchQuery,
+        },
+        {
+          $lookup: {
+            from: "pengarang",
+            localField: "pengarang_id",
+            foreignField: "id",
+            as: "pengarang",
+          },
+        },
+        {
+          $lookup: {
+            from: "penerbit",
+            localField: "penerbit_id",
+            foreignField: "id",
+            as: "penerbit",
+          },
+        },
+        {
+          $unwind: {
+            path: "$pengarang",
+            preserveNullAndEmptyArrays: true,
+          },
+        },
+        {
+          $unwind: {
+            path: "$penerbit",
+            preserveNullAndEmptyArrays: true,
+          },
+        },
+        {
+          $skip: skip, // Apply pagination
+        },
+        {
+          $limit: currentLimit, // Apply limit
+        },
+      ])
       .toArray();
 
     return {
@@ -49,7 +85,7 @@ class BookModel {
     const book = await collection
       .aggregate([
         {
-          $match: { _id: new ObjectId(id) }, // Filter dokumen berdasarkan id buku
+          $match: { id: id },
         },
         {
           $lookup: {
@@ -81,29 +117,87 @@ class BookModel {
         },
       ])
       .toArray();
-    console.log("ini boook di find one",book[0]);
+    console.log("ini boook di find one", book[0]);
     return book[0] || null;
   }
 
   static async createBook(data: Book) {
     const collection = await this.collection();
-    const book = await collection.insertOne(data);
+    
+    // Handle pengarang
+    if ((data as any).pengarang_name) {
+      const pengarangId = await PengarangModel.findOrCreatePengarang({
+        name: (data as any).pengarang_name,
+        nationality: (data as any).pengarang_nationality
+      });
+      data.pengarang_id = pengarangId;
+    }
+    
+    // Handle penerbit
+    if ((data as any).penerbit_name) {
+      const penerbitId = await PenerbitModel.findOrCreatePenerbit({
+        name: (data as any).penerbit_name
+      });
+      data.penerbit_id = penerbitId;
+    }
+    
+    // Set default abstrak for books
+    data.abstrak = "karena buku hanya ada sinopsis";
+    
+    // Clean up temporary fields
+    const bookDataToSave = { ...data };
+    delete (bookDataToSave as any).pengarang_name;
+    delete (bookDataToSave as any).pengarang_nationality;
+    delete (bookDataToSave as any).penerbit_name;
+    
+    const book = await collection.insertOne(bookDataToSave);
     return book;
   }
 
   static async updateBook(id: string, data: Book) {
     const collection = await this.collection();
-    const identifier = { _id: new ObjectId(id) };
+    const identifier = { id: id };
     const currentBook = await collection.findOne(identifier);
     if (!currentBook) {
       throw new Error("Book not found");
     }
-    return await collection.updateOne(identifier, { $set: data });
+    
+    // Handle pengarang
+    if ((data as any).pengarang_name) {
+      const pengarangId = await PengarangModel.findOrCreatePengarang({
+        name: (data as any).pengarang_name,
+        nationality: (data as any).pengarang_nationality
+      });
+      data.pengarang_id = pengarangId;
+    } else if (!data.pengarang_id) {
+      data.pengarang_id = currentBook.pengarang_id;
+    }
+    
+    // Handle penerbit
+    if ((data as any).penerbit_name) {
+      const penerbitId = await PenerbitModel.findOrCreatePenerbit({
+        name: (data as any).penerbit_name
+      });
+      data.penerbit_id = penerbitId;
+    } else if (!data.penerbit_id) {
+      data.penerbit_id = currentBook.penerbit_id;
+    }
+    
+    // Set default abstrak for books
+    data.abstrak = "karena buku hanya ada sinopsis";
+    
+    // Clean up temporary fields
+    const bookDataToSave = { ...data };
+    delete (bookDataToSave as any).pengarang_name;
+    delete (bookDataToSave as any).pengarang_nationality;
+    delete (bookDataToSave as any).penerbit_name;
+    
+    return await collection.updateOne(identifier, { $set: bookDataToSave });
   }
 
   static async deleteBook(id: string) {
     const collection = await this.collection();
-    const query = { _id: new ObjectId(id) };
+    const query = { id: id };
     const currentBook = await collection.findOne(query);
     if (!currentBook) {
       throw new Error("Book not found");
@@ -113,7 +207,7 @@ class BookModel {
 
   static async countBook(id: string) {
     const collection = await this.collection();
-    const identifier = { _id: new ObjectId(id) };
+    const identifier = { id: id };
     const currentBook = await collection.findOne(identifier);
     const bookCount = currentBook?.count || 0;
     if (!currentBook) {
@@ -128,7 +222,7 @@ class BookModel {
 
   static async getTop5MostBorrowedBooks() {
     const collection = await this.collection();
-    
+
     const books = await collection
       .aggregate([
         {
@@ -160,15 +254,34 @@ class BookModel {
           },
         },
         {
-          $sort: { count: -1 }
+          $sort: { count: -1 },
         },
         {
-          $limit: 5
-        }
+          $limit: 5,
+        },
       ])
       .toArray();
 
     return books;
+  }
+
+  static async findSimilarBooks(query: string) {
+    const collection = await this.collection();
+    const allBooks = await collection.find({}).toArray();
+
+    const results = allBooks.map((book: Book) => {
+      const text = `${book.judul} ${book.abstrak || ""}`;
+      const score = calculateSimilarity(query, text);
+      return { ...book, score };
+    });
+
+    return results
+      .filter((b: Book & { score: number }) => b.score > 0)
+      .sort(
+        (a: Book & { score: number }, b: Book & { score: number }) =>
+          b.score - a.score,
+      )
+      .slice(0, 10);
   }
 }
 

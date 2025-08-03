@@ -1,25 +1,25 @@
 import * as z from "zod";
 
-const journlSchema = z.object({
-  id: z.string({
-    required_error: "ID harus diisi!",
-  }),
+const journalSchema = z.object({
+  id: z.string().optional(),
   judul: z.string({
     required_error: "Judul harus diisi!",
   }),
-  abstrak: z.string({
-    required_error: "Abstrak harus diisi!",
-  }),
+  abstrak: z.string().optional(),
   jumlah: z.number({
     required_error: "Jumlah harus diisi!",
   }),
   tersedia: z.number(),
   dipinjam: z.number(),
-  jurnal_id: z.string({
-    required_error: "Journal ID tidak diisi!",
-  }),
-  updatedAt: z.string(),
-  createdAt: z.string(),
+  jurnal_id: z.string().optional(),
+  publikasi_name: z.string({
+    required_error: "Nama publikasi harus diisi!",
+  }).optional(),
+  publikasi_volume: z.string().optional(),
+  publikasi_tahun: z.string().optional(),
+  count: z.number().optional(),
+  updatedAt: z.string().optional(),
+  createdAt: z.string().optional(),
 });
 
-export default journlSchema;
+export default journalSchema;

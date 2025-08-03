@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import Sidebar from '@/components/Sidebar';
+import Sidebar from '@/components/layout/Sidebar';
 import ProtectedRoute from '@/components/ProtectedRoute';
 
 export default function DashboardLayout({

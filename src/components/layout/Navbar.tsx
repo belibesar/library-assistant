@@ -1,6 +1,6 @@
 "use client";
 import { BookOpen } from "lucide-react";
-import Button from "./Button";
+import Button from "../Button";
 import { useAuth } from "@/contexts/AuthContext";
 import { useRouter } from "next/navigation";
 
@@ -59,21 +59,21 @@ export default function Navbar() {
             <span className="text-sm font-semibold text-gray-800">
               Hi, {user.name}
             </span>
-            <Button 
-              buttonName="Logout" 
+            <Button
+              buttonName="Logout"
               className="btn btn-soft btn-error"
               onClick={handleLogout}
             />
           </div>
         ) : (
           <div className="flex items-center gap-2">
-            <Button 
-              buttonName="Masuk" 
+            <Button
+              buttonName="Masuk"
               className="btn btn-soft btn-info"
               onClick={handleLogin}
             />
-            <Button 
-              buttonName="Register" 
+            <Button
+              buttonName="Register"
               className="btn btn-soft btn-success"
               onClick={handleRegister}
             />

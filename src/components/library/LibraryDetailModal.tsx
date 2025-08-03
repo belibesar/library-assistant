@@ -43,23 +43,48 @@ export const LibraryDetailModal = ({
         <div className="space-y-4 p-4">
           <div>
             <h3 className="text-2xl font-bold text-gray-900">{item.judul}</h3>
-            <p className="text-sm text-gray-500">ID: {item.id}</p>
+            {item.type === "book" ? (
+              <>
+                <p className="text-sm text-gray-500">Lokasi: {item.lokasi}</p>
+                <p className="text-sm text-gray-500">Call Number: {item.id}</p>
+                <p className="text-sm text-gray-500">Rak: {item.rak}</p>
+              </>
+            ) : (
+              <p className="text-sm text-gray-500">ID: {item.id}</p>
+            )}
           </div>
 
           {item.type === "book" && (
             <>
               <p className="text-gray-700">
-                <strong>Pengarang ID:</strong> {(item as any).pengarang_id}
+                <strong>Pengarang:</strong> {(item as any).pengarang.name}
               </p>
               <p className="text-gray-700">
-                <strong>Penerbit ID:</strong> {(item as any).penerbit_id}
+                <strong>Penerbit:</strong> {(item as any).penerbit.name}
               </p>
             </>
           )}
           {item.type === "journal" && (
-            <p className="text-gray-700">
-              <strong>Jurnal ID:</strong> {(item as any).jurnal_id}
-            </p>
+            <>
+              <p className="text-gray-700">
+                <strong>Jurnal ID:</strong> {(item as any).jurnal_id}
+              </p>
+              {(item as any).publikasi && (
+                <>
+                  <p className="text-gray-700">
+                    <strong>Publikasi:</strong> {(item as any).publikasi.name}
+                  </p>
+                  <p className="text-gray-700">
+                    <strong>Tahun Publikasi:</strong>{" "}
+                    {(item as any).publikasi.tahun || "Tidak tersedia"}
+                  </p>
+                  <p className="text-gray-700">
+                    <strong>Volume:</strong>{" "}
+                    {(item as any).publikasi.volume || "Tidak tersedia"}
+                  </p>
+                </>
+              )}
+            </>
           )}
           {item.type === "skripsi" && (
             <>
@@ -69,11 +94,31 @@ export const LibraryDetailModal = ({
               <p className="text-gray-700">
                 <strong>Tahun:</strong> {(item as any).tahun}
               </p>
+              {(item as any).mahasiswa && (
+                <>
+                  <p className="text-gray-700">
+                    <strong>Mahasiswa:</strong> {(item as any).mahasiswa?.name || 'N/A'}
+                  </p>
+                  <p className="text-gray-700">
+                    <strong>Fakultas:</strong>{" "}
+                    {(item as any).mahasiswa?.fakultas || "Tidak tersedia"}
+                  </p>
+                  <p className="text-gray-700">
+                    <strong>Program Studi:</strong>{" "}
+                    {(item as any).mahasiswa?.program_studi || "Tidak tersedia"}
+                  </p>
+                  <p className="text-gray-700">
+                    <strong>IPK:</strong>{" "}
+                    {(item as any).mahasiswa?.ipk || "Tidak tersedia"}
+                  </p>
+                </>
+              )}
             </>
           )}
 
           <p className="text-gray-700">
-            <strong>Abstrak:</strong> {item.abstrak}
+            <strong>Sinopsis:</strong>{" "}
+            {item.abstrak || "Sinopsis belum tersedia"}
           </p>
           <div className="grid grid-cols-3 gap-2 border-t pt-4 text-sm text-gray-700">
             <p>

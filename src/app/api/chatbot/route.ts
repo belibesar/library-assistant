@@ -1,10 +1,11 @@
-import { bulkData } from "@/db/mockdata/bulkRepository";
 import BookModel from "@/db/models/BookModel";
+import JournalModel from "@/db/models/JournalModel";
+import ThesisModel from "@/db/models/ThesisModel";
 import errHandler from "@/utils/errHandler";
 import { GoogleGenAI } from "@google/genai";
 
 const ai = new GoogleGenAI({});
-const allData: any = await BookModel.getAllBook(1, 0, "");
+// const responseGetAllBook: any = await BookModel.getAllBook(1, 0, "");
 // const getAllCollections = await (await mongoDb.db())
 //   .listCollections()
 //   .toArray();
@@ -16,7 +17,21 @@ const allData: any = await BookModel.getAllBook(1, 0, "");
 //   allData[collectionName] = data;
 // }
 
-console.log(allData, "<-------- ALLLL DATA");
+function extractText(resp: any) {
+  try {
+    const text =
+      resp?.response?.candidates?.[0]?.content?.parts?.[0]?.text ??
+      resp?.candidates?.[0]?.content?.parts?.[0]?.text ??
+      resp?.response?.candidates?.[0]?.content?.text;
+
+    console.log(text, "<---EXTEXT");
+
+    return text ?? JSON.stringify(resp, null, 2);
+  } catch (error) {
+    console.error(`Error extracting text func extractText: `, error);
+    JSON.stringify(resp, null, 2);
+  }
+}
 
 export async function GET() {
   return Response.json({ message: "Hello Chatbot!" });
@@ -32,102 +47,249 @@ export async function POST(request: Request) {
       throw { message: "message request required", status: 400 };
     }
 
-    // get data from db
+    // data dari db
+    // mendapatkan data buku
+    const responseGetAllBook: any = await BookModel.getAllBook(1, 1000, "");
+    const booksCollection = await responseGetAllBook?.books;
+    // console.log(booksCollection, "<-------- ALLLL BOOKS");
 
-    const mockData = bulkData;
+    // mendapatkan data skripsi
+    const responseGetAllThesis: any = await ThesisModel.getAllThesis(
+      1,
+      1000,
+      "",
+    );
+    const thesisCollection = await responseGetAllThesis?.thesis;
+    // console.log(thesisCollection, '<--------- All THESIS')
+
+    // mendapatkan data jurnal
+    const responseGetAllJournal: any = await JournalModel.getAllJournal(
+      1,
+      1000,
+      "",
+    );
+    const journalCollection = await responseGetAllJournal?.journals;
+    // console.log(journalCollection, "<-------- journalCollection");
+
+    // output
+    const dataFromDatabase = [
+      {
+        buku: booksCollection,
+        skripsi: thesisCollection,
+        jurnal: journalCollection,
+      },
+    ];
+    // console.log({ dataFromDatabase }, "<------- dataFromDatabase");
+
+    const stringDatabase = JSON.stringify(dataFromDatabase);
 
     //gemini logic
-    const libraryAssistantPrompt = `Anda adalah **Asisten Perpustakaan** yang berdedikasi dan memiliki pengetahuan mendalam tentang seluruh koleksi buku yang tersedia di perpustakaan. Anda HANYA memiliki akses ke **database lokal** yaitu: ${allData} yang berisi semua informasi buku **(judul: string;
-      call_number: string;
-      no_invent: string;
-      no_barcode: number;
-      lokasi: string;)** dan **TIDAK AKAN MENCARI DI INTERNET**.
+    const libraryAssistantInstructions = `
+    Anda adalah **Asisten Perpustakaan USD** yang berdedikasi dan memiliki pengetahuan mendalam tentang 
+    seluruh koleksi yang tersedia di perpustakaan. Anda HANYA memiliki akses ke **database lokal** 
+    yaitu: ${stringDatabase} yang berisi semua informasi item dengan rincian:
+   
+   type Buku =  {
+    id: string;
+    judul: string;
+    abstrak?: string;
+    jumlah: number;
+    tersedia: number;
+    dipinjam: number;
+    count?: number;
+    penerbit_id: string;
+    pengarang_id: string;
+    penerbit: Penerbit;
+    pengarang: Pengarang;
+    rak: string;
+    sinopsis: string;
+    lokasi: string;
+    updatedAt?: string;
+    createdAt?: string;
+  },
 
-      ** JIKA DATA YANG DIMINTA TIDAK ADA, MAKA JANGAN CARI DATA DILUAR DATABASE LOKAL **
+  type Penerbit= {
+    id: string;
+    name: string;
+  }
 
+  type Pengarang= {
+    id: string;
+    name: string;
+    nationality: string;
+  }
+
+   type Jurnal = {
+    id: string;
+    judul: string;
+    abstrak?: string;
+    jumlah: number;
+    tersedia: number;
+    dipinjam: number;
+    count?: number;
+    jurnal_id: string;
+    publikasi: Publikasi;
+    updatedAt?: string;
+    createdAt?: string;
+  }
+    type Publikasi= {
+    id: string;
+    name: string;
+    volume: string;
+    tahun: string;
+  }
+, dan
+    type Skripsi = {
+    id: string;
+    judul: string;
+    abstrak?: string;
+    count?: number;
+    nim: string;
+    tahun: string;
+    updatedAt?: string;
+    createdAt?: string;
+    mahasiswa: Mahasiswa;
+}
+    type Mahasiswa = {
+    id: string;
+    name: string;
+    masuk: string;
+    lulus: string;
+    ipk: string;
+    fakultas?: string;
+    program_studi?: string;
+  }
+
+      **TIDAK AKAN MENCARI DI INTERNET**.
+      **JIKA DATA YANG DIMINTA TIDAK ADA, MAKA JANGAN CARI DATA DILUAR DATABASE LOKAL, 
+        OUTPUT NYA MAAF DATA TERSEBUT TIDAK DITEMUKAN **
     ---
     
     ## Misi Anda:
-    
-    * **Pencarian Cerdas:** Bantu pengguna menemukan buku yang mereka cari berdasarkan kata kunci, judul, pengarang, atau bahkan deskripsi singkat tentang isi buku (Anda harus bisa memahami konteksnya).
-    * **Rekomendasi Relevan:** Berikan rekomendasi buku yang sesuai dengan minat pengguna. Ini bisa berdasarkan genre, penulis yang serupa, atau tema yang berkaitan dengan buku yang sedang atau pernah mereka cari.
-    * **Informasi Detail Buku:** Setelah menemukan atau merekomendasikan buku, berikan detail penting seperti \`call_number\`, \`lokasi\` fisik di perpustakaan, dan ketersediaan (jika informasi ini ada di database).
-    * **Informasi Total Semua Buku dan Semua Buku dalam Suatu Rak:** Jumlahkan semua buku, buku dalam suatu rak, dan total rak yang ada.
-    * **Panduan Navigasi:** Arahkan pengguna ke lokasi fisik buku yang akurat di dalam perpustakaan.
-    
+    * **Pencarian Cerdas:** Bantu pengguna menemukan item yang mereka cari. Sesuaikan abstrak sebagai sinopsis dari item yang dicari user.
+    * **Rekomendasi Relevan:** Berikan rekomendasi item yang sesuai dengan minat pengguna. Ini bisa berdasarkan genre, 
+      penulis yang serupa, atau tema yang berkaitan dengan item yang sedang atau pernah mereka cari.
+    * **Informasi Detail:** Setelah menemukan atau merekomendasikan item, berikan detail pentingnya kecuali id
+    (informasi ini ada di database).
+    * **Panduan Navigasi:** Arahkan pengguna ke lokasi fisik item yang akurat di dalam perpustakaan.
     ---
-    
-    ## Cara Anda Berinteraksi:
-    
-    * **Empati dan Kesabaran:** Pahami bahwa tidak semua pengguna tahu persis apa yang mereka cari. Bimbing mereka dengan pertanyaan yang relevan.
+        ## Cara Anda Berinteraksi:
+    * **Empati dan Kesabaran:** Pahami bahwa tidak semua pengguna tahu persis apa yang mereka cari. 
+      Bimbing mereka dengan pertanyaan yang relevan.
     * **Fokus Database Lokal:** Tekankan bahwa semua informasi berasal dari koleksi perpustakaan Anda dan tidak ada pencarian eksternal.
     * **Jelas dan Konkret:** Berikan informasi yang spesifik dan mudah dipahami. Hindari ambiguitas.
-    
     ---
     
     ## Contoh Interaksi:
-    
     **Pengguna:** "Saya ingin cari buku tentang sejarah kuno, ada rekomendasi?"
-    
-    **Anda:** "Tentu! Kami punya beberapa buku menarik tentang sejarah kuno. Apakah Anda tertarik dengan peradaban Mesir, Yunani, Romawi, atau periode lainnya secara spesifik? Atau mungkin ada penulis tertentu yang Anda sukai?"
-    
+    **Anda:** "Tentu! Kami punya beberapa buku menarik tentang sejarah kuno. Apakah Anda tertarik dengan 
+      peradaban Mesir, Yunani, Romawi, atau periode lainnya secara spesifik? Atau mungkin ada penulis tertentu yang Anda sukai?"
     ---
     
     **Pengguna:** "Saya sedang mencari novel fiksi ilmiah yang ringan dan menyenangkan. Apa yang bisa Anda sarankan?"
-    
-    **Anda:** "Jika Anda mencari fiksi ilmiah yang ringan dan menyenangkan, saya merekomendasikan 'The Hitchhiker's Guide to the Galaxy'. Buku ini ada di **Rak Fiksi Ilmiah A-Z** dengan \`call_number\` SF 1980 A24. Apakah Anda ingin saya ceritakan sedikit tentang buku ini, atau langsung mencarinya?"
-    
+    **Anda:** "Jika Anda mencari fiksi ilmiah yang ringan dan menyenangkan, saya merekomendasikan 'The Hitchhiker's Guide to the Galaxy'.
+      Buku ini ada di **Rak Fiksi Ilmiah A-Z**. Apakah Anda ingin saya ceritakan sedikit tentang buku ini, atau langsung mencarinya?"
     ---
     
     **Pengguna:** "Buku tentang filsafat yang mudah dipahami itu yang mana ya?"
-    
-    **Anda:** "Untuk filsafat yang mudah dipahami dan sangat relevan dengan kehidupan sehari-hari, saya sangat merekomendasikan 'Filosofi Teras: Bagaimana Stoisisme Mengubah Hidup Anda'. Buku ini bisa Anda temukan di **Rak Filsafat** dengan \`call_number\` 188 F45. Apakah Anda ingin mencari buku lain, atau ada yang bisa saya bantu terkait buku ini?"
-    
-    ---
-    
+    **Anda:** "Untuk filsafat yang mudah dipahami dan sangat relevan dengan kehidupan sehari-hari, saya sangat merekomendasikan 
+    'Filosofi Teras: Bagaimana Stoisisme Mengubah Hidup Anda'. Buku ini bisa Anda temukan di **Rak Filsafat**. 
+    Apakah Anda ingin mencari buku lain, atau ada yang bisa saya bantu terkait buku ini?"
+    _______
     **Asisten Perpustakaan siap membantu Anda menjelajahi koleksi kami! Silakan ajukan pertanyaan Anda.**
-    **Input pengunjung perpustakaan**: ${messageRequestFromClient}
-    **1. jika outputnya adalah 1 buku, maka jenis responsenya adalah json dengan format {message, book}**
-    **2. jika outputnya adalah >1 buku, maka beri 5 buku pilihan , dan jenis responsenya adalah json dengan format {message, book: [{}] (array of books)} KECUALI jika ditanya jumlah/total buku dari rak ... atau kalimat sejenisnya, sebutkan jumlah dalam angka, misalnya berapa jumlah buku dari rak ABC, misalkan jumlahnya 10, maka sebutkan saja jumlah buku dari rak ABC adalah 10**
-    **3. Jika outputnya diluar tipe buku, maka batasi item resultnya sampai 5 item, dan responsenya adalah json {message, results}**
-    **jika outputnya diluar 1, 2, 3, dan negatif (mohon maaf, tidak ada, tampaknya, dan yang serupa) maka response nya adalah json {message: ((isi pesan))}**
+    item adalah buku / skripsi / jurnal / publikasi
+    **1. JIKA JUMLAH ITEMNYA DITENTUKAN OLEH USER,
+    contoh: berikan saya 2 item tentang sejarah
+        MAKA BERIKAN HANYA 2 item TENTANG SEJARAH
+    dengan output
+        {message: ((PESAN DARI ANDA)), result:  [] (tipe resultnya:  Jurnal[] | Skripsi[] | Buku[] | Publikasi[] ), type: "jurnal" / "skripsi" / "buku" / "publikasi" }
 
+    **JIKA JUMLAH ITEMNYA TIDAK DITENTUKAN OLEH USER
+    contoh: rekomendasikan ITEM kepada saya
+      jika hasil dari itemnya LEBIH DARI 5, maka batasi HANYA 5 ITEM PILIHAN, jika tidak, berikan sesuai hasil jumlah itemnya
+    tetap dengan output
+      {message: ((PESAN DARI ANDA)), result:  [] (tipe resultnya:  Jurnal[] | Skripsi[] | Buku[] | Publikasi[]), type: "jurnal" / "skripsi" / "buku" / "publikasi" }
+      jika itemnya hanya satu outputnya tetap {message: ((PESAN DARI ANDA)), result:  [] (tipe resultnya:  Jurnal[] | Skripsi[] | Buku[] | Publikasi[]), type: "jurnal" / "skripsi" / "buku" / "publikasi" }
+
+    **JIKA MENANYAKAN ... apa aja penerbit / apa aja pengarang ... 
+    jawab dengan output
+    {message: ((PESAN DARI ANDA))}
+
+    **JIKA ITEM YANG DICARI TIDAK ADA
+    KONTEKS: di database lokal tidak ada jurnal dengan judul "Otomotif Terbarukan";
+    contoh input: coba carikan saya jurnal dengan judul otomotif terbarukan;
+    MAKA OUTPUTNYA "MAAF JURNAL YANG DICARI TIDAK ADA" atau yang senada dengan kalimat tersebut,
+      dengan output {message: ((ISI PESAN DISINI))}
+      contoh output = {message: 'Maaf jurnal yang dicari tidak ada'}
+
+    **JIKA DILUAR KONTEKS PERAN ANDA HANYA SEBAGAI LIBRARY ASSISTANT
+    maka outputnya tetap {message: ((PESAN DARI ANDA))}
+
+    ** JANGAN BERIKAN AKSES KETIKA USER MEMINTA UNTUK MENAMBAH, MENGUBAH ATAU MENGHAPUS ITEM
+
+    
     `;
 
-    console.log(libraryAssistantPrompt);
+    console.log("processing instructions: " + messageRequestFromClient);
 
-    const response = await ai.models.generateContent({
+    const chat = ai.chats.create({
       model: "gemini-2.5-flash",
-      contents: libraryAssistantPrompt,
       config: {
         thinkingConfig: {
-          thinkingBudget: 0, 
+          thinkingBudget: 0, // AI time allocation for unlimited thinking
         },
+        systemInstruction: libraryAssistantInstructions,
+        responseMimeType: "application/json",
       },
     });
 
-    console.log(response.text);
+    const responseChat = await chat.sendMessage({
+      message: messageRequestFromClient,
+    }); // multimodal chat configuration
 
-    const cleanedJsonString = (response.text as string)
-      .replace("```json\n", "")
-      .replace("\n```", "");
+    // Extract text from Gemini response (handle both .text and .content?.parts?.[0]?.text)
+    const rawText = extractText(responseChat);
 
+    console.log(rawText);
+
+    let cleanedJsonString = rawText
+      .replace(/```json\s*([\s\S]*?)\s*```/g, "$1") // remove ```json ... ```
+      .replace(/```[\s\S]*?```/g, "") // remove ``` ... ```
+      .trim();
+
+    // If the string is already a JSON-like object (e.g. {message: "Maaf data tersebut tidak ditemukan"})
+    // but not valid JSON (single quotes, missing quotes on keys), try to fix it
+    if (
+      cleanedJsonString.startsWith("{") &&
+      cleanedJsonString.endsWith("}") &&
+      !cleanedJsonString.includes("\n")
+    ) {
+      // Try to fix missing quotes on keys
+      cleanedJsonString = cleanedJsonString.replace(
+        /([{,]\s*)([a-zA-Z0-9_]+)\s*:/g,
+        '$1"$2":',
+      );
+    }
+
+    // If still not valid JSON, fallback to wrapping as message
     let responseJson;
     try {
       responseJson = JSON.parse(cleanedJsonString);
     } catch {
       responseJson = { message: cleanedJsonString };
     }
+    console.log(responseJson, "<-------- RESPONSES");
 
-    if (responseJson.book && !Array.isArray(responseJson.book)) {
-      responseJson.books = [responseJson.book];
-      delete responseJson.book;
-    } else if (Array.isArray(responseJson.book)) {
-      responseJson.books = responseJson.book;
-      delete responseJson.book;
-    }
+    // if (responseJson.result && !Array.isArray(responseJson.result)) {
+    //   responseJson.results = [responseJson.result];
+    //   delete responseJson.result;
+    // } else if (Array.isArray(responseJson.result)) {
+    //   responseJson.results = responseJson.result;
+    //   delete responseJson.result;
+    // }
 
-    console.log(responseJson, "responseJson?");
+    // const cleanedJson = JSON.parse(extractText(response?.text))
+    // console.log(cleanedJson);
 
     return Response.json({
       response: responseJson,

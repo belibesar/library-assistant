@@ -10,26 +10,32 @@ const ChatbotSection: React.FC = () => {
     {
       id: 1,
       sender: "bot",
-      message: `Selamat datang di Perpustakaan USD! 👋
-      Saya siap membantu Anda mencari buku dan koleksi perpustakaan. Berikut beberapa contoh yang bisa Anda tanyakan:
+      message: `
+      Selamat datang di Perpustakaan USD! 👋
       <ul>
-        <li>"Carikan buku tentang filsafat"</li>
-        <li>"Rangkum sinopsis buku psikologi"</li>
-        <li>"Dimana letak buku teologi?"</li>
-        <li>"Rekomendasi buku teknologi terbaru"</li>
+        <li>Saya siap membantu Anda mencari buku dan koleksi perpustakaan. Berikut beberapa contoh yang bisa Anda tanyakan:</li>
+        <li>"Rekomendasikan skripsi tentang pendidikan, dong!"</li>
+        <li>"Rekomendasikan saya buku tentang habits"</li>
+        <li>"Apakah buku "Sapiens: A Brief History of Humankind" masih tersedia untuk dipinjam?"</li>
+        <li>"Rekomendasikan saya jurnal terkait teknik"</li>
+        <li>"Dimana letak buku Bumi Manusia?"</li>
       </ul>
       Silakan ketik pertanyaan Anda!`,
-      timestamp: "16.00",
+      timestamp: new Date().toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit",
+      }),
     },
   ]);
+  const [loading, setLoading] = useState<boolean>(false);
   const [inputMessage, setInputMessage] = useState<string>("");
   const [agreePrivacy, setAgreePrivacy] = useState<boolean>(false);
 
   const sentRequestToChatBotAI = async (userMessage: string) => {
     try {
+      setLoading(true);
       const lowerCaseMessage = userMessage.toLowerCase();
       console.log(lowerCaseMessage, "<----sentRequestToChatBotAI");
-
       const response = await fetch("/api/chatbot", {
         method: "POST",
         body: JSON.stringify({ messageRequestFromClient: lowerCaseMessage }),
@@ -47,9 +53,11 @@ const ChatbotSection: React.FC = () => {
 
       console.log(response, "response from api/chatbot");
 
+      setLoading(false);
       return responseJson; // Assuming the API returns a 'reply' field
     } catch (error) {
       console.log(error, "<--- sentRequestToApiChatbot");
+      setLoading(false);
       return "An error occurred"; // Return a fallback message
     }
   };
@@ -92,12 +100,12 @@ const ChatbotSection: React.FC = () => {
         id: prevMessages.length + 1,
         sender: "bot",
         message: botReply.response.message || botReply.response,
-        books: botReply.response.books || [],
-        racks: botReply.response.results || "",
+        results: botReply.response.result || [],
         timestamp: new Date().toLocaleTimeString([], {
           hour: "2-digit",
           minute: "2-digit",
         }),
+        type: botReply.response.type || "unidentified",
       },
     ]);
 
@@ -115,6 +123,7 @@ const ChatbotSection: React.FC = () => {
         agreePrivacy={agreePrivacy}
         setAgreePrivacy={setAgreePrivacy}
         sendMessage={sendMessage}
+        loading={loading}
       />
     </div>
   );

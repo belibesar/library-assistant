@@ -1,14 +1,14 @@
 import { useState, useEffect } from "react";
 import {
   BaseItem,
+  Book,
+  Journal,
   LibraryItem,
   LibraryItemType,
   Notification,
   Skripsi,
 } from "@/libs/types/libraryType";
 import { endpointMap } from "@/utils/libraryUtil";
-import { Book } from "@/libs/types/BookType";
-import { Journal } from "@/libs/types/JournalType";
 
 export const useLibraryItems = () => {
   const [search, setSearch] = useState("");
@@ -63,8 +63,11 @@ export const useLibraryItems = () => {
 
       if (json.success && Array.isArray(json.data)) {
         const mappedItems: LibraryItem[] = json.data.map((item: any) => {
+          console.log(item);
+
           const base: BaseItem = {
-            id: item._id?.$oid || item._id || item.id,
+            _id: String(item._id),
+            id: item.id || item._id,
             judul: item.judul || "",
             abstrak: item.abstrak || "",
             jumlah: Number(item.jumlah) || 0,
@@ -80,6 +83,11 @@ export const useLibraryItems = () => {
               ...base,
               penerbit_id: item.penerbit_id || "",
               pengarang_id: item.pengarang_id || "",
+              pengarang: item.pengarang || "",
+              penerbit: item.penerbit || "",
+              lokasi: item.lokasi || "",
+              rak: item.rak || "",
+              sinopsis: item.sinopsis || "",
               type: "book",
             } as Book;
           } else if (item.jurnal_id) {
@@ -87,6 +95,7 @@ export const useLibraryItems = () => {
               ...base,
               jurnal_id: item.jurnal_id || "",
               type: "journal",
+              publikasi: item.publikasi,
             } as Journal;
           } else if (item.tahun || item.nim) {
             return {
@@ -94,6 +103,7 @@ export const useLibraryItems = () => {
               tahun: item.tahun || "",
               nim: item.nim || "",
               type: "skripsi",
+              mahasiswa: item.mahasiswa,
             } as Skripsi;
           }
           return base as LibraryItem;

@@ -2,11 +2,9 @@
 
 import React, { useRef, useEffect } from "react";
 import { Bot } from "lucide-react";
-import {
-  ChatMessage,
-  ChatbotMessagesCardProps,
-  RepositoryType,
-} from "@/libs/types";
+import { ChatbotMessagesCardProps } from "@/libs/types";
+import LibraryItemBubbleChat from "./library/LibraryItemBubbleChat";
+import LoadingBotBubbleComponent from "./LoadingBotBubbleComponent";
 
 const ChatbotMessagesCard: React.FC<ChatbotMessagesCardProps> = ({
   messages,
@@ -15,6 +13,7 @@ const ChatbotMessagesCard: React.FC<ChatbotMessagesCardProps> = ({
   agreePrivacy,
   setAgreePrivacy,
   sendMessage,
+  loading,
 }) => {
   const chatAreaRef = useRef<HTMLDivElement>(null);
 
@@ -74,21 +73,23 @@ const ChatbotMessagesCard: React.FC<ChatbotMessagesCardProps> = ({
                 dangerouslySetInnerHTML={{ __html: msg.message }}
               />
               <div>
-                {/* // Usage of BookDisplay component within the messages mapping */}
-                {/* kalo ada buku */}
-                {msg.books &&
-                  msg.books.map((book, index) => (
-                    <BookDisplay key={index} book={book} />
-                  ))}
-                {msg.racks &&
-                  msg.racks.map((rack, index) => (
-                    <RackDisplay key={index} rack={rack} />
+                {/* kalo array result adalah array dan punya tipe*/}
+                {msg?.results &&
+                  msg?.type &&
+                  msg?.results?.length >= 1 &&
+                  msg?.results?.map((item, index) => (
+                    <LibraryItemBubbleChat
+                      key={index}
+                      item={item}
+                      type={msg?.type}
+                    />
                   ))}
               </div>
               <div className="mt-1 text-sm text-gray-500">{msg.timestamp}</div>
             </div>
           </div>
         ))}
+        {loading && <LoadingBotBubbleComponent />}
       </div>
       {/* hr nya di jadikan full */}
       <hr className="-mx-6 my-4 border-t border-gray-300" />
@@ -139,39 +140,6 @@ const ChatbotMessagesCard: React.FC<ChatbotMessagesCardProps> = ({
           </svg>
         </button>
       </div>
-    </div>
-  );
-};
-
-const BookDisplay: React.FC<{
-  book: {
-    judul: string;
-    call_number: string;
-    no_invent: string;
-    no_barcode: number;
-    lokasi: string;
-  };
-}> = ({ book }) => {
-  return (
-    <div className="mt-5 rounded-bl-none bg-blue-200 p-5 text-black">
-      <h3>
-        Judul: <span className="font-bold">{book.judul}</span>{" "}
-      </h3>
-      <p>Call Number: {book.call_number}</p>
-      <p>No Invent: {book.no_invent}</p>
-      <p>No Barcode: {book.no_barcode}</p>
-      <p>Lokasi: {book.lokasi}</p>
-    </div>
-  );
-};
-const RackDisplay: React.FC<{
-  rack: string;
-}> = ({ rack }) => {
-  return (
-    <div className="mt-5 rounded-bl-none bg-blue-200 p-5 text-black">
-      <h3>
-        <span className="font-bold">{rack}</span>{" "}
-      </h3>
     </div>
   );
 };
