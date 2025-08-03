@@ -27,14 +27,15 @@ const ChatbotSection: React.FC = () => {
       }),
     },
   ]);
+  const [loading, setLoading] = useState<boolean>(false);
   const [inputMessage, setInputMessage] = useState<string>("");
   const [agreePrivacy, setAgreePrivacy] = useState<boolean>(false);
 
   const sentRequestToChatBotAI = async (userMessage: string) => {
     try {
+      setLoading(true);
       const lowerCaseMessage = userMessage.toLowerCase();
       console.log(lowerCaseMessage, "<----sentRequestToChatBotAI");
-
       const response = await fetch("/api/chatbot", {
         method: "POST",
         body: JSON.stringify({ messageRequestFromClient: lowerCaseMessage }),
@@ -52,9 +53,11 @@ const ChatbotSection: React.FC = () => {
 
       console.log(response, "response from api/chatbot");
 
+      setLoading(false);
       return responseJson; // Assuming the API returns a 'reply' field
     } catch (error) {
       console.log(error, "<--- sentRequestToApiChatbot");
+      setLoading(false);
       return "An error occurred"; // Return a fallback message
     }
   };
@@ -120,6 +123,7 @@ const ChatbotSection: React.FC = () => {
         agreePrivacy={agreePrivacy}
         setAgreePrivacy={setAgreePrivacy}
         sendMessage={sendMessage}
+        loading={loading}
       />
     </div>
   );
