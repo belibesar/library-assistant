@@ -1,5 +1,4 @@
 import { Journal } from "../../libs/types/libraryType";
-import { formatDateForInput } from "../../utils/libraryUtil";
 import { Newspaper, Edit3, Trash2 } from "lucide-react";
 
 interface JournalCardProps {
@@ -53,8 +52,10 @@ export const JournalCard = ({
         <h3 className="line-clamp-2 text-lg leading-tight font-bold text-gray-900">
           {journal.judul}
         </h3>
-        <p className="text-sm text-gray-600">ID: {journal.id || 'N/A'}</p>
-        <p className="text-sm text-gray-600">Jurnal ID: {journal.jurnal_id || 'N/A'}</p>
+        <p className="text-sm text-gray-600">ID: {journal.id || "N/A"}</p>
+        <p className="text-sm text-gray-600">
+          Jurnal ID: {journal.jurnal_id || "N/A"}
+        </p>
         {journal.publikasi && (
           <div className="space-y-1">
             <span className="inline-block rounded-full bg-purple-100 px-3 py-1 text-xs font-medium text-purple-700">
@@ -71,27 +72,12 @@ export const JournalCard = ({
           </div>
         )}
         <p className="line-clamp-3 text-sm leading-relaxed text-gray-600">
-          {journal.abstrak || 'Tidak ada abstrak'}
+          {journal.abstrak || "Tidak ada abstrak"}
         </p>
       </div>
     </div>
 
     <div className="border-t border-gray-100 bg-gray-50 px-4 py-3">
-      <div className="mb-2 flex items-center justify-between">
-        <span className="text-sm text-gray-500">Total: {journal.jumlah}</span>
-        <div className="flex gap-2">
-          <span className="rounded-md bg-green-50 px-2 py-1 text-xs font-semibold text-green-600">
-            Tersedia: {journal.tersedia}
-          </span>
-          <span className="rounded-md bg-yellow-50 px-2 py-1 text-xs font-semibold text-yellow-600">
-            Dipinjam: {journal.dipinjam}
-          </span>
-        </div>
-      </div>
-      <div className="flex items-center justify-between text-xs text-gray-500">
-        <span>Dibuat: {formatDateForInput(journal.createdAt)}</span>
-        <span>Diperbarui: {formatDateForInput(journal.updatedAt)}</span>
-      </div>
       {journal.count !== undefined && (
         <div className="mt-2 text-right text-xs text-gray-500">
           Dilihat: {journal.count} kali

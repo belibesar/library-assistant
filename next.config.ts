@@ -1,9 +1,9 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  experimental: {
-    serverComponentsExternalPackages: ["pdf-parse"],
-  },
+  // Move 'serverComponentsExternalPackages' to 'serverExternalPackages'
+  serverExternalPackages: ["pdf-parse"],
+
   webpack: (config, { isServer }) => {
     if (isServer) {
       config.externals.push("canvas");
