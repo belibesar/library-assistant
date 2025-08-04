@@ -477,7 +477,7 @@ export default function LibraryCollectionPage() {
 
       <div className="grid grid-cols-1 gap-4 pt-4">
         {loading ? (
-          <LibrarySkeletonLoading count={8} />
+          <LibrarySkeletonLoading count={3} />
         ) : items.length > 0 ? (
           items.map((item) => {
             if (item.type === "book") {

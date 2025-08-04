@@ -54,16 +54,16 @@ export const SkripsiCard = ({
         </div>
 
         <div className="space-y-3">
-          <h3 className="line-clamp-2 text-lg leading-tight font-bold text-gray-900">
+          <h3 className="line-clamp-2 text-xl leading-tight font-bold text-gray-900">
             {skripsi.judul}
           </h3>
 
           <div className="flex flex-col gap-1">
-            <p className="text-sm text-gray-600">ID: {skripsi.id}</p>
-            {/* <p className="text-sm text-gray-600">
+            <p className="text-base text-gray-600">ID: {skripsi.id}</p>
+            {/* <p className="text-base text-gray-600">
               Author: {skripsi.mahasiswa?.name || 'N/A'}
             </p> */}
-            <p className="text-sm text-gray-600">NIM: {skripsi.nim}</p>
+            <p className="text-base text-gray-600">NIM: {skripsi.nim}</p>
             {/* {skripsi.mahasiswa && (
               <>
                 <p className="text-sm text-gray-600">Fakultas: {skripsi.mahasiswa?.fakultas || 'N/A'}</p>
@@ -72,11 +72,11 @@ export const SkripsiCard = ({
             )} */}
           </div>
 
-          <span className="inline-block rounded-full bg-gray-100 px-3 py-1 text-xs font-medium text-gray-700">
+          <span className="inline-block rounded-full bg-gray-100 px-3 py-1 text-sm font-medium text-gray-700">
             Tahun: {skripsi.tahun}
           </span>
 
-          <p className="line-clamp-3 text-sm leading-relaxed text-gray-600">
+          <p className="line-clamp-3 text-base leading-relaxed text-gray-600">
             {skripsi.abstrak}
           </p>
         </div>
@@ -85,7 +85,7 @@ export const SkripsiCard = ({
       {/* Card Footer with Stats */}
       <div className="border-t border-gray-100 bg-gray-50 px-4 py-3">
         {skripsi.count !== undefined && (
-          <div className="mt-2 text-right text-xs text-gray-500">
+          <div className="mt-2 text-right text-base text-gray-500">
             Dilihat: {skripsi.count} kali
           </div>
         )}
