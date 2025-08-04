@@ -475,7 +475,7 @@ export default function LibraryCollectionPage() {
 
       <LibraryNotification notification={notification} />
 
-      <div className="grid grid-cols-1 gap-4 pt-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+      <div className="grid grid-cols-1 gap-4 pt-4">
         {loading ? (
           <LibrarySkeletonLoading count={8} />
         ) : items.length > 0 ? (

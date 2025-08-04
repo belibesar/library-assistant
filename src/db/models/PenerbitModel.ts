@@ -9,7 +9,6 @@ class PenerbitModel {
   static async generateNextId(): Promise<string> {
     const collection = await this.collection();
     
-    // Find the latest penerbit with ID pattern P###
     const latestPenerbit = await collection
       .find({ id: { $regex: /^P\d{3}$/ } })
       .sort({ id: -1 })
@@ -17,7 +16,7 @@ class PenerbitModel {
       .toArray();
     
     if (latestPenerbit.length === 0) {
-      return "P017"; // Start from P017 as requested
+      return "P017";
     }
     
     const latestId = latestPenerbit[0].id;
@@ -58,7 +57,6 @@ class PenerbitModel {
   static async findOrCreatePenerbit(penerbitData: Partial<Penerbit>): Promise<string> {
     const collection = await this.collection();
     
-    // Find existing penerbit by name
     const existingPenerbit = await collection.findOne({
       name: penerbitData.name
     });
@@ -67,7 +65,6 @@ class PenerbitModel {
       return existingPenerbit.id;
     }
     
-    // Create new penerbit
     const newPenerbit: Penerbit = {
       id: await this.generateNextId(),
       name: penerbitData.name || ""

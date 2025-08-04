@@ -124,7 +124,6 @@ class BookModel {
   static async createBook(data: Book) {
     const collection = await this.collection();
     
-    // Handle pengarang
     if ((data as any).pengarang_name) {
       const pengarangId = await PengarangModel.findOrCreatePengarang({
         name: (data as any).pengarang_name,
@@ -133,7 +132,6 @@ class BookModel {
       data.pengarang_id = pengarangId;
     }
     
-    // Handle penerbit
     if ((data as any).penerbit_name) {
       const penerbitId = await PenerbitModel.findOrCreatePenerbit({
         name: (data as any).penerbit_name
@@ -141,10 +139,8 @@ class BookModel {
       data.penerbit_id = penerbitId;
     }
     
-    // Set default abstrak for books
     data.abstrak = "karena buku hanya ada sinopsis";
     
-    // Clean up temporary fields
     const bookDataToSave = { ...data };
     delete (bookDataToSave as any).pengarang_name;
     delete (bookDataToSave as any).pengarang_nationality;
@@ -162,7 +158,6 @@ class BookModel {
       throw new Error("Book not found");
     }
     
-    // Handle pengarang
     if ((data as any).pengarang_name) {
       const pengarangId = await PengarangModel.findOrCreatePengarang({
         name: (data as any).pengarang_name,
@@ -173,7 +168,6 @@ class BookModel {
       data.pengarang_id = currentBook.pengarang_id;
     }
     
-    // Handle penerbit
     if ((data as any).penerbit_name) {
       const penerbitId = await PenerbitModel.findOrCreatePenerbit({
         name: (data as any).penerbit_name
@@ -183,10 +177,8 @@ class BookModel {
       data.penerbit_id = currentBook.penerbit_id;
     }
     
-    // Set default abstrak for books
     data.abstrak = "karena buku hanya ada sinopsis";
     
-    // Clean up temporary fields
     const bookDataToSave = { ...data };
     delete (bookDataToSave as any).pengarang_name;
     delete (bookDataToSave as any).pengarang_nationality;
