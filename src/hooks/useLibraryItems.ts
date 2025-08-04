@@ -15,7 +15,7 @@ export const useLibraryItems = () => {
   const [category, setCategory] = useState<LibraryItemType>("book");
   const [items, setItems] = useState<LibraryItem[]>([]);
   const [page, setPage] = useState(1);
-  const [limit] = useState(12);
+  const [limit] = useState(3);
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(false);
   const [notification, setNotification] = useState<Notification | null>(null);
