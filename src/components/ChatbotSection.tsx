@@ -118,13 +118,30 @@ const ChatbotSection: React.FC = () => {
       {
         id: prevMessages.length + 1,
         sender: "bot",
-        message: botReply.response.message || botReply.response,
-        results: botReply.response.result || [],
+        message:
+          botReply &&
+          botReply.response &&
+          typeof botReply.response.message === "string"
+            ? botReply.response.message
+            : botReply && typeof botReply.response === "string"
+              ? botReply.response
+              : "Harap ulangi beberapa saat lagi, reload browser jika perlu",
+        results:
+          botReply &&
+          botReply.response &&
+          Array.isArray(botReply.response.result)
+            ? botReply.response.result
+            : [],
         timestamp: new Date().toLocaleTimeString([], {
           hour: "2-digit",
           minute: "2-digit",
         }),
-        type: botReply.response.type || "unidentified",
+        type:
+          botReply &&
+          botReply.response &&
+          typeof botReply.response.type === "string"
+            ? botReply.response.type
+            : "unidentified",
       },
     ]);
 
