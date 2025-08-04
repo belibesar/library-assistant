@@ -5,17 +5,6 @@ import errHandler from "@/utils/errHandler";
 import { GoogleGenAI } from "@google/genai";
 
 const ai = new GoogleGenAI({});
-// const responseGetAllBook: any = await BookModel.getAllBook(1, 0, "");
-// const getAllCollections = await (await mongoDb.db())
-//   .listCollections()
-//   .toArray();
-// const allCollections = getAllCollections.map((repo) => repo.name);
-// const allData: any = {};
-// for (const collectionName of allCollections) {
-//   const collection = await mongoDb.getRepository(collectionName);
-//   const data = await collection.find().toArray();
-//   allData[collectionName] = data;
-// }
 
 function extractText(resp: any) {
   try {
@@ -24,7 +13,7 @@ function extractText(resp: any) {
       resp?.candidates?.[0]?.content?.parts?.[0]?.text ??
       resp?.response?.candidates?.[0]?.content?.text;
 
-    console.log(text, "<---EXTEXT");
+    // console.log(text, "<---EXTEXT");
 
     return text ?? JSON.stringify(resp, null, 2);
   } catch (error) {
@@ -33,20 +22,46 @@ function extractText(resp: any) {
   }
 }
 
-export async function GET() {
-  return Response.json({ message: "Hello Chatbot!" });
-}
-
-export async function POST(request: Request) {
+function fetchHistoryChat(histories: any) {
   try {
-    const res = await request.json();
-    console.log(res);
+    let history = [];
 
-    const messageRequestFromClient = res?.messageRequestFromClient;
-    if (!messageRequestFromClient) {
-      throw { message: "message request required", status: 400 };
+    if (!histories) {
+      history = [];
+    } else {
+      history = histories;
     }
 
+    // // Log data untuk debugging
+    // console.log("Riwayat yang diterima:", JSON.stringify(historyMessage));
+
+    // Pastikan historyChat adalah array yang valid
+    if (!Array.isArray(history)) {
+      console.log("historyChat must be an array.");
+      history = [];
+    } else {
+      history = histories;
+    }
+
+    // Periksa setiap objek di historyChat
+    for (const turn of histories) {
+      if (!turn.role || (turn.role !== "user" && turn.role !== "model")) {
+        console.log("Objek riwayat dengan peran tidak valid:", turn);
+        console.log(`Role must be user or model, but got ${turn.role}.`);
+        history = [];
+      } else {
+        history = histories;
+      }
+    }
+
+    return history;
+  } catch (error) {
+    console.error(error, "error on fetchHistoryChat");
+  }
+}
+
+async function fetchDatabase() {
+  try {
     // data dari db
     // mendapatkan data buku
     const responseGetAllBook: any = await BookModel.getAllBook(1, 1000, "");
@@ -79,9 +94,72 @@ export async function POST(request: Request) {
         jurnal: journalCollection,
       },
     ];
+    return JSON.stringify(dataFromDatabase);
     // console.log({ dataFromDatabase }, "<------- dataFromDatabase");
+  } catch (error) {
+    console.log(error);
+  }
+}
 
-    const stringDatabase = JSON.stringify(dataFromDatabase);
+function handleGeminiResponse(responseChat: any) {
+  try {
+    // Extract text from Gemini response (handle both .text and .content?.parts?.[0]?.text)
+    const rawText = extractText(responseChat);
+
+    // console.log(rawText);
+
+    let cleanedJsonString = rawText
+      .replace(/```json\s*([\s\S]*?)\s*```/g, "$1") // remove ```json ... ```
+      .replace(/```[\s\S]*?```/g, "") // remove ``` ... ```
+      .trim();
+
+    // If the string is already a JSON-like object (e.g. {message: "Maaf data tersebut tidak ditemukan"})
+    // but not valid JSON (single quotes, missing quotes on keys), try to fix it
+    if (
+      cleanedJsonString.startsWith("{") &&
+      cleanedJsonString.endsWith("}") &&
+      !cleanedJsonString.includes("\n")
+    ) {
+      // Try to fix missing quotes on keys
+      cleanedJsonString = cleanedJsonString.replace(
+        /([{,]\s*)([a-zA-Z0-9_]+)\s*:/g,
+        '$1"$2":',
+      );
+    }
+
+    // If still not valid JSON, fallback to wrapping as message
+    let responseJson;
+    try {
+      responseJson = JSON.parse(cleanedJsonString);
+    } catch {
+      responseJson = { message: cleanedJsonString };
+    }
+    return responseJson;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function GET() {
+  return Response.json({ message: "Hello Chatbot!" });
+}
+
+export async function POST(request: Request) {
+  try {
+    const res = await request.json();
+    const messageRequestFromClient = res?.messageRequestFromClient;
+    const historyMessage = res?.historyMessage;
+    if (!messageRequestFromClient) {
+      throw { message: "message request required", status: 400 };
+    }
+
+    // fetch history chat
+    const history = fetchHistoryChat(JSON.parse(historyMessage)) || [];
+    // console.log("Riwayat yang diterima:", history);
+
+    // fetch db
+    const stringDatabase = await fetchDatabase();
+    // console.log("database", stringDatabase);
 
     //gemini logic
     const libraryAssistantInstructions = `
@@ -222,7 +300,7 @@ export async function POST(request: Request) {
       dengan output {message: ((ISI PESAN DISINI))}
       contoh output = {message: 'Maaf jurnal yang dicari tidak ada'}
 
-    **JIKA DILUAR KONTEKS PERAN ANDA HANYA SEBAGAI LIBRARY ASSISTANT
+    **JIKA DILUAR KONTEKS PERAN ANDA HANYA SEBAGAI LIBRARY ASSISTANT, maka tawarkan bantuan, apakah ingin disarankan atau direkomendasikan buku/ skripsi/ jurnal  di perpustakaan ini karena peran anda sebagai asisten perpustakaan
     maka outputnya tetap {message: ((PESAN DARI ANDA))}
 
     ** JANGAN BERIKAN AKSES KETIKA USER MEMINTA UNTUK MENAMBAH, MENGUBAH ATAU MENGHAPUS ITEM
@@ -234,6 +312,7 @@ export async function POST(request: Request) {
 
     const chat = ai.chats.create({
       model: "gemini-2.5-flash",
+      history: history,
       config: {
         thinkingConfig: {
           thinkingBudget: 0, // AI time allocation for unlimited thinking
@@ -247,49 +326,9 @@ export async function POST(request: Request) {
       message: messageRequestFromClient,
     }); // multimodal chat configuration
 
-    // Extract text from Gemini response (handle both .text and .content?.parts?.[0]?.text)
-    const rawText = extractText(responseChat);
+    const responseJson = handleGeminiResponse(responseChat);
 
-    console.log(rawText);
-
-    let cleanedJsonString = rawText
-      .replace(/```json\s*([\s\S]*?)\s*```/g, "$1") // remove ```json ... ```
-      .replace(/```[\s\S]*?```/g, "") // remove ``` ... ```
-      .trim();
-
-    // If the string is already a JSON-like object (e.g. {message: "Maaf data tersebut tidak ditemukan"})
-    // but not valid JSON (single quotes, missing quotes on keys), try to fix it
-    if (
-      cleanedJsonString.startsWith("{") &&
-      cleanedJsonString.endsWith("}") &&
-      !cleanedJsonString.includes("\n")
-    ) {
-      // Try to fix missing quotes on keys
-      cleanedJsonString = cleanedJsonString.replace(
-        /([{,]\s*)([a-zA-Z0-9_]+)\s*:/g,
-        '$1"$2":',
-      );
-    }
-
-    // If still not valid JSON, fallback to wrapping as message
-    let responseJson;
-    try {
-      responseJson = JSON.parse(cleanedJsonString);
-    } catch {
-      responseJson = { message: cleanedJsonString };
-    }
     console.log(responseJson, "<-------- RESPONSES");
-
-    // if (responseJson.result && !Array.isArray(responseJson.result)) {
-    //   responseJson.results = [responseJson.result];
-    //   delete responseJson.result;
-    // } else if (Array.isArray(responseJson.result)) {
-    //   responseJson.results = responseJson.result;
-    //   delete responseJson.result;
-    // }
-
-    // const cleanedJson = JSON.parse(extractText(response?.text))
-    // console.log(cleanedJson);
 
     return Response.json({
       response: responseJson,

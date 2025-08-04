@@ -31,14 +31,20 @@ const ChatbotSection: React.FC = () => {
   const [inputMessage, setInputMessage] = useState<string>("");
   const [agreePrivacy, setAgreePrivacy] = useState<boolean>(false);
 
-  const sentRequestToChatBotAI = async (userMessage: string) => {
+  const sentRequestToChatBotAI = async (
+    userMessage: string,
+    histories: string,
+  ) => {
     try {
       setLoading(true);
       const lowerCaseMessage = userMessage.toLowerCase();
       console.log(lowerCaseMessage, "<----sentRequestToChatBotAI");
       const response = await fetch("/api/chatbot", {
         method: "POST",
-        body: JSON.stringify({ messageRequestFromClient: lowerCaseMessage }),
+        body: JSON.stringify({
+          messageRequestFromClient: lowerCaseMessage,
+          historyMessage: histories,
+        }),
         headers: {
           "Content-Type": "application/json",
         },
@@ -48,7 +54,7 @@ const ChatbotSection: React.FC = () => {
       console.log(responseJson);
 
       if (!response.ok) {
-        throw new Error(responseJson.message || "Error occurred");
+        console.log(responseJson.message || "Error occurred");
       }
 
       console.log(response, "response from api/chatbot");
@@ -86,12 +92,25 @@ const ChatbotSection: React.FC = () => {
     };
 
     console.log(newMessage, "<-----sendMessage");
+    // array messages baru dan messages sebelumnya
+    const bulkMessages = [...messages, newMessage];
+    const formattedHistory = bulkMessages.map((message) => {
+      if (message.sender === "bot") {
+        return { role: "model", parts: [{ text: message.message }] };
+      } else {
+        return { role: "user", parts: [{ text: message.message }] };
+      }
+    });
+    console.log(formattedHistory, "histories");
 
     setMessages((prevMessages) => [...prevMessages, newMessage]);
     setInputMessage("");
 
     // setTimeout(async () => {
-    const botReply = await sentRequestToChatBotAI(newMessage.message);
+    const botReply = await sentRequestToChatBotAI(
+      newMessage.message,
+      JSON.stringify(formattedHistory),
+    );
     console.log(botReply, "botReply");
 
     setMessages((prevMessages) => [
