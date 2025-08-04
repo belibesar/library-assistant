@@ -6,9 +6,9 @@ const LibraryItemBubbleChat: React.FC<{
   type: LibraryBubbleItemType | undefined;
 }> = ({ item, type }) => {
   return (
-    <div className="mt-5 rounded-bl-none bg-blue-200 p-5 text-black">
-      {type === "buku" && (
-        <>
+    <>
+      {type === "buku" && (item as Book).sinopsis && (
+        <div className="mt-5 rounded-bl-none bg-blue-200 p-5 text-black">
           {/* tipe item === buku */}
           <h3>
             Judul:{" "}
@@ -20,11 +20,11 @@ const LibraryItemBubbleChat: React.FC<{
           <p>Pengarang: {(item as Book)?.pengarang?.name || ""}</p>
           <p>Penerbit: {(item as Book)?.penerbit?.name || ""}</p>
           <p>Lokasi buku: {(item as Book)?.lokasi || ""}</p>
-        </>
+        </div>
       )}
 
-      {type === "jurnal" && (
-        <>
+      {type === "jurnal" && (item as Journal)?.publikasi && (
+        <div className="mt-5 rounded-bl-none bg-blue-200 p-5 text-black">
           {/* tipe item === jurnal */}
           <h3>
             Judul:{" "}
@@ -40,11 +40,11 @@ const LibraryItemBubbleChat: React.FC<{
             {(item as Journal)?.publikasi?.volume || ""}
           </p>
           <p>Jurnal tersedia: {(item as Journal)?.tersedia || ""}</p>
-        </>
+        </div>
       )}
 
-      {type === "skripsi" && (
-        <>
+      {type === "skripsi" && (item as Skripsi)?.mahasiswa && (
+        <div className="mt-5 rounded-bl-none bg-blue-200 p-5 text-black">
           <h3>
             Judul:{" "}
             <span className="font-bold">
@@ -54,10 +54,10 @@ const LibraryItemBubbleChat: React.FC<{
           <p>Sinopsis: {(item as Skripsi)?.abstrak || ""}</p>
           <p>Nama Mahasiswa: {(item as Skripsi)?.mahasiswa?.name || ""} </p>
           <p>Tahun Skripsi: {(item as Skripsi)?.tahun || ""}</p>
-        </>
+        </div>
       )}
-      {type === "publikasi" && (
-        <>
+      {type === "publikasi" && (item as Publikasi)?.volume && (
+        <div className="mt-5 rounded-bl-none bg-blue-200 p-5 text-black">
           <h3>
             Nama:{" "}
             <span className="font-bold">
@@ -66,9 +66,9 @@ const LibraryItemBubbleChat: React.FC<{
           </h3>
           <p>Volume: {(item as Publikasi)?.volume || ""} </p>
           <p>Tahun: {(item as Publikasi)?.tahun || ""}</p>
-        </>
+        </div>
       )}
-    </div>
+    </>
   );
 };
 
