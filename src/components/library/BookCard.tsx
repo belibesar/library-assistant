@@ -52,26 +52,26 @@ export const BookCard = ({
 
         <div className="space-y-3">
           <div className="min-h-10">
-            <h3 className="line-clamp-2 text-lg leading-tight font-bold text-gray-900">
+            <h3 className="line-clamp-2 text-xl leading-tight font-bold text-gray-900">
               {book.judul}
             </h3>
           </div>
 
-          <p className="text-sm text-gray-600">
+          <p className="text-base text-gray-600">
             {/* ID Buku: { book.id} */}
             Lokasi Buku: {book.lokasi}
           </p>
-          <p className="text-sm text-gray-600">
+          <p className="text-base text-gray-600">
             {/* Pengarang id:  book.pengarang_id */}
             Pengarang: {book?.pengarang?.name}
           </p>
 
-          <span className="inline-block rounded-full bg-gray-100 px-3 text-xs font-medium text-gray-700">
+          <span className="inline-block rounded-full bg-gray-100 px-3 text-sm font-medium text-gray-700">
             {/* Penerbit id: book.penerbit_id */}
             Penerbit: {book?.penerbit?.name}
           </span>
           <div className="min-h-20">
-            <p className="line-clamp-3 text-sm leading-relaxed text-gray-600">
+            <p className="line-clamp-3 text-base leading-relaxed text-gray-600">
               Sinopsis: {book.abstrak || "Sinopsis belum tersedia"}
             </p>
           </div>
@@ -80,22 +80,22 @@ export const BookCard = ({
 
       <div className="border-t border-gray-100 bg-gray-50 px-4 py-3">
         <div className="mb-2 flex items-center justify-between">
-          <span className="text-sm text-gray-500">Total: {book.jumlah}</span>
+          <span className="text-base text-gray-500">Total: {book.jumlah}</span>
           <div className="flex gap-2">
-            <span className="rounded-md bg-green-50 px-2 py-1 text-xs font-semibold text-green-600">
+            <span className="rounded-md bg-green-50 px-2 py-1 text-base font-semibold text-green-600">
               Tersedia: {book.tersedia}
             </span>
-            <span className="rounded-md bg-yellow-50 px-2 py-1 text-xs font-semibold text-yellow-600">
+            <span className="rounded-md bg-yellow-50 px-2 py-1 text-base font-semibold text-yellow-600">
               Dipinjam: {book.dipinjam}
             </span>
           </div>
         </div>
-        {/* <div className="flex items-center justify-between text-xs text-gray-500">
+        {/* <div className="flex items-center justify-between text-base text-gray-500">
         <span>Dibuat: {formatDateForInput(book.createdAt)}</span>
         <span>Diperbarui: {formatDateForInput(book.updatedAt)}</span>
       </div> */}
         {book.count !== undefined && (
-          <div className="mt-2 text-right text-xs text-gray-500">
+          <div className="mt-2 text-right text-base text-gray-500">
             Dilihat: {book.count} kali
           </div>
         )}

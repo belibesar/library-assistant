@@ -49,29 +49,29 @@ export const JournalCard = ({
       </div>
 
       <div className="space-y-3">
-        <h3 className="line-clamp-2 text-lg leading-tight font-bold text-gray-900">
+        <h3 className="line-clamp-2 text-xl leading-tight font-bold text-gray-900">
           {journal.judul}
         </h3>
-        <p className="text-sm text-gray-600">ID: {journal.id || "N/A"}</p>
-        <p className="text-sm text-gray-600">
+        <p className="text-base text-gray-600">ID: {journal.id || "N/A"}</p>
+        <p className="text-base text-gray-600">
           Jurnal ID: {journal.jurnal_id || "N/A"}
         </p>
         {journal.publikasi && (
           <div className="space-y-1">
-            <span className="inline-block rounded-full bg-purple-100 px-3 py-1 text-xs font-medium text-purple-700">
+            <span className="inline-block rounded-full bg-purple-100 px-3 py-1 text-sm font-medium text-purple-700">
               {journal.publikasi.name}
             </span>
             <div className="flex gap-2">
-              <span className="inline-block rounded-full bg-gray-100 px-2 py-1 text-xs font-medium text-gray-700">
+              <span className="inline-block rounded-full bg-gray-100 px-2 py-1 text-sm font-medium text-gray-700">
                 Vol: {journal.publikasi.volume}
               </span>
-              <span className="inline-block rounded-full bg-gray-100 px-2 py-1 text-xs font-medium text-gray-700">
+              <span className="inline-block rounded-full bg-gray-100 px-2 py-1 text-sm font-medium text-gray-700">
                 Tahun: {journal.publikasi.tahun}
               </span>
             </div>
           </div>
         )}
-        <p className="line-clamp-3 text-sm leading-relaxed text-gray-600">
+        <p className="line-clamp-3 text-base leading-relaxed text-gray-600">
           {journal.abstrak || "Tidak ada abstrak"}
         </p>
       </div>
@@ -79,7 +79,7 @@ export const JournalCard = ({
 
     <div className="border-t border-gray-100 bg-gray-50 px-4 py-3">
       {journal.count !== undefined && (
-        <div className="mt-2 text-right text-xs text-gray-500">
+        <div className="mt-2 text-right text-base text-gray-500">
           Dilihat: {journal.count} kali
         </div>
       )}
