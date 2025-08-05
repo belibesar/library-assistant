@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken";
 export async function GET(request: NextRequest) {
   try {
     const authorization = request.headers.get("authorization");
-    
+
     if (!authorization || !authorization.startsWith("Bearer ")) {
       return Response.json({ message: "No token provided" }, { status: 401 });
     }
@@ -13,18 +13,22 @@ export async function GET(request: NextRequest) {
     const jwtSecret = process.env.JWT_SECRET;
 
     if (!jwtSecret) {
-      return Response.json({ message: "JWT secret not configured" }, { status: 500 });
+      return Response.json(
+        { message: "JWT secret not configured" },
+        { status: 500 },
+      );
     }
 
     const decoded = jwt.verify(token, jwtSecret) as any;
-    
+    // console.log(decoded, "userLogin");
+
     return Response.json({
       id: decoded.id,
       name: decoded.name,
       email: decoded.email,
-      username: decoded.username
+      username: decoded.username,
+      role: decoded.role,
     });
-
   } catch (error) {
     console.error("Token verification error:", error);
     return Response.json({ message: "Invalid token" }, { status: 401 });

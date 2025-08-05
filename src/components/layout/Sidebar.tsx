@@ -14,7 +14,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { SidebarProps } from "@/libs/types";
 
 const Sidebar: React.FC<SidebarProps> = ({ isOpen, toggleSidebar }) => {
-  const { user, logout } = useAuth();
+  const { user, logout, role } = useAuth();
   const [activeItem, setActiveItem] = useState("Obrolan"); // State untuk menu aktif
 
   const handleLogout = () => {
@@ -96,30 +96,29 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, toggleSidebar }) => {
                 Cek Plagiat
               </Link>
             </li>
-            {/* <li>
-              <Link href="/dashboard/search" className="flex items-center gap-2 px-3 py-2 hover:bg-gray-200 hover:text-gray-900 active:bg-gray-800 active:text-white transition-colors duration-200 rounded-lg">
-                <Search size={20} color="#111d22" />
-                Pencarian
-              </Link>
-            </li> */}
-            <li>
-              <Link
-                href="/dashboard/analytics"
-                className="flex items-center gap-2 rounded-lg px-3 py-2 transition-colors duration-200 hover:bg-gray-200 hover:text-gray-900 active:bg-gray-800 active:text-white"
-              >
-                <BarChart2 size={20} color="#111d22" />
-                Analytics
-              </Link>
-            </li>
-            <li>
-              <Link
-                href="/dashboard/settings"
-                className="flex items-center gap-2 rounded-lg px-3 py-2 transition-colors duration-200 hover:bg-gray-200 hover:text-gray-900 active:bg-gray-800 active:text-white"
-              >
-                <Settings size={20} color="#111d22" />
-                Pengaturan
-              </Link>
-            </li>
+            {/* role implementation on analysis and pengaturan */}
+            {role === "admin" && (
+              <>
+                <li>
+                  <Link
+                    href="/dashboard/analytics"
+                    className="flex items-center gap-2 rounded-lg px-3 py-2 transition-colors duration-200 hover:bg-gray-200 hover:text-gray-900 active:bg-gray-800 active:text-white"
+                  >
+                    <BarChart2 size={20} color="#111d22" />
+                    Analytics
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/dashboard/settings"
+                    className="flex items-center gap-2 rounded-lg px-3 py-2 transition-colors duration-200 hover:bg-gray-200 hover:text-gray-900 active:bg-gray-800 active:text-white"
+                  >
+                    <Settings size={20} color="#111d22" />
+                    Pengaturan
+                  </Link>
+                </li>
+              </>
+            )}
           </ul>
         </nav>
         {/* ubah hr jadi full dan grey 200 */}
