@@ -1,3 +1,4 @@
+import { useAuth } from "@/contexts/AuthContext";
 import { Skripsi } from "../../libs/types/libraryType";
 import { formatDateForInput } from "../../utils/libraryUtil";
 import { FileText, Edit3, Trash2 } from "lucide-react";
@@ -15,6 +16,7 @@ export const SkripsiCard = ({
   onDelete,
   onViewDetail,
 }: SkripsiCardProps) => {
+  const { role } = useAuth();
   return (
     <div
       key={skripsi.id}
@@ -27,30 +29,33 @@ export const SkripsiCard = ({
           <div>
             <FileText size={30} color="#FFA500" />
           </div>
-          <div className="flex gap-1">
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                onEdit(skripsi);
-              }}
-              className="rounded-lg p-2 text-gray-400 transition-colors hover:bg-orange-50 hover:text-orange-600"
-              title="Edit skripsi"
-              aria-label="Edit skripsi"
-            >
-              <Edit3 size={16} />
-            </button>
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                onDelete(skripsi.id, "skripsi");
-              }}
-              className="rounded-lg p-2 text-gray-400 transition-colors hover:bg-red-50 hover:text-red-600"
-              title="Hapus skripsi"
-              aria-label="Hapus skripsi"
-            >
-              <Trash2 size={16} />
-            </button>
-          </div>
+          {/* role implementation */}
+          {role === "admin" && (
+            <div className="flex gap-1">
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onEdit(skripsi);
+                }}
+                className="rounded-lg p-2 text-gray-400 transition-colors hover:bg-orange-50 hover:text-orange-600"
+                title="Edit skripsi"
+                aria-label="Edit skripsi"
+              >
+                <Edit3 size={16} />
+              </button>
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onDelete(skripsi.id, "skripsi");
+                }}
+                className="rounded-lg p-2 text-gray-400 transition-colors hover:bg-red-50 hover:text-red-600"
+                title="Hapus skripsi"
+                aria-label="Hapus skripsi"
+              >
+                <Trash2 size={16} />
+              </button>
+            </div>
+          )}
         </div>
 
         <div className="space-y-3">
