@@ -23,6 +23,7 @@ import { getInitialFormInput, endpointMap } from "@/utils/libraryUtil";
 import { useLibraryItems } from "@/hooks/useLibraryItems";
 import LibrarySkeletonLoading from "../library/LibrarySkeletonLoading";
 import { ZodError } from "zod";
+import { useAuth } from "@/contexts/AuthContext";
 
 export default function LibraryCollectionPage() {
   const {
@@ -54,6 +55,9 @@ export default function LibraryCollectionPage() {
     getInitialFormInput("book"),
   );
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
+
+  // role implementation
+  const { role } = useAuth();
 
   const handleOpenFormModal = (itemType: LibraryItemType) => {
     setCategory(itemType);
@@ -438,29 +442,32 @@ export default function LibraryCollectionPage() {
               ({total} total item)
             </p>
           </div>
-          <div className="flex gap-2">
-            <button
-              onClick={() => handleOpenFormModal("book")}
-              className="flex items-center gap-2 rounded-md bg-blue-600 px-6 py-2 text-sm font-medium text-white shadow-sm transition-colors hover:bg-blue-700"
-            >
-              <Plus size={16} />
-              Tambah Buku
-            </button>
-            <button
-              onClick={() => handleOpenFormModal("journal")}
-              className="flex items-center gap-2 rounded-md bg-purple-600 px-6 py-2 text-sm font-medium text-white shadow-sm transition-colors hover:bg-purple-700"
-            >
-              <Plus size={16} />
-              Tambah Jurnal
-            </button>
-            <button
-              onClick={() => handleOpenFormModal("skripsi")}
-              className="flex items-center gap-2 rounded-md bg-orange-600 px-6 py-2 text-sm font-medium text-white shadow-sm transition-colors hover:bg-orange-700"
-            >
-              <Plus size={16} />
-              Tambah Skripsi
-            </button>
-          </div>
+          {/* role implementation */}
+          {role === "admin" && (
+            <div className="flex gap-2">
+              <button
+                onClick={() => handleOpenFormModal("book")}
+                className="flex items-center gap-2 rounded-md bg-blue-600 px-6 py-2 text-sm font-medium text-white shadow-sm transition-colors hover:bg-blue-700"
+              >
+                <Plus size={16} />
+                Tambah Buku
+              </button>
+              <button
+                onClick={() => handleOpenFormModal("journal")}
+                className="flex items-center gap-2 rounded-md bg-purple-600 px-6 py-2 text-sm font-medium text-white shadow-sm transition-colors hover:bg-purple-700"
+              >
+                <Plus size={16} />
+                Tambah Jurnal
+              </button>
+              <button
+                onClick={() => handleOpenFormModal("skripsi")}
+                className="flex items-center gap-2 rounded-md bg-orange-600 px-6 py-2 text-sm font-medium text-white shadow-sm transition-colors hover:bg-orange-700"
+              >
+                <Plus size={16} />
+                Tambah Skripsi
+              </button>
+            </div>
+          )}
         </div>
       </div>
 
