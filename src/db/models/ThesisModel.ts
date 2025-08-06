@@ -150,6 +150,12 @@ class ThesisModel {
     });
   }
 
+  static async getCountThesis() {
+    const collection = await this.collection();
+    const count = await collection.countDocuments();
+    return count;
+  }
+
   static async getTop5MostAccessedThesis() {
     const collection = await this.collection();
 

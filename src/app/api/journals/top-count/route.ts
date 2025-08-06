@@ -4,12 +4,14 @@ import JournalModel from "@/db/models/JournalModel";
 export async function GET(request: NextRequest) {
   try {
     const topCountJournals = await JournalModel.getTop5MostAccessedJournals();
+    const totalJournals = await JournalModel.getCountJournals();
 
     return NextResponse.json({
       success: true,
       message: "Top 5 journals with highest count retrieved successfully",
       data: topCountJournals,
-      total: topCountJournals.length
+      count: topCountJournals.length,
+      totalAllData: totalJournals
     });
 
   } catch (error) {

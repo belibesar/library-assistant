@@ -52,6 +52,7 @@ class UserModel {
         const collection = await this.collection();
         return await collection.findOne({ email });
     }
+    
 
     static async getUserById(id: string) {
         const collection = await this.collection();

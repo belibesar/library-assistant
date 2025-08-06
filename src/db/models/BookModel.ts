@@ -123,29 +123,29 @@ class BookModel {
 
   static async createBook(data: Book) {
     const collection = await this.collection();
-    
+
     if ((data as any).pengarang_name) {
       const pengarangId = await PengarangModel.findOrCreatePengarang({
         name: (data as any).pengarang_name,
-        nationality: (data as any).pengarang_nationality
+        nationality: (data as any).pengarang_nationality,
       });
       data.pengarang_id = pengarangId;
     }
-    
+
     if ((data as any).penerbit_name) {
       const penerbitId = await PenerbitModel.findOrCreatePenerbit({
-        name: (data as any).penerbit_name
+        name: (data as any).penerbit_name,
       });
       data.penerbit_id = penerbitId;
     }
-    
+
     data.abstrak = "karena buku hanya ada sinopsis";
-    
+
     const bookDataToSave = { ...data };
     delete (bookDataToSave as any).pengarang_name;
     delete (bookDataToSave as any).pengarang_nationality;
     delete (bookDataToSave as any).penerbit_name;
-    
+
     const book = await collection.insertOne(bookDataToSave);
     return book;
   }
@@ -157,33 +157,33 @@ class BookModel {
     if (!currentBook) {
       throw new Error("Book not found");
     }
-    
+
     if ((data as any).pengarang_name) {
       const pengarangId = await PengarangModel.findOrCreatePengarang({
         name: (data as any).pengarang_name,
-        nationality: (data as any).pengarang_nationality
+        nationality: (data as any).pengarang_nationality,
       });
       data.pengarang_id = pengarangId;
     } else if (!data.pengarang_id) {
       data.pengarang_id = currentBook.pengarang_id;
     }
-    
+
     if ((data as any).penerbit_name) {
       const penerbitId = await PenerbitModel.findOrCreatePenerbit({
-        name: (data as any).penerbit_name
+        name: (data as any).penerbit_name,
       });
       data.penerbit_id = penerbitId;
     } else if (!data.penerbit_id) {
       data.penerbit_id = currentBook.penerbit_id;
     }
-    
+
     data.abstrak = "karena buku hanya ada sinopsis";
-    
+
     const bookDataToSave = { ...data };
     delete (bookDataToSave as any).pengarang_name;
     delete (bookDataToSave as any).pengarang_nationality;
     delete (bookDataToSave as any).penerbit_name;
-    
+
     return await collection.updateOne(identifier, { $set: bookDataToSave });
   }
 
@@ -210,6 +210,12 @@ class BookModel {
         count: Number(bookCount) + 1,
       },
     });
+  }
+
+  static async getCountBooks() {
+    const collection = await this.collection();
+    const count = await collection.countDocuments();
+    return count;
   }
 
   static async getTop5MostBorrowedBooks() {
