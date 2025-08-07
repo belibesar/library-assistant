@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { FormInput, LibraryItemType } from "../../libs/types/libraryType";
 import { getItemTypeLabel } from "@/utils/libraryUtil";
 
@@ -313,6 +312,24 @@ export const LibraryFormModal = ({
                       placeholder="Contoh: 2024"
                     />
                   </div>
+                </div>
+
+                <div>
+                  <label
+                    htmlFor="journal-authors-input"
+                    className="mb-2 block text-sm font-medium text-gray-700"
+                  >
+                    Author/Penulis
+                  </label>
+                  <input
+                    id="journal-authors-input"
+                    type="text"
+                    name="authors"
+                    value={(formInput as any).authors || ""}
+                    onChange={onChange}
+                    className="w-full rounded-md border border-gray-300 px-3 py-2 focus:border-transparent focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                    placeholder="Pisahkan dengan koma (contoh: John Doe, Jane Smith, Bob Johnson)"
+                  />
                 </div>
 
                 <div>

@@ -26,6 +26,7 @@ export interface Book extends BaseItem {
 
 export interface Journal extends BaseItem {
   jurnal_id?: string;
+  authors?: string;
   type: "journal";
   publikasi?: Publikasi;
 }
@@ -69,6 +70,7 @@ export interface JournalFormInput {
   publikasi_name?: string;
   publikasi_volume?: string;
   publikasi_tahun?: string;
+  authors?: string;
   createdAt?: string;
   updatedAt?: string;
 }

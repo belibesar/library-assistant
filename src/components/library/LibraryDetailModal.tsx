@@ -1,4 +1,4 @@
-import { LibraryItem } from "../../libs/types/libraryType";
+import { LibraryItem, Book, Journal, Skripsi } from "../../libs/types/libraryType";
 import { formatDateForInput, getItemTypeLabel } from "@/utils/libraryUtil";
 
 interface LibraryDetailModalProps {
@@ -45,9 +45,9 @@ export const LibraryDetailModal = ({
             <h3 className="text-2xl font-bold text-gray-900">{item.judul}</h3>
             {item.type === "book" ? (
               <>
-                <p className="text-sm text-gray-500">Lokasi: {item.lokasi}</p>
+                <p className="text-sm text-gray-500">Lokasi: {(item as Book).lokasi}</p>
                 <p className="text-sm text-gray-500">Call Number: {item.id}</p>
-                <p className="text-sm text-gray-500">Rak: {item.rak}</p>
+                <p className="text-sm text-gray-500">Rak: {(item as Book).rak}</p>
               </>
             ) : (
               <p className="text-sm text-gray-500">ID: {item.id}</p>
@@ -57,30 +57,35 @@ export const LibraryDetailModal = ({
           {item.type === "book" && (
             <>
               <p className="text-gray-700">
-                <strong>Pengarang:</strong> {(item as any).pengarang.name}
+                <strong>Pengarang:</strong> {(item as Book).pengarang?.name}
               </p>
               <p className="text-gray-700">
-                <strong>Penerbit:</strong> {(item as any).penerbit.name}
+                <strong>Penerbit:</strong> {(item as Book).penerbit?.name}
               </p>
             </>
           )}
           {item.type === "journal" && (
             <>
               <p className="text-gray-700">
-                <strong>Jurnal ID:</strong> {(item as any).jurnal_id}
+                <strong>Jurnal ID:</strong> {(item as Journal).jurnal_id}
               </p>
-              {(item as any).publikasi && (
+              {(item as Journal).authors && (
+                <p className="text-gray-700">
+                  <strong>Author/Penulis:</strong> {(item as Journal).authors}
+                </p>
+              )}
+              {(item as Journal).publikasi && (
                 <>
                   <p className="text-gray-700">
-                    <strong>Publikasi:</strong> {(item as any).publikasi.name}
+                    <strong>Publikasi:</strong> {(item as Journal).publikasi?.name}
                   </p>
                   <p className="text-gray-700">
                     <strong>Tahun Publikasi:</strong>{" "}
-                    {(item as any).publikasi.tahun || "Tidak tersedia"}
+                    {(item as Journal).publikasi?.tahun || "Tidak tersedia"}
                   </p>
                   <p className="text-gray-700">
                     <strong>Volume:</strong>{" "}
-                    {(item as any).publikasi.volume || "Tidak tersedia"}
+                    {(item as Journal).publikasi?.volume || "Tidak tersedia"}
                   </p>
                 </>
               )}
@@ -89,27 +94,27 @@ export const LibraryDetailModal = ({
           {item.type === "skripsi" && (
             <>
               <p className="text-gray-700">
-                <strong>NIM:</strong> {(item as any).nim}
+                <strong>NIM:</strong> {(item as Skripsi).nim}
               </p>
               <p className="text-gray-700">
-                <strong>Tahun:</strong> {(item as any).tahun}
+                <strong>Tahun:</strong> {(item as Skripsi).tahun}
               </p>
-              {(item as any).mahasiswa && (
+              {(item as Skripsi).mahasiswa && (
                 <>
                   <p className="text-gray-700">
-                    <strong>Mahasiswa:</strong> {(item as any).mahasiswa?.name || 'N/A'}
+                    <strong>Mahasiswa:</strong> {(item as Skripsi).mahasiswa?.name || 'N/A'}
                   </p>
                   <p className="text-gray-700">
                     <strong>Fakultas:</strong>{" "}
-                    {(item as any).mahasiswa?.fakultas || "Tidak tersedia"}
+                    {(item as Skripsi).mahasiswa?.fakultas || "Tidak tersedia"}
                   </p>
                   <p className="text-gray-700">
                     <strong>Program Studi:</strong>{" "}
-                    {(item as any).mahasiswa?.program_studi || "Tidak tersedia"}
+                    {(item as Skripsi).mahasiswa?.program_studi || "Tidak tersedia"}
                   </p>
                   <p className="text-gray-700">
                     <strong>IPK:</strong>{" "}
-                    {(item as any).mahasiswa?.ipk || "Tidak tersedia"}
+                    {(item as Skripsi).mahasiswa?.ipk || "Tidak tersedia"}
                   </p>
                 </>
               )}

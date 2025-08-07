@@ -10,6 +10,7 @@ export type Journal = {
   publikasi_name?: string;
   publikasi_volume?: string;
   publikasi_tahun?: string;
+  authors?: string;
   updatedAt?: string;
   createdAt?: string;
 };

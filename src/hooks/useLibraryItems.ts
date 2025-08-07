@@ -63,7 +63,6 @@ export const useLibraryItems = () => {
 
       if (json.success && Array.isArray(json.data)) {
         const mappedItems: LibraryItem[] = json.data.map((item: any) => {
-          console.log(item);
 
           const base: BaseItem = {
             _id: String(item._id),
@@ -90,10 +89,11 @@ export const useLibraryItems = () => {
               sinopsis: item.sinopsis || "",
               type: "book",
             } as Book;
-          } else if (item.jurnal_id) {
+          } else if (item.jurnal_id || item.publikasi || item.authors || (category === "journal")) {
             return {
               ...base,
               jurnal_id: item.jurnal_id || "",
+              authors: item.authors || "",
               type: "journal",
               publikasi: item.publikasi,
             } as Journal;
