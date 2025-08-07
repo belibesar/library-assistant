@@ -94,6 +94,7 @@ export const useLibraryItems = () => {
               ...base,
               jurnal_id: item.jurnal_id || "",
               authors: item.authors || "",
+              link: item.link || "",
               type: "journal",
               publikasi: item.publikasi,
             } as Journal;
@@ -102,6 +103,7 @@ export const useLibraryItems = () => {
               ...base,
               tahun: item.tahun || "",
               nim: item.nim || "",
+              link: item.link || "",
               type: "skripsi",
               mahasiswa: item.mahasiswa,
             } as Skripsi;

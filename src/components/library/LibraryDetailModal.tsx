@@ -74,6 +74,19 @@ export const LibraryDetailModal = ({
                   <strong>Author/Penulis:</strong> {(item as Journal).authors}
                 </p>
               )}
+              {(item as Journal).link && (
+                <p className="text-gray-700">
+                  <strong>Link Jurnal:</strong>{" "}
+                  <a 
+                    href={(item as Journal).link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-600 hover:text-blue-800 underline"
+                  >
+                    Buka Link
+                  </a>
+                </p>
+              )}
               {(item as Journal).publikasi && (
                 <>
                   <p className="text-gray-700">
@@ -99,6 +112,19 @@ export const LibraryDetailModal = ({
               <p className="text-gray-700">
                 <strong>Tahun:</strong> {(item as Skripsi).tahun}
               </p>
+              {(item as Skripsi).link && (
+                <p className="text-gray-700">
+                  <strong>Link Skripsi:</strong>{" "}
+                  <a 
+                    href={(item as Skripsi).link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-600 hover:text-blue-800 underline"
+                  >
+                    Buka Link
+                  </a>
+                </p>
+              )}
               {(item as Skripsi).mahasiswa && (
                 <>
                   <p className="text-gray-700">

@@ -70,6 +70,7 @@ export async function PUT(
       publikasi_volume: requestData.publikasi_volume,
       publikasi_tahun: requestData.publikasi_tahun,
       authors: requestData.authors ?? currentJournal.authors,
+      link: requestData.link ?? currentJournal.link,
       count: currentJournal.count || 0,
       createdAt: currentJournal.createdAt,
       updatedAt: timestamp,

@@ -42,11 +42,12 @@ export async function POST(request: NextRequest) {
       jumlah: Number(requestData.jumlah),
       tersedia: Number(requestData.jumlah), // Initially tersedia = jumlah
       dipinjam: Number(requestData.dipinjam) || 0,
-      jurnal_id: requestData.jurnal_id || undefined, // Will be auto-generated if not provided
+      jurnal_id: requestData.jurnal_id || undefined,
       publikasi_name: requestData.publikasi_name,
       publikasi_volume: requestData.publikasi_volume,
       publikasi_tahun: requestData.publikasi_tahun,
       authors: requestData.authors,
+      link: requestData.link,
       count: 0,
       createdAt: timestamp,
       updatedAt: timestamp,

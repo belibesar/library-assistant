@@ -18,6 +18,7 @@ const journalSchema = z.object({
   publikasi_volume: z.string().optional(),
   publikasi_tahun: z.string().optional(),
   authors: z.string().optional(),
+  link: z.string().optional(),
   count: z.number().optional(),
   updatedAt: z.string().optional(),
   createdAt: z.string().optional(),
