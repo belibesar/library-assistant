@@ -46,6 +46,7 @@ export async function POST(request: NextRequest) {
       count: 0,
       nim: requestData.nim,
       tahun: requestData.tahun,
+      link: requestData.link,
       jumlah: Number(requestData.jumlah),
       tersedia: Number(requestData.jumlah),
       dipinjam: Number(requestData.dipinjam) || 0,

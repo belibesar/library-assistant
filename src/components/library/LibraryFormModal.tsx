@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { FormInput, LibraryItemType } from "../../libs/types/libraryType";
 import { getItemTypeLabel } from "@/utils/libraryUtil";
 
@@ -317,6 +316,42 @@ export const LibraryFormModal = ({
 
                 <div>
                   <label
+                    htmlFor="journal-authors-input"
+                    className="mb-2 block text-sm font-medium text-gray-700"
+                  >
+                    Author/Penulis
+                  </label>
+                  <input
+                    id="journal-authors-input"
+                    type="text"
+                    name="authors"
+                    value={(formInput as any).authors || ""}
+                    onChange={onChange}
+                    className="w-full rounded-md border border-gray-300 px-3 py-2 focus:border-transparent focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                    placeholder="Pisahkan dengan koma (contoh: Asep, Kosala, Hafidz, Arsyad)"
+                  />
+                </div>
+
+                <div>
+                  <label
+                    htmlFor="journal-link-input"
+                    className="mb-2 block text-sm font-medium text-gray-700"
+                  >
+                    Link Jurnal
+                  </label>
+                  <input
+                    id="journal-link-input"
+                    type="url"
+                    name="link"
+                    value={(formInput as any).link || ""}
+                    onChange={onChange}
+                    className="w-full rounded-md border border-gray-300 px-3 py-2 focus:border-transparent focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                    placeholder="https://drive.google.com/... atau link lainnya"
+                  />
+                </div>
+
+                <div>
+                  <label
                     htmlFor="journal-jurnalid-input"
                     className="mb-2 block text-sm font-medium text-gray-700"
                   >
@@ -336,7 +371,7 @@ export const LibraryFormModal = ({
             )}
 
             {category === "skripsi" && (
-              <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+              <><div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                 <div>
                   <label
                     htmlFor="skripsi-nim-input"
@@ -350,13 +385,10 @@ export const LibraryFormModal = ({
                     name="nim"
                     value={(formInput as any).nim || ""}
                     onChange={onChange}
-                    className={`w-full rounded-md border px-3 py-2 focus:border-transparent focus:ring-2 focus:ring-blue-500 focus:outline-none ${
-                      formErrors.nim
+                    className={`w-full rounded-md border px-3 py-2 focus:border-transparent focus:ring-2 focus:ring-blue-500 focus:outline-none ${formErrors.nim
                         ? "border-red-500 bg-red-50"
-                        : "border-gray-300"
-                    }`}
-                    placeholder="Masukkan NIM mahasiswa"
-                  />
+                        : "border-gray-300"}`}
+                    placeholder="Masukkan NIM mahasiswa" />
                   {formErrors.nim && (
                     <p className="mt-1 text-xs text-red-500">
                       {formErrors.nim}
@@ -376,13 +408,10 @@ export const LibraryFormModal = ({
                     name="tahun"
                     value={(formInput as any).tahun || ""}
                     onChange={onChange}
-                    className={`w-full rounded-md border px-3 py-2 focus:border-transparent focus:ring-2 focus:ring-blue-500 focus:outline-none ${
-                      formErrors.tahun
+                    className={`w-full rounded-md border px-3 py-2 focus:border-transparent focus:ring-2 focus:ring-blue-500 focus:outline-none ${formErrors.tahun
                         ? "border-red-500 bg-red-50"
-                        : "border-gray-300"
-                    }`}
-                    placeholder="Masukkan tahun skripsi"
-                  />
+                        : "border-gray-300"}`}
+                    placeholder="Masukkan tahun skripsi" />
                   {formErrors.tahun && (
                     <p className="mt-1 text-xs text-red-500">
                       {formErrors.tahun}
@@ -390,6 +419,22 @@ export const LibraryFormModal = ({
                   )}
                 </div>
               </div>
+              <div>
+                  <label
+                    htmlFor="skripsi-link-input"
+                    className="mb-2 block text-sm font-medium text-gray-700"
+                  >
+                    Link Skripsi
+                  </label>
+                  <input
+                    id="skripsi-link-input"
+                    type="url"
+                    name="link"
+                    value={(formInput as any).link || ""}
+                    onChange={onChange}
+                    className="w-full rounded-md border border-gray-300 px-3 py-2 focus:border-transparent focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                    placeholder="https://drive.google.com/... atau link lainnya" />
+                </div></>
             )}
 
             <div className="grid grid-cols-1 gap-4 md:grid-cols-3">

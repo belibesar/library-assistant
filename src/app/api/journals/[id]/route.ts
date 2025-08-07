@@ -10,7 +10,7 @@ export async function GET(
   try {
     const { id } = await params;
     const data = await JournalModel.getJournalById(id);
-    if (!data[0]) {
+    if (!data) {
       return NextResponse.json(
         {
           success: false,
@@ -24,7 +24,7 @@ export async function GET(
     return NextResponse.json({
       success: true,
       message: `Data for Journal ID ${id}`,
-      data: data[0],
+      data: data,
     });
   } catch (error) {
     console.log(error);
@@ -69,6 +69,8 @@ export async function PUT(
       publikasi_name: requestData.publikasi_name,
       publikasi_volume: requestData.publikasi_volume,
       publikasi_tahun: requestData.publikasi_tahun,
+      authors: requestData.authors ?? currentJournal.authors,
+      link: requestData.link ?? currentJournal.link,
       count: currentJournal.count || 0,
       createdAt: currentJournal.createdAt,
       updatedAt: timestamp,

@@ -17,6 +17,7 @@ const thesisSchema = z.object({
   }),
   tersedia: z.number(),
   dipinjam: z.number(),
+  link: z.string().optional(),
   count: z.number().optional(),
   createdAt: z.string().optional(),
   updatedAt: z.string().optional(),

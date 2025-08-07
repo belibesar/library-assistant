@@ -6,7 +6,6 @@ import { Journal } from "@/libs/types/JournalType";
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
 
-  // Extract specific parameters
   const page = searchParams.get("page") || "1";
   const limit = searchParams.get("limit") || "5";
   const search = searchParams.get("search") || "";
@@ -43,11 +42,12 @@ export async function POST(request: NextRequest) {
       jumlah: Number(requestData.jumlah),
       tersedia: Number(requestData.jumlah), // Initially tersedia = jumlah
       dipinjam: Number(requestData.dipinjam) || 0,
-      jurnal_id: requestData.jurnal_id || undefined, // Will be auto-generated if not provided
-      // Publikasi fields
+      jurnal_id: requestData.jurnal_id || undefined,
       publikasi_name: requestData.publikasi_name,
       publikasi_volume: requestData.publikasi_volume,
       publikasi_tahun: requestData.publikasi_tahun,
+      authors: requestData.authors,
+      link: requestData.link,
       count: 0,
       createdAt: timestamp,
       updatedAt: timestamp,

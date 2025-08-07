@@ -68,6 +68,7 @@ export async function PUT(
       abstrak: requestData.abstrak ?? existing.abstrak,
       nim: requestData.nim || existing.nim,
       tahun: requestData.tahun || existing.tahun,
+      link: requestData.link ?? existing.link,
       jumlah: Number(requestData.jumlah) || existing.jumlah,
       tersedia: Number(requestData.tersedia) || existing.tersedia,
       dipinjam: Number(requestData.dipinjam) || existing.dipinjam,
