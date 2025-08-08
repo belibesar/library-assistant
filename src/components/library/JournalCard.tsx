@@ -19,7 +19,7 @@ export const JournalCard = ({
   return (
     <div
       key={journal.id}
-      className="cursor-pointer overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm transition-all duration-300 hover:border-purple-300 hover:shadow-xl hover:shadow-purple-100"
+      className="group cursor-pointer overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm transition-all duration-300 hover:border-purple-300 hover:shadow-xl hover:shadow-purple-100 hover:-translate-y-1 hover:scale-[1.02]"
       onClick={() => onViewDetail(journal)}
     >
       <div className="p-4 pb-3">
@@ -35,7 +35,7 @@ export const JournalCard = ({
                   e.stopPropagation();
                   onEdit(journal);
                 }}
-                className="rounded-lg p-2 text-gray-400 transition-colors hover:bg-purple-50 hover:text-purple-600"
+                className="rounded-lg p-2 text-gray-400 transition-all duration-200 hover:bg-purple-50 hover:text-purple-600 hover:scale-110 hover:rotate-12"
                 title="Edit jurnal"
               >
                 <Edit3 size={16} />
@@ -45,7 +45,7 @@ export const JournalCard = ({
                   e.stopPropagation();
                   onDelete(journal.id, "journal");
                 }}
-                className="rounded-lg p-2 text-gray-400 transition-colors hover:bg-red-50 hover:text-red-600"
+                className="rounded-lg p-2 text-gray-400 transition-all duration-200 hover:bg-red-50 hover:text-red-600 hover:scale-110 hover:rotate-12"
                 title="Hapus jurnal"
               >
                 <Trash2 size={16} />

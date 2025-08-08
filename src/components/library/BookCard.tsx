@@ -20,13 +20,13 @@ export const BookCard = ({
   return (
     <div
       key={book.id}
-      className="cursor-pointer overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm transition-all duration-300 hover:border-blue-300 hover:shadow-xl hover:shadow-blue-100"
+      className="group cursor-pointer overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm transition-all duration-300 hover:border-blue-300 hover:shadow-xl hover:shadow-blue-100 hover:-translate-y-1 hover:scale-[1.02] card-hover"
       onClick={() => onViewDetail(book)}
     >
       <div className="flex flex-col">
         <div className="p-4 pb-3">
           <div className="mb-1 flex items-start justify-between">
-            <div>
+            <div className="transition-transform duration-200 group-hover:scale-110">
               <BookOpen size={30} color="#113FF7" />
             </div>
             {/* role implementation */}
@@ -37,7 +37,7 @@ export const BookCard = ({
                     e.stopPropagation();
                     onEdit(book);
                   }}
-                  className="rounded-lg p-2 text-gray-400 transition-colors hover:bg-blue-50 hover:text-blue-600"
+                  className="rounded-lg p-2 text-gray-400 transition-all duration-200 hover:bg-blue-50 hover:text-blue-600 modal-button hover:scale-110"
                   title="Edit buku"
                 >
                   <Edit3 size={16} />
@@ -47,7 +47,7 @@ export const BookCard = ({
                     e.stopPropagation();
                     onDelete(book.id, "book");
                   }}
-                  className="rounded-lg p-2 text-gray-400 transition-colors hover:bg-red-50 hover:text-red-600"
+                  className="rounded-lg p-2 text-gray-400 transition-all duration-200 hover:bg-red-50 hover:text-red-600 modal-button hover:scale-110"
                   title="Hapus buku"
                 >
                   <Trash2 size={16} />
@@ -58,42 +58,42 @@ export const BookCard = ({
 
           <div className="space-y-3">
             <div className="min-h-10">
-              <h3 className="line-clamp-2 text-xl leading-tight font-bold text-gray-900">
+              <h3 className="line-clamp-2 text-xl leading-tight font-bold text-gray-900 group-hover:text-blue-700 transition-colors duration-200">
                 {book.judul}
               </h3>
             </div>
 
-            <p className="text-base text-gray-600">
+            <p className="text-base text-gray-600 transition-colors duration-200 group-hover:text-gray-700">
               {/* ID Buku: { book.id} */}
               Lokasi Buku: {book.lokasi}
             </p>
-            <p className="text-base text-gray-600">
+            <p className="text-base text-gray-600 transition-colors duration-200 group-hover:text-gray-700">
               {/* Pengarang id:  book.pengarang_id */}
               Pengarang: {book?.pengarang?.name}
             </p>
 
-            <span className="inline-block rounded-full bg-gray-100 px-3 text-sm font-medium text-gray-700">
+            <span className="inline-block rounded-full bg-gray-100 px-3 text-sm font-medium text-gray-700 transition-all duration-200 group-hover:bg-blue-100 group-hover:text-blue-700">
               {/* Penerbit id: book.penerbit_id */}
               Penerbit: {book?.penerbit?.name}
             </span>
             <div className="min-h-20">
-              <p className="line-clamp-3 text-base leading-relaxed text-gray-600">
+              <p className="line-clamp-3 text-base leading-relaxed text-gray-600 transition-colors duration-200 group-hover:text-gray-700">
                 Sinopsis: {book.abstrak || "Sinopsis belum tersedia"}
               </p>
             </div>
           </div>
         </div>
 
-        <div className="border-t border-gray-100 bg-gray-50 px-4 py-3">
+        <div className="border-t border-gray-100 bg-gray-50 px-4 py-3 transition-colors duration-200 group-hover:bg-blue-50/30">
           <div className="mb-2 flex items-center justify-between">
-            <span className="text-base text-gray-500">
+            <span className="text-base text-gray-500 transition-colors duration-200 group-hover:text-gray-600">
               Total: {book.jumlah}
             </span>
             <div className="flex gap-2">
-              <span className="rounded-md bg-green-50 px-2 py-1 text-base font-semibold text-green-600">
+              <span className="rounded-md bg-green-50 px-2 py-1 text-base font-semibold text-green-600 transition-all duration-200 group-hover:bg-green-100 group-hover:scale-105">
                 Tersedia: {book.tersedia}
               </span>
-              <span className="rounded-md bg-yellow-50 px-2 py-1 text-base font-semibold text-yellow-600">
+              <span className="rounded-md bg-yellow-50 px-2 py-1 text-base font-semibold text-yellow-600 transition-all duration-200 group-hover:bg-yellow-100 group-hover:scale-105">
                 Dipinjam: {book.dipinjam}
               </span>
             </div>
@@ -103,7 +103,7 @@ export const BookCard = ({
         <span>Diperbarui: {formatDateForInput(book.updatedAt)}</span>
       </div> */}
           {book.count !== undefined && (
-            <div className="mt-2 text-right text-base text-gray-500">
+            <div className="mt-2 text-right text-base text-gray-500 transition-colors duration-200 group-hover:text-gray-600">
               Dilihat: {book.count} kali
             </div>
           )}

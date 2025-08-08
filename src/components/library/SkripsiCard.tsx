@@ -20,7 +20,7 @@ export const SkripsiCard = ({
   return (
     <div
       key={skripsi.id}
-      className="cursor-pointer overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm transition-all duration-300 hover:border-orange-300 hover:shadow-xl hover:shadow-orange-100"
+      className="group cursor-pointer overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm transition-all duration-300 hover:border-orange-300 hover:shadow-xl hover:shadow-orange-100 hover:-translate-y-1 hover:scale-[1.02]"
       onClick={() => onViewDetail(skripsi)}
     >
       {/* Card Header with Icon and Action Buttons */}
@@ -29,7 +29,7 @@ export const SkripsiCard = ({
           <div>
             <FileText size={30} color="#FFA500" />
           </div>
-          {/* role implementation */}
+          {/* untuk admin.. */}
           {role === "admin" && (
             <div className="flex gap-1">
               <button
