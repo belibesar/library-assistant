@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import JournalModel from "@/db/models/JournalModel";
 import journalSchema from "@/libs/schemas/JournalSchema";
 import { Journal } from "@/libs/types/JournalType";
+import { CachingService } from "@/utils/caching";
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
@@ -56,13 +57,21 @@ export async function POST(request: NextRequest) {
     const journalData = await journalSchema.parseAsync(newJournal);
     const createdJournal = await JournalModel.createJournal(journalData);
 
-    return NextResponse.json({
-      success: true,
-      message: "Journal created successfully!",
-      data: createdJournal,
-    }, {
-      status: 201,
-    });
+    // delete chatbot cache while CUD library entity
+    const chatbotCache = await CachingService.getCache("DB:CHATBOT:SOURCE");
+    chatbotCache &&
+      (await CachingService.deleteCacheByKey("DB:CHATBOT:SOURCE"));
+
+    return NextResponse.json(
+      {
+        success: true,
+        message: "Journal created successfully!",
+        data: createdJournal,
+      },
+      {
+        status: 201,
+      },
+    );
   } catch (error) {
     console.log(error);
     return NextResponse.json(

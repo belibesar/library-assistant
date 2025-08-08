@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import JournalModel from "@/db/models/JournalModel";
 import journalSchema from "@/libs/schemas/JournalSchema";
 import { Journal } from "@/libs/types/JournalType";
+import { CachingService } from "@/utils/caching";
 
 export async function GET(
   request: NextRequest,
@@ -76,6 +77,12 @@ export async function PUT(
 
     const journalData = await journalSchema.parseAsync(newData);
     const updatedJournal = await JournalModel.updateJournal(id, journalData);
+
+    // delete chatbot cache while CUD library entity
+    const chatbotCache = await CachingService.getCache("DB:CHATBOT:SOURCE");
+    chatbotCache &&
+      (await CachingService.deleteCacheByKey("DB:CHATBOT:SOURCE"));
+
     return NextResponse.json({
       success: true,
       message: `Journal with id ${id} has been updated`,
@@ -103,6 +110,12 @@ export async function DELETE(
     }
 
     const deleteJournal = await JournalModel.deleteJournal(id);
+
+    // delete chatbot cache while CUD library entity
+    const chatbotCache = await CachingService.getCache("DB:CHATBOT:SOURCE");
+    chatbotCache &&
+      (await CachingService.deleteCacheByKey("DB:CHATBOT:SOURCE"));
+
     return NextResponse.json(
       {
         success: true,
@@ -131,6 +144,12 @@ export async function PATCH(
       throw new Error(`Journal not found!`);
     }
     const increaseCount = await JournalModel.countJournal(id);
+
+    // delete chatbot cache while CUD library entity
+    const chatbotCache = await CachingService.getCache("DB:CHATBOT:SOURCE");
+    chatbotCache &&
+      (await CachingService.deleteCacheByKey("DB:CHATBOT:SOURCE"));
+
     return NextResponse.json(
       {
         success: true,
