@@ -2,6 +2,7 @@ import BookModel from "@/db/models/BookModel";
 import JournalModel from "@/db/models/JournalModel";
 import ThesisModel from "@/db/models/ThesisModel";
 import errHandler from "@/utils/errHandler";
+import { CachingService } from "@/utils/caching";
 import { GoogleGenAI } from "@google/genai";
 
 const ai = new GoogleGenAI({});
@@ -157,9 +158,17 @@ export async function POST(request: Request) {
     const history = fetchHistoryChat(JSON.parse(historyMessage)) || [];
     // console.log("Riwayat yang diterima:", history);
 
-    // fetch db
-    const stringDatabase = await fetchDatabase();
-    // console.log("database", stringDatabase);
+    // cek apakah cache dengan key tsb ada? kalo ada fetch lewat cache
+    // kalo gaada fetch database, terus set key value ke uptash
+    let stringDatabase = await CachingService.getCache("DB:CHATBOT:SOURCE");
+
+    if (!stringDatabase) {
+      console.log("fetching from database....");
+      stringDatabase = (await fetchDatabase()) as string;
+      await CachingService.setCache("DB:CHATBOT:SOURCE", stringDatabase);
+    } else {
+      console.log("cache hit - using cached data");
+    }
 
     //gemini logic
     const libraryAssistantInstructions = `
