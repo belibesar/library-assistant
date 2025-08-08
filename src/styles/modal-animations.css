@@ -132,6 +132,33 @@
   transform: translateY(-4px) scale(1.02);
 }
 
+@media (max-width: 768px) {
+  .card-hover:hover {
+    transform: translateY(-2px) scale(1.01);
+  }
+  
+  .modal-slide-in {
+    animation: modalSlideInMobile 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  }
+  
+  @keyframes modalSlideInMobile {
+    0% {
+      opacity: 0;
+      transform: scale(0.9) translateY(20px);
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1) translateY(0);
+    }
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .card-hover:hover {
+    transform: translateY(-3px) scale(1.015);
+  }
+}
+
 .stagger-item {
   animation: staggerIn 0.5s ease-out forwards;
   opacity: 0;
