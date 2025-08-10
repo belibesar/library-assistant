@@ -20,9 +20,7 @@ import CategoryDistributionChart from "../analytics/CategoryDistributionChart";
 import PopularItemsSection from "../analytics/PopularItemsSection";
 import { PopularItem, StatData } from "@/libs/types/analisisType";
 import SectionHeader from "../analytics/SectionHeader";
-
-
-
+import { useGetViewCounts } from "@/hooks/useGetViewCounts";
 
 export default function AnalyticsPage() {
   const [timeRange, setTimeRange] = useState<string>("week");
@@ -35,6 +33,11 @@ export default function AnalyticsPage() {
   const [totalJournals, setTotalJournals] = useState<number>(0);
   const [totalThesis, setTotalThesis] = useState<number>(0);
   const [stats, setStats] = useState<StatData[]>([]);
+  const {
+    data: viewCounts,
+    loading: viewCountsLoading,
+    error: viewCountsError,
+  } = useGetViewCounts();
 
   // Generate dynamic stats based on time range
   const generateStats = (range: string): StatData[] => {
@@ -264,7 +267,15 @@ export default function AnalyticsPage() {
           {/* Category Distribution */}
           <div className="rounded-lg border border-gray-100 bg-white p-4 shadow-sm lg:col-span-2">
             <h3 className="mb-4 text-lg font-semibold">Distribusi Kategori</h3>
-            <CategoryDistributionChart loading={loading} error={error as string} data={{ books: totalBooks, journals: totalJournals, thesis: totalThesis }} />
+            <CategoryDistributionChart
+              loading={viewCountsLoading}
+              error={viewCountsError as string}
+              data={{
+                books: viewCounts?.totalBookAccess,
+                journals: viewCounts?.totalJournalAccess,
+                thesis: viewCounts?.totalThesisAccess,
+              }}
+            />
           </div>
 
           {/* Recent Activity */}

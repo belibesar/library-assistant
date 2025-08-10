@@ -81,7 +81,6 @@ const UserFormModal = ({
                 <p className="mt-1 text-xs text-red-500">{errors.username}</p>
               )}
             </div>
-
             <div>
               <label className="mb-1 block text-sm font-medium text-gray-700">
                 Email *
@@ -98,6 +97,28 @@ const UserFormModal = ({
               />
               {errors.email && (
                 <p className="mt-1 text-xs text-red-500">{errors.email}</p>
+              )}
+            </div>
+            <div>
+              <label
+                id="id_number"
+                className="mb-1 block text-sm font-medium text-gray-700"
+              >
+                NIM/NRP *
+              </label>
+              <input
+                id="id_number"
+                type="text"
+                name="id_number"
+                value={formData.id_number}
+                onChange={onChange}
+                className={`w-full rounded-lg border px-3 py-2 focus:border-transparent focus:ring-2 focus:ring-blue-500 ${
+                  errors.id_number ? "border-red-500" : "border-gray-300"
+                }`}
+                placeholder="Masukkan ID Number (NIM/NRP)"
+              />
+              {errors.id_number && (
+                <p className="mt-1 text-xs text-red-500">{errors.id_number}</p>
               )}
             </div>
 
@@ -150,25 +171,6 @@ const UserFormModal = ({
                 <option value="user">Mahasiswa</option>
                 <option value="admin">Pegawai</option>
               </select>
-            </div>
-
-            <div>
-              <label className="mb-1 block text-sm font-medium text-gray-700">
-                ID Number *
-              </label>
-              <input
-                type="text"
-                name="id_number"
-                value={formData.id_number}
-                onChange={onChange}
-                className={`w-full rounded-lg border px-3 py-2 focus:border-transparent focus:ring-2 focus:ring-blue-500 ${
-                  errors.id_number ? "border-red-500" : "border-gray-300"
-                }`}
-                placeholder="Masukkan ID Number (NIM/NIP)"
-              />
-              {errors.id_number && (
-                <p className="mt-1 text-xs text-red-500">{errors.id_number}</p>
-              )}
             </div>
             <div className="flex justify-end space-x-3 pt-4">
               <button

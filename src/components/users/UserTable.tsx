@@ -32,7 +32,7 @@ const UserTable = ({
               Email
             </th>
             <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase">
-              ID Number
+              NIM/NRP
             </th>
             <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase">
               Role
