@@ -264,7 +264,7 @@ export default function AnalyticsPage() {
           {/* Category Distribution */}
           <div className="rounded-lg border border-gray-100 bg-white p-4 shadow-sm lg:col-span-2">
             <h3 className="mb-4 text-lg font-semibold">Distribusi Kategori</h3>
-            <CategoryDistributionChart />
+            <CategoryDistributionChart loading={loading} error={error as string} data={{ books: totalBooks, journals: totalJournals, thesis: totalThesis }} />
           </div>
 
           {/* Recent Activity */}
