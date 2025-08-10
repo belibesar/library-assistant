@@ -1,4 +1,6 @@
 @import "tailwindcss";
+@import "../styles/modal-animations.css";
+
 @plugin "daisyui" {
   themes: light --default;
   root: ":root";

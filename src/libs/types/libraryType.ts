@@ -26,6 +26,8 @@ export interface Book extends BaseItem {
 
 export interface Journal extends BaseItem {
   jurnal_id?: string;
+  authors?: string;
+  link?: string;
   type: "journal";
   publikasi?: Publikasi;
 }
@@ -33,6 +35,7 @@ export interface Journal extends BaseItem {
 export interface Skripsi extends BaseItem {
   tahun: string;
   nim: string;
+  link?: string;
   type: "skripsi";
   mahasiswa?: Mahasiswa;
 }
@@ -69,6 +72,8 @@ export interface JournalFormInput {
   publikasi_name?: string;
   publikasi_volume?: string;
   publikasi_tahun?: string;
+  authors?: string;
+  link?: string;
   createdAt?: string;
   updatedAt?: string;
 }
@@ -82,6 +87,7 @@ export interface SkripsiFormInput {
   dipinjam: number | string;
   tahun: string;
   nim: string;
+  link?: string;
   createdAt?: string;
   updatedAt?: string;
 }

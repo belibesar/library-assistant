@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import PublikasiModel from "@/db/models/PublikasiModel";
+import { CachingService } from "@/utils/caching";
 
 export async function GET(request: NextRequest) {
   try {
@@ -21,7 +22,7 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     const requestData = await request.json();
-    
+
     const publikasiData = {
       id: requestData.id,
       name: requestData.name,
@@ -29,15 +30,24 @@ export async function POST(request: NextRequest) {
       tahun: requestData.tahun,
     };
 
-    const createdPublikasi = await PublikasiModel.createPublikasi(publikasiData);
+    const createdPublikasi =
+      await PublikasiModel.createPublikasi(publikasiData);
 
-    return NextResponse.json({
-      success: true,
-      message: "Publikasi created successfully!",
-      data: createdPublikasi,
-    }, {
-      status: 201,
-    });
+    // delete chatbot cache while CUD library entity
+    const chatbotCache = await CachingService.getCache("DB:CHATBOT:SOURCE");
+    chatbotCache &&
+      (await CachingService.deleteCacheByKey("DB:CHATBOT:SOURCE"));
+
+    return NextResponse.json(
+      {
+        success: true,
+        message: "Publikasi created successfully!",
+        data: createdPublikasi,
+      },
+      {
+        status: 201,
+      },
+    );
   } catch (error) {
     console.log(error);
     return NextResponse.json(

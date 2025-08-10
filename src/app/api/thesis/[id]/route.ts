@@ -1,6 +1,7 @@
 import ThesisModel from "@/db/models/ThesisModel";
 import thesisSchema from "@/libs/schemas/ThesisSchema";
 import { Thesis } from "@/libs/types/ThesisType";
+import { CachingService } from "@/utils/caching";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(
@@ -68,6 +69,7 @@ export async function PUT(
       abstrak: requestData.abstrak ?? existing.abstrak,
       nim: requestData.nim || existing.nim,
       tahun: requestData.tahun || existing.tahun,
+      link: requestData.link ?? existing.link,
       jumlah: Number(requestData.jumlah) || existing.jumlah,
       tersedia: Number(requestData.tersedia) || existing.tersedia,
       dipinjam: Number(requestData.dipinjam) || existing.dipinjam,
@@ -78,6 +80,11 @@ export async function PUT(
 
     const thesisData = await thesisSchema.parseAsync(newThesis);
     const updatedThesis = await ThesisModel.updateThesis(id, thesisData);
+
+    // delete chatbot cache while CUD library entity
+    const chatbotCache = await CachingService.getCache("DB:CHATBOT:SOURCE");
+    chatbotCache &&
+      (await CachingService.deleteCacheByKey("DB:CHATBOT:SOURCE"));
 
     return NextResponse.json({
       success: true,
@@ -117,6 +124,11 @@ export async function DELETE(
       );
     }
     await ThesisModel.deleteThesis(id);
+    // delete chatbot cache while CUD library entity
+    const chatbotCache = await CachingService.getCache("DB:CHATBOT:SOURCE");
+    chatbotCache &&
+      (await CachingService.deleteCacheByKey("DB:CHATBOT:SOURCE"));
+
     return NextResponse.json({
       success: true,
       message: `Thesis with id ${id} has been deleted successfully`,
@@ -145,6 +157,11 @@ export async function PATCH(
       throw new Error(`Thesis not found!`);
     }
     const increaseCount = await ThesisModel.countThesis(id);
+    // delete chatbot cache while CUD library entity
+    const chatbotCache = await CachingService.getCache("DB:CHATBOT:SOURCE");
+    chatbotCache &&
+      (await CachingService.deleteCacheByKey("DB:CHATBOT:SOURCE"));
+
     return NextResponse.json(
       {
         success: true,

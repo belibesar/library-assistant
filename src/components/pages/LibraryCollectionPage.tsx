@@ -56,7 +56,6 @@ export default function LibraryCollectionPage() {
   );
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
 
-  // role implementation
   const { role } = useAuth();
 
   const handleOpenFormModal = (itemType: LibraryItemType) => {
@@ -165,6 +164,8 @@ export default function LibraryCollectionPage() {
         publikasi_name: journalFormInput.publikasi_name?.trim(),
         publikasi_volume: journalFormInput.publikasi_volume?.trim(),
         publikasi_tahun: journalFormInput.publikasi_tahun?.trim(),
+        authors: journalFormInput.authors?.trim(),
+        link: journalFormInput.link?.trim(),
         createdAt: journalFormInput.createdAt,
         updatedAt: journalFormInput.updatedAt,
       };
@@ -185,6 +186,7 @@ export default function LibraryCollectionPage() {
         dipinjam: dipinjamNum,
         tahun: skripsiFormInput.tahun.trim(),
         nim: skripsiFormInput.nim.trim(),
+        link: skripsiFormInput.link?.trim(),
         createdAt: skripsiFormInput.createdAt,
         updatedAt: skripsiFormInput.updatedAt,
       };
@@ -366,6 +368,8 @@ export default function LibraryCollectionPage() {
         publikasi_name: (item as any).publikasi?.name || "",
         publikasi_volume: (item as any).publikasi?.volume || "",
         publikasi_tahun: (item as any).publikasi?.tahun || "",
+        authors: (item as any).authors || "",
+        link: (item as any).link || "",
         createdAt: item.createdAt,
         updatedAt: item.updatedAt,
       } as any);
@@ -379,6 +383,7 @@ export default function LibraryCollectionPage() {
         dipinjam: item.dipinjam.toString(),
         tahun: (item as any).tahun,
         nim: (item as any).nim,
+        link: (item as any).link || "",
         createdAt: item.createdAt,
         updatedAt: item.updatedAt,
       } as any);
@@ -442,7 +447,6 @@ export default function LibraryCollectionPage() {
               ({total} total item)
             </p>
           </div>
-          {/* role implementation */}
           {role === "admin" && (
             <div className="flex gap-2">
               <button

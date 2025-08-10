@@ -1,6 +1,7 @@
 import ThesisModel from "@/db/models/ThesisModel";
 import thesisSchema from "@/libs/schemas/ThesisSchema";
 import { Thesis } from "@/libs/types/ThesisType";
+import { CachingService } from "@/utils/caching";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest) {
@@ -46,6 +47,7 @@ export async function POST(request: NextRequest) {
       count: 0,
       nim: requestData.nim,
       tahun: requestData.tahun,
+      link: requestData.link,
       jumlah: Number(requestData.jumlah),
       tersedia: Number(requestData.jumlah),
       dipinjam: Number(requestData.dipinjam) || 0,
@@ -54,6 +56,11 @@ export async function POST(request: NextRequest) {
     };
     const thesisData = await thesisSchema.parseAsync(newThesis);
     const createdThesis = await ThesisModel.createThesis(thesisData);
+
+    // delete chatbot cache while CUD library entity
+    const chatbotCache = await CachingService.getCache("DB:CHATBOT:SOURCE");
+    chatbotCache &&
+      (await CachingService.deleteCacheByKey("DB:CHATBOT:SOURCE"));
 
     return NextResponse.json({
       success: true,

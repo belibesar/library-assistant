@@ -1,0 +1,206 @@
+/* animasi modal */
+.modal-overlay {
+  transition: all 0.3s ease-in-out;
+}
+
+.modal-overlay.entering {
+  opacity: 0;
+  backdrop-filter: blur(0px);
+}
+
+.modal-overlay.entered {
+  opacity: 1;
+  backdrop-filter: blur(4px);
+}
+
+.modal-overlay.exiting {
+  opacity: 0;
+  backdrop-filter: blur(0px);
+}
+
+.modal-container {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-origin: center;
+}
+
+.modal-container.entering {
+  opacity: 0;
+  transform: scale(0.85) translateY(20px);
+}
+
+.modal-container.entered {
+  opacity: 1;
+  transform: scale(1) translateY(0px);
+}
+
+.modal-container.exiting {
+  opacity: 0;
+  transform: scale(0.85) translateY(-20px);
+}
+
+@keyframes modalSlideIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.8) translateY(30px);
+  }
+  50% {
+    transform: scale(1.05) translateY(-10px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes modalSlideOut {
+  0% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.8) translateY(30px);
+  }
+}
+
+.modal-slide-in {
+  animation: modalSlideIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+.modal-slide-out {
+  animation: modalSlideOut 0.3s cubic-bezier(0.55, 0.085, 0.68, 0.53) forwards;
+}
+
+@keyframes backdropFadeIn {
+  0% {
+    opacity: 0;
+    backdrop-filter: blur(0px);
+  }
+  100% {
+    opacity: 1;
+    backdrop-filter: blur(4px);
+  }
+}
+
+@keyframes backdropFadeOut {
+  0% {
+    opacity: 1;
+    backdrop-filter: blur(4px);
+  }
+  100% {
+    opacity: 0;
+    backdrop-filter: blur(0px);
+  }
+}
+
+.backdrop-fade-in {
+  animation: backdropFadeIn 0.3s ease-out forwards;
+}
+
+.backdrop-fade-out {
+  animation: backdropFadeOut 0.3s ease-in forwards;
+}
+
+.modal-button {
+  transition: all 0.2s ease-in-out;
+}
+
+.modal-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.modal-button:active {
+  transform: translateY(0);
+}
+
+.close-button {
+  transition: all 0.2s ease-in-out;
+}
+
+.close-button:hover {
+  transform: rotate(90deg) scale(1.1);
+  background-color: rgba(239, 68, 68, 0.1);
+  color: rgb(239, 68, 68);
+}
+
+.card-hover {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.card-hover:hover {
+  transform: translateY(-4px) scale(1.02);
+}
+
+@media (max-width: 768px) {
+  .card-hover:hover {
+    transform: translateY(-2px) scale(1.01);
+  }
+  
+  .modal-slide-in {
+    animation: modalSlideInMobile 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  }
+  
+  @keyframes modalSlideInMobile {
+    0% {
+      opacity: 0;
+      transform: scale(0.9) translateY(20px);
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1) translateY(0);
+    }
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .card-hover:hover {
+    transform: translateY(-3px) scale(1.015);
+  }
+}
+
+.stagger-item {
+  animation: staggerIn 0.5s ease-out forwards;
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+@keyframes staggerIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.stagger-item:nth-child(1) { animation-delay: 0.1s; }
+.stagger-item:nth-child(2) { animation-delay: 0.2s; }
+.stagger-item:nth-child(3) { animation-delay: 0.3s; }
+.stagger-item:nth-child(4) { animation-delay: 0.4s; }
+.stagger-item:nth-child(5) { animation-delay: 0.5s; }
+.stagger-item:nth-child(6) { animation-delay: 0.6s; }
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.animate-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}

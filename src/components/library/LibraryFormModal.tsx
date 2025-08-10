@@ -1,6 +1,7 @@
-import { useState } from "react";
 import { FormInput, LibraryItemType } from "../../libs/types/libraryType";
 import { getItemTypeLabel } from "@/utils/libraryUtil";
+import { useModalAnimation } from "@/hooks/useModalAnimation";
+import { useEffect, useState } from "react";
 
 interface LibraryFormModalProps {
   isOpen: boolean;
@@ -27,11 +28,62 @@ export const LibraryFormModal = ({
   onSubmit,
   isEditMode,
 }: LibraryFormModalProps) => {
-  if (!isOpen) return null;
+  const [isClosing, setIsClosing] = useState(false);
+  
+  const { shouldRender, animationState } = useModalAnimation({
+    isOpen,
+    duration: 300
+  });
+
+  const handleClose = () => {
+    setIsClosing(true);
+    setTimeout(() => {
+      setIsClosing(false);
+      onClose();
+    }, 300);
+  };
+
+  useEffect(() => {
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && isOpen) {
+        handleClose();
+      }
+    };
+
+    if (isOpen) {
+      document.addEventListener('keydown', handleEscape);
+      document.body.style.overflow = 'hidden';
+    }
+
+    return () => {
+      document.removeEventListener('keydown', handleEscape);
+      document.body.style.overflow = 'unset';
+    };
+  }, [isOpen]);
+
+  if (!shouldRender) return null;
 
   return (
-    <div className="bg-opacity-30 fixed inset-0 z-50 flex items-center justify-center p-4 backdrop-blur-xs transition duration-300">
-      <div className="animate-fadeIn max-h-[90vh] w-full max-w-2xl scale-[0.98] overflow-y-auto rounded-xl border border-gray-100 bg-white shadow-[0_12px_32px_rgba(0,0,0,0.15)]">
+    <div 
+      className={`fixed inset-0 z-50 flex items-center justify-center p-4 transition-all duration-300 ${
+        animationState === 'entering' 
+          ? 'backdrop-fade-in bg-black/30' 
+          : animationState === 'entered'
+          ? 'bg-black/30 backdrop-blur-sm'
+          : 'backdrop-fade-out bg-black/30'
+      }`}
+      onClick={handleClose}
+    >
+      <div 
+        className={`max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-xl border border-gray-100 bg-white shadow-[0_20px_50px_rgba(8,_112,_184,_0.7)] transition-all duration-300 ${
+          animationState === 'entering' || isClosing
+            ? 'modal-slide-in opacity-0 scale-90 translate-y-8' 
+            : animationState === 'entered' 
+            ? 'modal-slide-in opacity-100 scale-100 translate-y-0'
+            : 'modal-slide-out opacity-0 scale-90 translate-y-8'
+        }`}
+        onClick={(e) => e.stopPropagation()}
+      >
         <div className="flex items-center justify-between border-b p-3">
           <h2 className="text-xl font-semibold text-gray-900">
             {isEditMode
@@ -39,8 +91,8 @@ export const LibraryFormModal = ({
               : `Tambah ${getItemTypeLabel(category)} Baru`}
           </h2>
           <button
-            onClick={onClose}
-            className="text-gray-400 transition-colors hover:text-gray-600"
+            onClick={handleClose}
+            className="close-button text-gray-400 transition-all duration-200 hover:text-red-500 hover:rotate-90 hover:scale-110 rounded-full p-1"
           >
             <svg
               className="h-6 w-6"
@@ -317,6 +369,42 @@ export const LibraryFormModal = ({
 
                 <div>
                   <label
+                    htmlFor="journal-authors-input"
+                    className="mb-2 block text-sm font-medium text-gray-700"
+                  >
+                    Author/Penulis
+                  </label>
+                  <input
+                    id="journal-authors-input"
+                    type="text"
+                    name="authors"
+                    value={(formInput as any).authors || ""}
+                    onChange={onChange}
+                    className="w-full rounded-md border border-gray-300 px-3 py-2 focus:border-transparent focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                    placeholder="Pisahkan dengan koma (contoh: Asep, Kosala, Hafidz, Arsyad)"
+                  />
+                </div>
+
+                <div>
+                  <label
+                    htmlFor="journal-link-input"
+                    className="mb-2 block text-sm font-medium text-gray-700"
+                  >
+                    Link Jurnal
+                  </label>
+                  <input
+                    id="journal-link-input"
+                    type="url"
+                    name="link"
+                    value={(formInput as any).link || ""}
+                    onChange={onChange}
+                    className="w-full rounded-md border border-gray-300 px-3 py-2 focus:border-transparent focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                    placeholder="https://drive.google.com/... atau link lainnya"
+                  />
+                </div>
+
+                <div>
+                  <label
                     htmlFor="journal-jurnalid-input"
                     className="mb-2 block text-sm font-medium text-gray-700"
                   >
@@ -336,7 +424,7 @@ export const LibraryFormModal = ({
             )}
 
             {category === "skripsi" && (
-              <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+              <><div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                 <div>
                   <label
                     htmlFor="skripsi-nim-input"
@@ -350,13 +438,10 @@ export const LibraryFormModal = ({
                     name="nim"
                     value={(formInput as any).nim || ""}
                     onChange={onChange}
-                    className={`w-full rounded-md border px-3 py-2 focus:border-transparent focus:ring-2 focus:ring-blue-500 focus:outline-none ${
-                      formErrors.nim
+                    className={`w-full rounded-md border px-3 py-2 focus:border-transparent focus:ring-2 focus:ring-blue-500 focus:outline-none ${formErrors.nim
                         ? "border-red-500 bg-red-50"
-                        : "border-gray-300"
-                    }`}
-                    placeholder="Masukkan NIM mahasiswa"
-                  />
+                        : "border-gray-300"}`}
+                    placeholder="Masukkan NIM mahasiswa" />
                   {formErrors.nim && (
                     <p className="mt-1 text-xs text-red-500">
                       {formErrors.nim}
@@ -376,13 +461,10 @@ export const LibraryFormModal = ({
                     name="tahun"
                     value={(formInput as any).tahun || ""}
                     onChange={onChange}
-                    className={`w-full rounded-md border px-3 py-2 focus:border-transparent focus:ring-2 focus:ring-blue-500 focus:outline-none ${
-                      formErrors.tahun
+                    className={`w-full rounded-md border px-3 py-2 focus:border-transparent focus:ring-2 focus:ring-blue-500 focus:outline-none ${formErrors.tahun
                         ? "border-red-500 bg-red-50"
-                        : "border-gray-300"
-                    }`}
-                    placeholder="Masukkan tahun skripsi"
-                  />
+                        : "border-gray-300"}`}
+                    placeholder="Masukkan tahun skripsi" />
                   {formErrors.tahun && (
                     <p className="mt-1 text-xs text-red-500">
                       {formErrors.tahun}
@@ -390,6 +472,22 @@ export const LibraryFormModal = ({
                   )}
                 </div>
               </div>
+              <div>
+                  <label
+                    htmlFor="skripsi-link-input"
+                    className="mb-2 block text-sm font-medium text-gray-700"
+                  >
+                    Link Skripsi
+                  </label>
+                  <input
+                    id="skripsi-link-input"
+                    type="url"
+                    name="link"
+                    value={(formInput as any).link || ""}
+                    onChange={onChange}
+                    className="w-full rounded-md border border-gray-300 px-3 py-2 focus:border-transparent focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                    placeholder="https://drive.google.com/... atau link lainnya" />
+                </div></>
             )}
 
             <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
@@ -565,14 +663,14 @@ export const LibraryFormModal = ({
             <div className="mt-2 flex justify-end gap-3">
               <button
                 type="button"
-                onClick={onClose}
-                className="rounded-md border border-gray-300 px-4 py-2 text-gray-700 transition-colors hover:bg-gray-50"
+                onClick={handleClose}
+                className="modal-button rounded-md border border-gray-300 px-4 py-2 text-gray-700 transition-all duration-200 hover:bg-gray-50 hover:shadow-md hover:-translate-y-0.5"
               >
                 Batal
               </button>
               <button
                 type="submit"
-                className="rounded-md bg-blue-600 px-4 py-2 text-white transition-colors hover:bg-blue-700"
+                className="modal-button rounded-md bg-blue-600 px-4 py-2 text-white transition-all duration-200 hover:bg-blue-700 hover:shadow-md hover:-translate-y-0.5"
               >
                 {isEditMode ? "Update" : "Simpan"}
               </button>
