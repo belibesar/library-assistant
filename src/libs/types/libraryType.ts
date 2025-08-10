@@ -93,7 +93,7 @@ export interface SkripsiFormInput {
 }
 
 export type FormInput = BookFormInput | JournalFormInput | SkripsiFormInput;
-export type LibraryItemType = "book" | "journal" | "skripsi" | "";
+export type LibraryItemType = "book" | "journal" | "skripsi";
 
 export interface Notification {
   message: string;

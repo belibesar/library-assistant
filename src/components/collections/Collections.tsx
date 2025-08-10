@@ -588,6 +588,7 @@ export default function Collections() {
           onViewDetail={handleViewDetail}
           onDeleteItem={handleDeleteItem}
           role={role}
+          loading={loading}
         />
       </div>
 
