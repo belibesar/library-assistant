@@ -488,7 +488,10 @@ export default function LibraryCollectionPage() {
 
       <div className="grid grid-cols-1 gap-4 pt-4">
         {loading ? (
-          <LibrarySkeletonLoading count={3} />
+          <LibrarySkeletonLoading 
+            count={3} 
+            type={category === 'book' ? undefined : category}
+          />
         ) : items.length > 0 ? (
           items.map((item) => {
             if (item.type === "book") {

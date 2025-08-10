@@ -2,6 +2,7 @@ import { Edit, Trash2, Eye, BookOpen } from "lucide-react";
 import { BookCard } from "@/components/library/BookCard";
 import { JournalCard } from "@/components/library/JournalCard";
 import { SkripsiCard } from "@/components/library/SkripsiCard";
+import LibrarySkeletonLoading from "@/components/library/LibrarySkeletonLoading";
 import { LibraryItem, LibraryItemType } from "@/libs/types/libraryType";
 
 interface ItemsListProps {
@@ -11,6 +12,7 @@ interface ItemsListProps {
   onViewDetail: (item: LibraryItem) => void;
   onDeleteItem: (id: string, type: LibraryItemType) => void;
   role: string | null;
+  loading?: boolean;
 }
 
 export const ItemsList = ({
@@ -20,6 +22,7 @@ export const ItemsList = ({
   onViewDetail,
   onDeleteItem,
   role,
+  loading = false,
 }: ItemsListProps) => {
   const filteredItems =
     selectedViewMode === "overview"
@@ -44,7 +47,13 @@ export const ItemsList = ({
       </div>
 
       <div className="p-6">
-        {filteredItems.length > 0 ? (
+        {loading ? (
+          <LibrarySkeletonLoading 
+            count={4} 
+            type={selectedViewMode === 'overview' ? undefined : 
+                  (selectedViewMode as 'book' | 'journal' | 'skripsi')}
+          />
+        ) : filteredItems.length > 0 ? (
           <div className="grid grid-cols-1 gap-4">
             {filteredItems.map((item) => {
               if (item.type === "book") {
