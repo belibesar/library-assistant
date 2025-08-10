@@ -9,6 +9,7 @@ import {
   Clock,
   BarChart2,
   Calendar,
+  Info,
 } from "lucide-react";
 import StatsCard from "@/components/analytics/StatsCard";
 import TimeRangeSelector from "@/components/analytics/TimeRangeSelector";
@@ -17,21 +18,9 @@ import AnalyticsHeader from "../analytics/AnalyticsHeader";
 import RecentActivity from "../analytics/RecentActivity";
 import CategoryDistributionChart from "../analytics/CategoryDistributionChart";
 import PopularItemsSection from "../analytics/PopularItemsSection";
-
-interface PopularItem {
-  _id: string;
-  judul: string;
-  count: number;
-}
-
-interface StatData {
-  title: string;
-  value: string;
-  change: string;
-  icon: JSX.Element;
-  color: string;
-  isPositive: boolean;
-}
+import { PopularItem, StatData } from "@/libs/types/analisisType";
+import SectionHeader from "../analytics/SectionHeader";
+import { useGetViewCounts } from "@/hooks/useGetViewCounts";
 
 export default function AnalyticsPage() {
   const [timeRange, setTimeRange] = useState<string>("week");
@@ -40,7 +29,15 @@ export default function AnalyticsPage() {
   const [topBooks, setTopBooks] = useState<PopularItem[]>([]);
   const [topJournals, setTopJournals] = useState<PopularItem[]>([]);
   const [topThesis, setTopThesis] = useState<PopularItem[]>([]);
+  const [totalBooks, setTotalBooks] = useState<number>(0);
+  const [totalJournals, setTotalJournals] = useState<number>(0);
+  const [totalThesis, setTotalThesis] = useState<number>(0);
   const [stats, setStats] = useState<StatData[]>([]);
+  const {
+    data: viewCounts,
+    loading: viewCountsLoading,
+    error: viewCountsError,
+  } = useGetViewCounts();
 
   // Generate dynamic stats based on time range
   const generateStats = (range: string): StatData[] => {
@@ -143,9 +140,18 @@ export default function AnalyticsPage() {
         const journalsData = await journalsRes.json();
         const thesisData = await thesisRes.json();
 
-        if (booksData.success) setTopBooks(booksData.data);
-        if (journalsData.success) setTopJournals(journalsData.data);
-        if (thesisData.success) setTopThesis(thesisData.data);
+        if (booksData.success) {
+          setTopBooks(booksData.data);
+          setTotalBooks(booksData.totalAllData);
+        }
+        if (journalsData.success) {
+          setTopJournals(journalsData.data);
+          setTotalJournals(journalsData.totalAllData);
+        }
+        if (thesisData.success) {
+          setTopThesis(thesisData.data);
+          setTotalThesis(thesisData.totalAllData);
+        }
       } catch (err) {
         console.error("Failed to fetch popular items:", err);
         setError("Gagal memuat data statistik");
@@ -186,55 +192,99 @@ export default function AnalyticsPage() {
   }
 
   return (
-    <div className="rounded-lg bg-white p-6">
+    <div className="space-y-8 rounded-lg bg-white p-6">
       <AnalyticsHeader
         title="Analitik Perpustakaan"
         description="Tinjau aktivitas dan statistik penggunaan perpustakaan"
       />
 
-      {/* Time Range Selector */}
-      <TimeRangeSelector timeRange={timeRange} setTimeRange={setTimeRange} />
-
-      {/* Stats Grid */}
-      <div className="mb-6 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
-        {stats.map((stat, index) => (
-          <StatsCard key={index} {...stat} />
-        ))}
+      {/* SECTION 1: Ringkasan Koleksi Perpustakaan */}
+      <div>
+        <SectionHeader
+          title="📚 Ringkasan Koleksi Perpustakaan"
+          description="Menampilkan total keseluruhan koleksi perpustakaan dan item yang paling banyak diakses oleh pengunjung. Data ini menunjukkan popularitas dan minat pembaca terhadap jenis koleksi tertentu."
+          icon={<BookOpen className="h-5 w-5 text-blue-600" />}
+        />
+        <PopularItemsSection
+          topBooks={topBooks}
+          topJournals={topJournals}
+          topThesis={topThesis}
+          loading={loading}
+          totalBooks={totalBooks}
+          totalJournals={totalJournals}
+          totalThesis={totalThesis}
+        />
       </div>
 
-      {/* Main Chart */}
-      <div className="mb-6 rounded-lg border border-gray-100 bg-white p-4 shadow-sm">
-        <div className="mb-4 flex items-center justify-between">
-          <h3 className="text-lg font-semibold">Grafik Kunjungan</h3>
-          <div className="flex items-center text-sm text-gray-500">
-            <Calendar className="mr-2 h-4 w-4" />
-            {getTimeRangeLabel(timeRange)}
+      {/* SECTION 2: Analisis Kunjungan & Aktivitas */}
+      <div>
+        <SectionHeader
+          title="📊 Analisis Kunjungan & Aktivitas"
+          description="Statistik pengunjung perpustakaan berdasarkan periode waktu yang dipilih. Termasuk total kunjungan, koleksi yang dibaca, waktu rata-rata kunjungan, dan jumlah pengunjung unik. Persentase menunjukkan perubahan dibanding periode sebelumnya."
+          icon={<Users className="h-5 w-5 text-blue-600" />}
+        />
+
+        {/* Time Range Selector */}
+        <TimeRangeSelector timeRange={timeRange} setTimeRange={setTimeRange} />
+
+        {/* Stats Grid */}
+        <div className="mb-6 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
+          {stats.map((stat, index) => (
+            <StatsCard key={index} {...stat} />
+          ))}
+        </div>
+      </div>
+
+      {/* SECTION 3: Grafik Trend Kunjungan */}
+      <div>
+        <SectionHeader
+          title="📈 Grafik Trend Kunjungan"
+          description="Visualisasi grafik yang menunjukkan pola kunjungan perpustakaan dalam bentuk line chart. Membantu melihat tren naik-turun aktivitas pengunjung sesuai periode waktu yang dipilih (hari, minggu, bulan, atau tahun)."
+          icon={<BarChart2 className="h-5 w-5 text-blue-600" />}
+        />
+
+        <div className="rounded-lg border border-gray-100 bg-white p-4 shadow-sm">
+          <div className="mb-4 flex items-center justify-between">
+            <h3 className="text-lg font-semibold">Grafik Kunjungan</h3>
+            <div className="flex items-center text-sm text-gray-500">
+              <Calendar className="mr-2 h-4 w-4" />
+              {getTimeRangeLabel(timeRange)}
+            </div>
+          </div>
+          <MainChart timeRange={timeRange} />
+        </div>
+      </div>
+
+      {/* SECTION 4: Distribusi & Aktivitas Detail */}
+      <div>
+        <SectionHeader
+          title="🎯 Distribusi & Aktivitas Detail"
+          description="Bagian ini terdiri dari dua komponen: (1) Distribusi Kategori - pie chart yang menampilkan proporsi akses per kategori koleksi, dan (2) Aktivitas Terkini - daftar aktivitas terbaru pengunjung seperti peminjaman, pengembalian, atau akses koleksi digital."
+          icon={<Info className="h-5 w-5 text-blue-600" />}
+        />
+
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
+          {/* Category Distribution */}
+          <div className="rounded-lg border border-gray-100 bg-white p-4 shadow-sm lg:col-span-2">
+            <h3 className="mb-4 text-lg font-semibold">Distribusi Kategori</h3>
+            <CategoryDistributionChart
+              loading={viewCountsLoading}
+              error={viewCountsError as string}
+              data={{
+                books: viewCounts?.totalBookAccess,
+                journals: viewCounts?.totalJournalAccess,
+                thesis: viewCounts?.totalThesisAccess,
+              }}
+            />
+          </div>
+
+          {/* Recent Activity */}
+          <div className="rounded-lg border border-gray-100 bg-white p-4 shadow-sm">
+            <h3 className="mb-4 text-lg font-semibold">Aktivitas Terkini</h3>
+            <RecentActivity />
           </div>
         </div>
-        <MainChart timeRange={timeRange} />
       </div>
-
-      <div className="mb-6 grid grid-cols-1 gap-6 lg:grid-cols-3">
-        {/* Category Distribution */}
-        <div className="rounded-lg border border-gray-100 bg-white p-4 shadow-sm lg:col-span-2">
-          <h3 className="mb-4 text-lg font-semibold">Distribusi Kategori</h3>
-          <CategoryDistributionChart />
-        </div>
-
-        {/* Recent Activity */}
-        <div className="rounded-lg border border-gray-100 bg-white p-4 shadow-sm">
-          <h3 className="mb-4 text-lg font-semibold">Aktivitas Terkini</h3>
-          <RecentActivity />
-        </div>
-      </div>
-
-      {/* Popular Items Section */}
-      <PopularItemsSection
-        topBooks={topBooks}
-        topJournals={topJournals}
-        topThesis={topThesis}
-        loading={loading}
-      />
     </div>
   );
 }

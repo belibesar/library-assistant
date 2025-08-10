@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import PublikasiModel from "@/db/models/PublikasiModel";
+import { CachingService } from "@/utils/caching";
 
 export async function GET(
   request: NextRequest,
@@ -8,7 +9,7 @@ export async function GET(
   try {
     const { id } = await params;
     const publikasi = await PublikasiModel.getPublikasiById(id);
-    
+
     if (!publikasi) {
       return NextResponse.json(
         {
@@ -68,7 +69,15 @@ export async function PUT(
       tahun: requestData.tahun || currentPublikasi.tahun,
     };
 
-    const updatedPublikasi = await PublikasiModel.updatePublikasi(id, publikasiData);
+    const updatedPublikasi = await PublikasiModel.updatePublikasi(
+      id,
+      publikasiData,
+    );
+    // delete chatbot cache while CUD library entity
+    const chatbotCache = await CachingService.getCache("DB:CHATBOT:SOURCE");
+    chatbotCache &&
+      (await CachingService.deleteCacheByKey("DB:CHATBOT:SOURCE"));
+
     return NextResponse.json({
       success: true,
       message: `Publikasi with id ${id} has been updated`,

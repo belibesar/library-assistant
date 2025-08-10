@@ -69,9 +69,11 @@ export type userType = {
 };
 export type NewUser = {
   email: string;
-  password: string;
-  name: string;
   username: string;
+  name: string;
+  password: string;
+  role: "user" | "admin";
+  id_number: number;
 };
 
 export type CustomError = {
@@ -132,7 +134,14 @@ export type Publikasi = {
 //   available?: number;
 //   total?: number;
 // }
-
+export interface SkeletonCardProps {
+  type?: 'book' | 'journal' | 'skripsi';
+}
+export interface LibrarySkeletonLoadingProps {
+  count?: number;
+  type?: 'book' | 'journal' | 'skripsi';
+  types?: ('book' | 'journal' | 'skripsi')[];
+}
 export interface BookData {
   _id: string;
   judul: string;

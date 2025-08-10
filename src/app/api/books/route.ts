@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import BookModel from "@/db/models/BookModel";
 import bookSchema from "@/libs/schemas/BookSchema";
 import { Book } from "@/libs/types/BookType";
+import { CachingService } from "@/utils/caching";
 
 export async function GET(request: NextRequest) {
   // Get search parameters from the URL
@@ -64,7 +65,12 @@ export async function POST(request: NextRequest) {
 
     // Let BookModel handle the creation and pengarang/penerbit processing
     const insertBook = await BookModel.createBook(newData);
-    
+
+    // delete chatbot cache while CUD library entity
+    const chatbotCache = await CachingService.getCache("DB:CHATBOT:SOURCE");
+    chatbotCache &&
+      (await CachingService.deleteCacheByKey("DB:CHATBOT:SOURCE"));
+
     return NextResponse.json(
       {
         success: true,

@@ -6,7 +6,7 @@ import {
   Shield,
   Users,
 } from "lucide-react";
-import CardOnboardingFeature from "../components/CardOnboardingFeature";
+import CardOnboardingFeature from "../CardOnboardingFeature";
 
 export default function CardsGroupFeature() {
   const iconSizing = "mb-4 h-24 w-24";

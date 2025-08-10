@@ -3,11 +3,34 @@
 import { useEffect, useRef } from "react";
 import Chart from "chart.js/auto";
 
-export default function CategoryDistributionChart() {
+interface CategoryDistributionChartProps {
+  data: {
+    books: number;
+    journals: number;
+    thesis: number;
+  };
+  loading?: boolean;
+  error?: string;
+}
+
+export default function CategoryDistributionChart({
+  data,
+  loading,
+  error,
+}: CategoryDistributionChartProps) {
   const chartRef = useRef<HTMLCanvasElement>(null);
+  const chartInstanceRef = useRef<Chart | null>(null);
+  console.log("Rendering CategoryDistributionChart with data:", data);
 
   useEffect(() => {
-    if (!chartRef.current) return;
+    // Destroy existing chart instance before creating new one
+    if (chartInstanceRef.current) {
+      chartInstanceRef.current.destroy();
+      chartInstanceRef.current = null;
+    }
+
+    // Don't create chart if loading or no canvas ref
+    if (!chartRef.current || loading) return;
 
     const ctx = chartRef.current.getContext("2d");
     if (!ctx) return;
@@ -15,16 +38,14 @@ export default function CategoryDistributionChart() {
     const chart = new Chart(ctx, {
       type: "doughnut",
       data: {
-        labels: ["Buku", "Jurnal", "Skripsi", "Laporan", "Referensi"],
+        labels: ["Buku", "Jurnal", "Skripsi"],
         datasets: [
           {
-            data: [35, 25, 20, 15, 5],
+            data: [data.books, data.journals, data.thesis],
             backgroundColor: [
               "#3b82f6", // blue
               "#8b5cf6", // purple
               "#f97316", // orange
-              "#10b981", // green
-              "#64748b", // slate
             ],
             borderColor: "#ffffff",
             borderWidth: 2,
@@ -75,8 +96,32 @@ export default function CategoryDistributionChart() {
       },
     });
 
-    return () => chart.destroy();
-  }, []);
+    // Store chart instance for cleanup
+    chartInstanceRef.current = chart;
+
+    return () => {
+      if (chartInstanceRef.current) {
+        chartInstanceRef.current.destroy();
+        chartInstanceRef.current = null;
+      }
+    };
+  }, [data, loading]); 
+
+  if (loading) {
+    return (
+      <div className="flex h-64 items-center justify-center md:h-72">
+        <div className="text-gray-500">Loading chart...</div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex h-64 items-center justify-center md:h-72">
+        <div className="text-red-500">Error: {error}</div>
+      </div>
+    );
+  }
 
   return (
     <div className="h-64 md:h-72">

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import PenerbitModel from "@/db/models/PenerbitModel";
+import { CachingService } from "@/utils/caching";
 
 export async function GET() {
   try {
@@ -26,6 +27,12 @@ export async function POST(request: NextRequest) {
   try {
     const requestData = await request.json();
     const insertPenerbit = await PenerbitModel.createPenerbit(requestData);
+
+    // delete chatbot cache while CUD library entity
+    const chatbotCache = await CachingService.getCache("DB:CHATBOT:SOURCE");
+    chatbotCache &&
+      (await CachingService.deleteCacheByKey("DB:CHATBOT:SOURCE"));
+
     return NextResponse.json(
       {
         success: true,

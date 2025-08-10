@@ -4,12 +4,14 @@ import ThesisModel from "@/db/models/ThesisModel";
 export async function GET(request: NextRequest) {
   try {
     const topCountThesis = await ThesisModel.getTop5MostAccessedThesis();
+    const totalThesis = await ThesisModel.getCountThesis();
 
     return NextResponse.json({
       success: true,
       message: "Top 5 thesis with highest count retrieved successfully",
       data: topCountThesis,
-      total: topCountThesis.length
+      count: topCountThesis.length,
+      totalAllData: totalThesis,
     });
 
   } catch (error) {

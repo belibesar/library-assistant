@@ -23,6 +23,7 @@ import { getInitialFormInput, endpointMap } from "@/utils/libraryUtil";
 import { useLibraryItems } from "@/hooks/useLibraryItems";
 import LibrarySkeletonLoading from "../library/LibrarySkeletonLoading";
 import { ZodError } from "zod";
+import { useAuth } from "@/contexts/AuthContext";
 
 export default function LibraryCollectionPage() {
   const {
@@ -54,6 +55,8 @@ export default function LibraryCollectionPage() {
     getInitialFormInput("book"),
   );
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
+
+  const { role } = useAuth();
 
   const handleOpenFormModal = (itemType: LibraryItemType) => {
     setCategory(itemType);
@@ -161,6 +164,8 @@ export default function LibraryCollectionPage() {
         publikasi_name: journalFormInput.publikasi_name?.trim(),
         publikasi_volume: journalFormInput.publikasi_volume?.trim(),
         publikasi_tahun: journalFormInput.publikasi_tahun?.trim(),
+        authors: journalFormInput.authors?.trim(),
+        link: journalFormInput.link?.trim(),
         createdAt: journalFormInput.createdAt,
         updatedAt: journalFormInput.updatedAt,
       };
@@ -181,6 +186,7 @@ export default function LibraryCollectionPage() {
         dipinjam: dipinjamNum,
         tahun: skripsiFormInput.tahun.trim(),
         nim: skripsiFormInput.nim.trim(),
+        link: skripsiFormInput.link?.trim(),
         createdAt: skripsiFormInput.createdAt,
         updatedAt: skripsiFormInput.updatedAt,
       };
@@ -362,6 +368,8 @@ export default function LibraryCollectionPage() {
         publikasi_name: (item as any).publikasi?.name || "",
         publikasi_volume: (item as any).publikasi?.volume || "",
         publikasi_tahun: (item as any).publikasi?.tahun || "",
+        authors: (item as any).authors || "",
+        link: (item as any).link || "",
         createdAt: item.createdAt,
         updatedAt: item.updatedAt,
       } as any);
@@ -375,6 +383,7 @@ export default function LibraryCollectionPage() {
         dipinjam: item.dipinjam.toString(),
         tahun: (item as any).tahun,
         nim: (item as any).nim,
+        link: (item as any).link || "",
         createdAt: item.createdAt,
         updatedAt: item.updatedAt,
       } as any);
@@ -438,29 +447,31 @@ export default function LibraryCollectionPage() {
               ({total} total item)
             </p>
           </div>
-          <div className="flex gap-2">
-            <button
-              onClick={() => handleOpenFormModal("book")}
-              className="flex items-center gap-2 rounded-md bg-blue-600 px-6 py-2 text-sm font-medium text-white shadow-sm transition-colors hover:bg-blue-700"
-            >
-              <Plus size={16} />
-              Tambah Buku
-            </button>
-            <button
-              onClick={() => handleOpenFormModal("journal")}
-              className="flex items-center gap-2 rounded-md bg-purple-600 px-6 py-2 text-sm font-medium text-white shadow-sm transition-colors hover:bg-purple-700"
-            >
-              <Plus size={16} />
-              Tambah Jurnal
-            </button>
-            <button
-              onClick={() => handleOpenFormModal("skripsi")}
-              className="flex items-center gap-2 rounded-md bg-orange-600 px-6 py-2 text-sm font-medium text-white shadow-sm transition-colors hover:bg-orange-700"
-            >
-              <Plus size={16} />
-              Tambah Skripsi
-            </button>
-          </div>
+          {role === "admin" && (
+            <div className="flex gap-2">
+              <button
+                onClick={() => handleOpenFormModal("book")}
+                className="flex items-center gap-2 rounded-md bg-blue-600 px-6 py-2 text-sm font-medium text-white shadow-sm transition-colors hover:bg-blue-700"
+              >
+                <Plus size={16} />
+                Tambah Buku
+              </button>
+              <button
+                onClick={() => handleOpenFormModal("journal")}
+                className="flex items-center gap-2 rounded-md bg-purple-600 px-6 py-2 text-sm font-medium text-white shadow-sm transition-colors hover:bg-purple-700"
+              >
+                <Plus size={16} />
+                Tambah Jurnal
+              </button>
+              <button
+                onClick={() => handleOpenFormModal("skripsi")}
+                className="flex items-center gap-2 rounded-md bg-orange-600 px-6 py-2 text-sm font-medium text-white shadow-sm transition-colors hover:bg-orange-700"
+              >
+                <Plus size={16} />
+                Tambah Skripsi
+              </button>
+            </div>
+          )}
         </div>
       </div>
 
@@ -475,9 +486,12 @@ export default function LibraryCollectionPage() {
 
       <LibraryNotification notification={notification} />
 
-      <div className="grid grid-cols-1 gap-4 pt-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+      <div className="grid grid-cols-1 gap-4 pt-4">
         {loading ? (
-          <LibrarySkeletonLoading count={8} />
+          <LibrarySkeletonLoading 
+            count={3} 
+            type={category === 'book' ? undefined : category}
+          />
         ) : items.length > 0 ? (
           items.map((item) => {
             if (item.type === "book") {

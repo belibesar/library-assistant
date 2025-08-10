@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import BookModel from "@/db/models/BookModel";
 import bookSchema from "@/libs/schemas/BookSchema";
 import { Book } from "@/libs/types/BookType";
+import { CachingService } from "@/utils/caching";
 
 export async function GET(
   request: NextRequest,
@@ -70,6 +71,12 @@ export async function PUT(
 
     // Let BookModel handle the update and pengarang/penerbit processing
     const updatedBook = await BookModel.updateBook(id, newData);
+
+    // delete chatbot cache while CUD library entity
+    const chatbotCache = await CachingService.getCache("DB:CHATBOT:SOURCE");
+    chatbotCache &&
+      (await CachingService.deleteCacheByKey("DB:CHATBOT:SOURCE"));
+
     return NextResponse.json({
       success: true,
       message: `Book with id ${id} has been updated`,
@@ -97,6 +104,12 @@ export async function DELETE(
     }
 
     const deleteBook = await BookModel.deleteBook(id);
+
+    // delete chatbot cache while CUD library entity
+    const chatbotCache = await CachingService.getCache("DB:CHATBOT:SOURCE");
+    chatbotCache &&
+      (await CachingService.deleteCacheByKey("DB:CHATBOT:SOURCE"));
+
     return NextResponse.json(
       {
         success: true,
@@ -125,6 +138,12 @@ export async function PATCH(
       throw new Error(`Book not found!`);
     }
     const increaseCount = await BookModel.countBook(id);
+
+    // delete chatbot cache while CUD library entity
+    const chatbotCache = await CachingService.getCache("DB:CHATBOT:SOURCE");
+    chatbotCache &&
+      (await CachingService.deleteCacheByKey("DB:CHATBOT:SOURCE"));
+
     return NextResponse.json(
       {
         success: true,
