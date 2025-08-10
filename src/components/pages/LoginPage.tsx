@@ -67,6 +67,7 @@ export default function Login() {
         email: tokenPayload.email,
         name: tokenPayload.name || tokenPayload.email,
         username: tokenPayload.username || tokenPayload.email,
+        role: tokenPayload.role || "user",
       });
 
       Swal.fire({
