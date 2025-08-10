@@ -1,6 +1,6 @@
 "use client";
 import { BookOpen, User, LogOut, Menu, X } from "lucide-react";
-import Button from "../Button";
+import Button from "../shared/Button";
 import { useAuth } from "@/contexts/AuthContext";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";

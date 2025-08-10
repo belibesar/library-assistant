@@ -1,5 +1,5 @@
 import { HeroSectionProps } from "@/libs/types";
-import Button from "../Button";
+import Button from "../shared/Button";
 
 export default function Hero({
   heroTitle,

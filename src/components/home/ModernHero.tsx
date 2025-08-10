@@ -1,7 +1,7 @@
 "use client";
 
 import { HeroSectionProps } from "@/libs/types";
-import Button from "../Button";
+import Button from "../shared/Button";
 import { useRouter } from "next/navigation";
 
 export default function ModernHero({

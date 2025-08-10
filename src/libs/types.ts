@@ -69,9 +69,11 @@ export type userType = {
 };
 export type NewUser = {
   email: string;
-  password: string;
-  name: string;
   username: string;
+  name: string;
+  password: string;
+  role: "user" | "admin";
+  id_number: number;
 };
 
 export type CustomError = {

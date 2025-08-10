@@ -8,6 +8,8 @@ import {
   Search,
   Settings,
   BarChart2,
+  Users,
+  Layers,
 } from "lucide-react";
 import Link from "next/link";
 import { useAuth } from "@/contexts/AuthContext";
@@ -15,15 +17,11 @@ import { SidebarProps } from "@/libs/types";
 
 const Sidebar: React.FC<SidebarProps> = ({ isOpen, toggleSidebar }) => {
   const { user, logout, role } = useAuth();
-  const [activeItem, setActiveItem] = useState("Obrolan"); // State untuk menu aktif
+  const [activeItem, setActiveItem] = useState("Obrolan");
 
   const handleLogout = () => {
     logout();
     window.location.href = "/";
-  };
-
-  const handleMenuClick = (menuName: string) => {
-    setActiveItem(menuName);
   };
 
   return (
@@ -41,17 +39,12 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, toggleSidebar }) => {
         } bg-base-100 z-50 flex h-screen w-64 flex-col border border-gray-200 p-4 transition-transform duration-300 ease-in-out lg:relative lg:h-full lg:flex-shrink-0 lg:translate-x-0`}
       >
         <div className="mb-8 flex items-center justify-between lg:justify-start">
-          <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+          <div className="flex items-center gap-2">
             <BookOpen size={30} color="#113FF7" />
             <h1 className="text-xl font-semibold">Perpustakaan USD</h1>
           </div>
-          <button
-            className="btn btn-ghost lg:hidden"
-            aria-label="Toggle menu"
-            onClick={toggleSidebar}
-          >
+          <button className="btn btn-ghost lg:hidden" onClick={toggleSidebar}>
             <svg
-              xmlns="http://www.w3.org/2000/svg"
               className="h-6 w-6"
               fill="none"
               viewBox="0 0 24 24"
@@ -67,53 +60,79 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, toggleSidebar }) => {
           </button>
         </div>
 
-        <nav className="menu text-base-content w-full flex-grow p-0">
-          <ul>
+        <nav className="menu text-base-content w-full flex-grow">
+          <ul className="space-y-1">
+            {/* === Bagian Umum === */}
+            <li className="px-3 py-1 text-sm font-semibold text-gray-500 uppercase">
+              Umum
+            </li>
             <li>
               <Link
                 href="/dashboard"
-                className="flex items-center gap-2 rounded-lg px-3 py-2 transition-colors duration-200 hover:bg-gray-200 hover:text-gray-900 active:bg-gray-800 active:text-white"
+                className="flex items-center gap-2 rounded-lg px-3 py-2 transition-colors hover:bg-gray-200"
               >
-                <MessageSquare size={20} color="#111d22" />
+                <MessageSquare size={20} />
                 Obrolan
               </Link>
             </li>
             <li>
               <Link
                 href="/dashboard/books"
-                className="flex items-center gap-2 rounded-lg px-3 py-2 transition-colors duration-200 hover:bg-gray-200 hover:text-gray-900 active:bg-gray-800 active:text-white"
+                className="flex items-center gap-2 rounded-lg px-3 py-2 transition-colors hover:bg-gray-200"
               >
-                <BookOpen size={20} color="#111d22" />
+                <BookOpen size={20} />
                 Jelajahi Koleksi
               </Link>
             </li>
             <li>
               <Link
                 href="/dashboard/plagiarism"
-                className="flex items-center gap-2 rounded-lg px-3 py-2 transition-colors duration-200 hover:bg-gray-200 hover:text-gray-900 active:bg-gray-800 active:text-white"
+                className="flex items-center gap-2 rounded-lg px-3 py-2 transition-colors hover:bg-gray-200"
               >
-                <FileCheck size={20} color="#111d22" />
+                <FileCheck size={20} />
                 Cek Plagiat
               </Link>
             </li>
-            {/* role implementation on analysis and pengaturan */}
+
+            {/* === Bagian Admin === */}
             {role === "admin" && (
               <>
+                <li className="mt-4 px-3 py-1 text-sm font-semibold text-gray-500 uppercase">
+                  Kontrol Admin
+                </li>
                 <li>
                   <Link
-                    href="/dashboard/analytics"
-                    className="flex items-center gap-2 rounded-lg px-3 py-2 transition-colors duration-200 hover:bg-gray-200 hover:text-gray-900 active:bg-gray-800 active:text-white"
+                    href="/dashboard/admin/collections"
+                    className="flex items-center gap-2 rounded-lg px-3 py-2 transition-colors hover:bg-gray-200"
                   >
-                    <BarChart2 size={20} color="#111d22" />
-                    Analytics
+                    <Layers size={20} />
+                    Manajemen Koleksi
                   </Link>
                 </li>
                 <li>
                   <Link
-                    href="/dashboard/settings"
-                    className="flex items-center gap-2 rounded-lg px-3 py-2 transition-colors duration-200 hover:bg-gray-200 hover:text-gray-900 active:bg-gray-800 active:text-white"
+                    href="/dashboard/admin/users"
+                    className="flex items-center gap-2 rounded-lg px-3 py-2 transition-colors hover:bg-gray-200"
                   >
-                    <Settings size={20} color="#111d22" />
+                    <Users size={20} />
+                    Manajemen Pengguna
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/dashboard/admin/analytics"
+                    className="flex items-center gap-2 rounded-lg px-3 py-2 transition-colors hover:bg-gray-200"
+                  >
+                    <BarChart2 size={20} />
+                    Statistik & Analisis
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/dashboard/admin/settings"
+                    className="flex items-center gap-2 rounded-lg px-3 py-2 transition-colors hover:bg-gray-200"
+                  >
+                    <Settings size={20} />
                     Pengaturan
                   </Link>
                 </li>
@@ -121,9 +140,9 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, toggleSidebar }) => {
             )}
           </ul>
         </nav>
-        {/* ubah hr jadi full dan grey 200 */}
+
         <hr className="-mx-4 my-4 border-t border-gray-300" />
-        {/* hr ini ya */}
+
         <div className="mt-auto flex items-center justify-between pt-4">
           <div>
             <div className="text-sm">{user?.email || "Guest"}</div>
@@ -135,16 +154,15 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, toggleSidebar }) => {
             onClick={handleLogout}
           >
             <svg
-              xmlns="http://www.w3.org/2000/svg"
+              className="h-6 w-6"
               fill="none"
               viewBox="0 0 24 24"
-              strokeWidth={1.5}
               stroke="currentColor"
-              className="h-6 w-6"
             >
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
+                strokeWidth={1.5}
                 d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15M12 9l3 3m0 0-3 3m3-3H9"
               />
             </svg>
