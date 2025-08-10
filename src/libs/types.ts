@@ -134,7 +134,14 @@ export type Publikasi = {
 //   available?: number;
 //   total?: number;
 // }
-
+export interface SkeletonCardProps {
+  type?: 'book' | 'journal' | 'skripsi';
+}
+export interface LibrarySkeletonLoadingProps {
+  count?: number;
+  type?: 'book' | 'journal' | 'skripsi';
+  types?: ('book' | 'journal' | 'skripsi')[];
+}
 export interface BookData {
   _id: string;
   judul: string;

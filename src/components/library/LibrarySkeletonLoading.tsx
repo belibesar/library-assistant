@@ -1,8 +1,5 @@
 import React from "react";
-
-interface SkeletonCardProps {
-  type?: 'book' | 'journal' | 'skripsi';
-}
+import { LibrarySkeletonLoadingProps, SkeletonCardProps } from "../../libs/types";
 
 const SkeletonCard = ({ type = 'book' }: SkeletonCardProps) => {
   return (
@@ -93,12 +90,6 @@ const SkeletonCard = ({ type = 'book' }: SkeletonCardProps) => {
     </div>
   );
 };
-
-interface LibrarySkeletonLoadingProps {
-  count?: number;
-  type?: 'book' | 'journal' | 'skripsi';
-  types?: ('book' | 'journal' | 'skripsi')[];
-}
 
 const LibrarySkeletonLoading = ({ 
   count = 8, 
