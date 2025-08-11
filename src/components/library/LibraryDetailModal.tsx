@@ -155,7 +155,14 @@ export const LibraryDetailModal = ({
                 </h4>
                 <div className="bg-gradient-to-br from-indigo-50 to-blue-50 rounded-lg p-4 border border-indigo-100">
                   <p className="text-gray-700 leading-relaxed">
-                    {item.abstrak || "Sinopsis belum tersedia untuk item ini."}
+                    {item.type === "book"
+                      ? (item as Book).sinopsis || "Sinopsis belum tersedia untuk item ini."
+                      : item.type === "journal"
+                      ? (item as Journal).abstrak || "Sinopsis belum tersedia untuk item ini."
+                      : item.type === "skripsi"
+                      ? (item as Skripsi).abstrak || "Sinopsis belum tersedia untuk item ini."
+                      : "Sinopsis belum tersedia untuk item ini."
+                    }
                   </p>
                 </div>
               </div>
