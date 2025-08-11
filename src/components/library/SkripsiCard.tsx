@@ -84,7 +84,6 @@ export const SkripsiCard = ({
         </div>
       </div>
 
-      {/* Card Footer with Stats */}
       <div className="border-t border-gray-100 bg-gray-50 px-4 py-3 transition-colors duration-200 group-hover:bg-orange-50/30">
         {skripsi.count !== undefined && (
           <div className="mt-2 text-right text-base text-gray-500 transition-colors duration-200 group-hover:text-gray-600">
