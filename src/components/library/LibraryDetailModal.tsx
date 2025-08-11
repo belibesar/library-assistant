@@ -293,7 +293,11 @@ export const LibraryDetailModal = ({
                           </a>
                         </div>
                       )}
-                      <div className="p-3 bg-orange-50 rounded-lg border border-orange-200">
+                      
+                    </div>
+                  </div>
+                  <div className="bg-white rounded-xl border border-gray-200 p-4 sm:p-6 shadow-sm">
+                    <div className="p-3 bg-orange-50 rounded-lg border border-orange-200">
                         <span className="block text-orange-600 font-medium text-sm">Nama Mahasiswa</span>
                         <span className="block text-gray-800 font-semibold text-lg">{(item as Skripsi).nama_mahasiswa || 'N/A'}</span>
                       </div>
@@ -305,7 +309,6 @@ export const LibraryDetailModal = ({
                         <span className="block text-gray-600 font-medium text-sm">Program Studi</span>
                         <span className="block text-gray-800 font-semibold">{(item as Skripsi).program_studi || "N/A"}</span>
                       </div>
-                    </div>
                   </div>
                 </>
               )}
