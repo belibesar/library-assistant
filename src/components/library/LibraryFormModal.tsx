@@ -432,62 +432,20 @@ export const LibraryFormModal = ({
                     {formErrors.nim && (<p className="mt-1 text-xs text-red-500">{formErrors.nim}</p>)}
                   </div>
                   <div>
-      <label htmlFor="skripsi-nama-mahasiswa-input" className="mb-2 block text-sm font-medium text-gray-700">
-        Nama Mahasiswa <span className="text-red-500">*</span>
-      </label>
-      <input
-        id="skripsi-nama-mahasiswa-input"
-        type="text"
-        name="mahasiswa_name"
-        value={(formInput as any).mahasiswa_name || ""}
-        onChange={onChange}
-        className={`w-full rounded-md border px-3 py-2 focus:border-transparent focus:ring-2 focus:ring-blue-500 focus:outline-none ${
-          formErrors.mahasiswa_name ? "border-red-500 bg-red-50" : "border-gray-300"
-        }`}
-        placeholder="Masukkan nama mahasiswa"
-      />
-      {formErrors.mahasiswa_name && (
-        <p className="mt-1 text-xs text-red-500">{formErrors.mahasiswa_name}</p>
-      )}
-    </div>
-    <div>
-      <label htmlFor="skripsi-fakultas-input" className="mb-2 block text-sm font-medium text-gray-700">
-        Fakultas <span className="text-red-500">*</span>
-      </label>
-      <input
-        id="skripsi-fakultas-input"
-        type="text"
-        name="fakultas"
-        value={(formInput as any).fakultas || ""}
-        onChange={onChange}
-        className={`w-full rounded-md border px-3 py-2 focus:border-transparent focus:ring-2 focus:ring-blue-500 focus:outline-none ${
-          formErrors.fakultas ? "border-red-500 bg-red-50" : "border-gray-300"
-        }`}
-        placeholder="Masukkan fakultas"
-      />
-      {formErrors.fakultas && (
-        <p className="mt-1 text-xs text-red-500">{formErrors.fakultas}</p>
-      )}
-    </div>
-    <div>
-      <label htmlFor="skripsi-prodi-input" className="mb-2 block text-sm font-medium text-gray-700">
-        Program Studi <span className="text-red-500">*</span>
-      </label>
-      <input
-        id="skripsi-prodi-input"
-        type="text"
-        name="program_studi"
-        value={(formInput as any).program_studi || ""}
-        onChange={onChange}
-        className={`w-full rounded-md border px-3 py-2 focus:border-transparent focus:ring-2 focus:ring-blue-500 focus:outline-none ${
-          formErrors.program_studi ? "border-red-500 bg-red-50" : "border-gray-300"
-        }`}
-        placeholder="Masukkan program studi"
-      />
-      {formErrors.program_studi && (
-        <p className="mt-1 text-xs text-red-500">{formErrors.program_studi}</p>
-      )}
-    </div>
+                    <label htmlFor="skripsi-nama-mahasiswa-input" className="mb-2 block text-sm font-medium text-gray-700">Nama Mahasiswa <span className="text-red-500">*</span></label>
+                    <input id="skripsi-nama-mahasiswa-input" type="text" name="nama_mahasiswa" value={(formInput as any).nama_mahasiswa || ""} onChange={onChange} className={`w-full rounded-md border px-3 py-2 focus:border-transparent focus:ring-2 focus:ring-blue-500 focus:outline-none ${formErrors.nama_mahasiswa ? "border-red-500 bg-red-50" : "border-gray-300"}`} placeholder="Masukkan nama mahasiswa" />
+                    {formErrors.nama_mahasiswa && (<p className="mt-1 text-xs text-red-500">{formErrors.nama_mahasiswa}</p>)}
+                  </div>
+                  <div>
+                    <label htmlFor="skripsi-fakultas-input" className="mb-2 block text-sm font-medium text-gray-700">Fakultas <span className="text-red-500">*</span></label>
+                    <input id="skripsi-fakultas-input" type="text" name="fakultas" value={(formInput as any).fakultas || ""} onChange={onChange} className={`w-full rounded-md border px-3 py-2 focus:border-transparent focus:ring-2 focus:ring-blue-500 focus:outline-none ${formErrors.fakultas ? "border-red-500 bg-red-50" : "border-gray-300"}`} placeholder="Masukkan fakultas" />
+                    {formErrors.fakultas && (<p className="mt-1 text-xs text-red-500">{formErrors.fakultas}</p>)}
+                  </div>
+                  <div>
+                    <label htmlFor="skripsi-prodi-input" className="mb-2 block text-sm font-medium text-gray-700">Program Studi <span className="text-red-500">*</span></label>
+                    <input id="skripsi-prodi-input" type="text" name="program_studi" value={(formInput as any).program_studi || ""} onChange={onChange} className={`w-full rounded-md border px-3 py-2 focus:border-transparent focus:ring-2 focus:ring-blue-500 focus:outline-none ${formErrors.program_studi ? "border-red-500 bg-red-50" : "border-gray-300"}`} placeholder="Masukkan program studi" />
+                    {formErrors.program_studi && (<p className="mt-1 text-xs text-red-500">{formErrors.program_studi}</p>)}
+                  </div>
                 </div>
                 <div>
                   <label htmlFor="skripsi-tahun-input" className="mb-2 block text-sm font-medium text-gray-700">Tahun <span className="text-red-500">*</span></label>

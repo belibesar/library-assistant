@@ -175,8 +175,8 @@ export default function LibraryCollectionPage() {
       );
     } else if (category === "skripsi") {
       const skripsiFormInput = formInput as SkripsiFormInput;
-      if (!skripsiFormInput.tahun.trim()) newErrors.tahun = "Tahun wajib diisi";
-      if (!skripsiFormInput.nim.trim()) newErrors.nim = "NIM wajib diisi";
+      if (!skripsiFormInput.tahun?.trim()) newErrors.tahun = "Tahun wajib diisi";
+      if (!skripsiFormInput.nim?.trim()) newErrors.nim = "NIM wajib diisi";
       if (!skripsiFormInput.nama_mahasiswa?.trim()) newErrors.nama_mahasiswa = "Nama mahasiswa wajib diisi";
       if (!skripsiFormInput.fakultas?.trim()) newErrors.fakultas = "Fakultas wajib diisi";
       if (!skripsiFormInput.program_studi?.trim()) newErrors.program_studi = "Program studi wajib diisi";
@@ -187,8 +187,8 @@ export default function LibraryCollectionPage() {
         jumlah: jumlahNum,
         tersedia: tersediaNum,
         dipinjam: dipinjamNum,
-        tahun: skripsiFormInput.tahun.trim(),
-        nim: skripsiFormInput.nim.trim(),
+        tahun: skripsiFormInput.tahun?.trim() || "N/A",
+        nim: skripsiFormInput.nim?.trim() || "N/A",
         nama_mahasiswa: skripsiFormInput.nama_mahasiswa?.trim() || "N/A",
         fakultas: skripsiFormInput.fakultas?.trim() || "N/A",
         program_studi: skripsiFormInput.program_studi?.trim() || "N/A",

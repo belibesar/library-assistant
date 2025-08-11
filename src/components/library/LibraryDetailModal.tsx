@@ -293,38 +293,20 @@ export const LibraryDetailModal = ({
                           </a>
                         </div>
                       )}
-                    </div>
-                  </div>
-
-                  {(item as Skripsi).mahasiswa && (
-                    <div className="bg-white rounded-xl border border-gray-200 p-4 sm:p-6 shadow-sm">
-                      <h4 className="text-lg font-semibold text-gray-800 mb-4 flex items-center">
-                        <svg className="w-5 h-5 mr-2 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 14l9-5-9-5-9 5 9 5z" />
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" />
-                        </svg>
-                        Mahasiswa
-                      </h4>
-                      <div className="space-y-3">
-                        <div className="p-3 bg-orange-50 rounded-lg border border-orange-200">
-                          <span className="block text-orange-600 font-medium text-sm">Nama Mahasiswa</span>
-                          <span className="block text-gray-800 font-semibold text-lg">{(item as Skripsi).mahasiswa?.name || 'N/A'}</span>
-                        </div>
-                        <div className="p-3 bg-gray-50 rounded-lg">
-                          <span className="block text-gray-600 font-medium text-sm">Fakultas</span>
-                          <span className="block text-gray-800 font-semibold">{(item as Skripsi).mahasiswa?.fakultas || "N/A"}</span>
-                        </div>
-                        <div className="p-3 bg-gray-50 rounded-lg">
-                          <span className="block text-gray-600 font-medium text-sm">Program Studi</span>
-                          <span className="block text-gray-800 font-semibold">{(item as Skripsi).mahasiswa?.program_studi || "N/A"}</span>
-                        </div>
-                        {/* <div className="p-3 bg-gradient-to-r from-yellow-50 to-amber-50 rounded-lg border border-yellow-200">
-                          <span className="block text-yellow-600 font-medium text-sm">IPK</span>
-                          <span className="block text-gray-800 font-bold text-xl">{(item as Skripsi).mahasiswa?.ipk || "N/A"}</span>
-                        </div> */}
+                      <div className="p-3 bg-orange-50 rounded-lg border border-orange-200">
+                        <span className="block text-orange-600 font-medium text-sm">Nama Mahasiswa</span>
+                        <span className="block text-gray-800 font-semibold text-lg">{(item as Skripsi).nama_mahasiswa || 'N/A'}</span>
+                      </div>
+                      <div className="p-3 bg-gray-50 rounded-lg">
+                        <span className="block text-gray-600 font-medium text-sm">Fakultas</span>
+                        <span className="block text-gray-800 font-semibold">{(item as Skripsi).fakultas || "N/A"}</span>
+                      </div>
+                      <div className="p-3 bg-gray-50 rounded-lg">
+                        <span className="block text-gray-600 font-medium text-sm">Program Studi</span>
+                        <span className="block text-gray-800 font-semibold">{(item as Skripsi).program_studi || "N/A"}</span>
                       </div>
                     </div>
-                  )}
+                  </div>
                 </>
               )}
 
