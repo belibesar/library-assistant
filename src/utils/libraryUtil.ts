@@ -40,7 +40,14 @@ export const getInitialFormInput = (itemType: LibraryItemType): FormInput => {
   } else if (itemType === "journal") {
     return { ...commonFields, jurnal_id: "" } as JournalFormInput;
   } else if (itemType === "skripsi") {
-    return { ...commonFields, tahun: "", nim: "" } as SkripsiFormInput;
+    return {
+      ...commonFields,
+      tahun: "",
+      nim: "",
+      nama_mahasiswa: "",
+      fakultas: "",
+      program_studi: ""
+    } as SkripsiFormInput;
   }
   return commonFields as FormInput;
 };

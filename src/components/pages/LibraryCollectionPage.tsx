@@ -177,6 +177,9 @@ export default function LibraryCollectionPage() {
       const skripsiFormInput = formInput as SkripsiFormInput;
       if (!skripsiFormInput.tahun.trim()) newErrors.tahun = "Tahun wajib diisi";
       if (!skripsiFormInput.nim.trim()) newErrors.nim = "NIM wajib diisi";
+      if (!skripsiFormInput.nama_mahasiswa?.trim()) newErrors.nama_mahasiswa = "Nama mahasiswa wajib diisi";
+      if (!skripsiFormInput.fakultas?.trim()) newErrors.fakultas = "Fakultas wajib diisi";
+      if (!skripsiFormInput.program_studi?.trim()) newErrors.program_studi = "Program studi wajib diisi";
       payload = {
         id: skripsiFormInput.id.trim(),
         judul: skripsiFormInput.judul.trim(),
@@ -186,6 +189,9 @@ export default function LibraryCollectionPage() {
         dipinjam: dipinjamNum,
         tahun: skripsiFormInput.tahun.trim(),
         nim: skripsiFormInput.nim.trim(),
+        nama_mahasiswa: skripsiFormInput.nama_mahasiswa?.trim() || "N/A",
+        fakultas: skripsiFormInput.fakultas?.trim() || "N/A",
+        program_studi: skripsiFormInput.program_studi?.trim() || "N/A",
         link: skripsiFormInput.link?.trim(),
         createdAt: skripsiFormInput.createdAt,
         updatedAt: skripsiFormInput.updatedAt,
@@ -383,6 +389,9 @@ export default function LibraryCollectionPage() {
         dipinjam: item.dipinjam.toString(),
         tahun: (item as any).tahun,
         nim: (item as any).nim,
+        nama_mahasiswa: (item as any).nama_mahasiswa || "",
+        fakultas: (item as any).fakultas || "",
+        program_studi: (item as any).program_studi || "",
         link: (item as any).link || "",
         createdAt: item.createdAt,
         updatedAt: item.updatedAt,
