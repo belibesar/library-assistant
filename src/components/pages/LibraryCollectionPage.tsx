@@ -102,20 +102,22 @@ export default function LibraryCollectionPage() {
     if (category !== "journal" && (!formInput.id || !formInput.id.trim()))
       newErrors.id = "ID wajib diisi";
     if (!formInput.judul.trim()) newErrors.judul = "Judul wajib diisi";
-    if (!formInput.jumlah || Number(formInput.jumlah) < 1)
-      newErrors.jumlah = "Jumlah harus minimal 1";
-    if (!formInput.tersedia || Number(formInput.tersedia) < 0)
-      newErrors.tersedia = "Tersedia tidak boleh negatif";
-    if (!formInput.dipinjam || Number(formInput.dipinjam) < 0)
-      newErrors.dipinjam = "Dipinjam tidak boleh negatif";
 
-    const jumlahNum = Number(formInput.jumlah);
-    const tersediaNum = Number(formInput.tersedia);
-    const dipinjamNum = Number(formInput.dipinjam);
-
-    if (tersediaNum + dipinjamNum !== jumlahNum) {
-      newErrors.general =
-        "Jumlah tersedia + dipinjam harus sama dengan total jumlah";
+    let jumlahNum = 0, tersediaNum = 0, dipinjamNum = 0;
+    if (category === "book") {
+      if (!formInput.jumlah || Number(formInput.jumlah) < 1)
+        newErrors.jumlah = "Jumlah harus minimal 1";
+      if (!formInput.tersedia || Number(formInput.tersedia) < 0)
+        newErrors.tersedia = "Tersedia tidak boleh negatif";
+      if (!formInput.dipinjam || Number(formInput.dipinjam) < 0)
+        newErrors.dipinjam = "Dipinjam tidak boleh negatif";
+      jumlahNum = Number(formInput.jumlah);
+      tersediaNum = Number(formInput.tersedia);
+      dipinjamNum = Number(formInput.dipinjam);
+      if (tersediaNum + dipinjamNum !== jumlahNum) {
+        newErrors.general =
+          "Jumlah tersedia + dipinjam harus sama dengan total jumlah";
+      }
     }
 
     if (!formInput.createdAt)
@@ -157,9 +159,6 @@ export default function LibraryCollectionPage() {
         id: journalFormInput.id?.trim() || undefined,
         judul: journalFormInput.judul.trim(),
         abstrak: journalFormInput.abstrak?.trim(),
-        jumlah: jumlahNum,
-        tersedia: tersediaNum,
-        dipinjam: dipinjamNum,
         jurnal_id: journalFormInput.jurnal_id?.trim() || undefined,
         publikasi_name: journalFormInput.publikasi_name?.trim(),
         publikasi_volume: journalFormInput.publikasi_volume?.trim(),
@@ -169,6 +168,9 @@ export default function LibraryCollectionPage() {
         createdAt: journalFormInput.createdAt,
         updatedAt: journalFormInput.updatedAt,
       };
+      delete payload.jumlah;
+      delete payload.tersedia;
+      delete payload.dipinjam;
       endpoint = "/api/journals";
       isUpdating = items.some(
         (item) => item.id === journalFormInput.id && item.type === "journal",
@@ -180,22 +182,28 @@ export default function LibraryCollectionPage() {
       if (!skripsiFormInput.nama_mahasiswa?.trim()) newErrors.nama_mahasiswa = "Nama mahasiswa wajib diisi";
       if (!skripsiFormInput.fakultas?.trim()) newErrors.fakultas = "Fakultas wajib diisi";
       if (!skripsiFormInput.program_studi?.trim()) newErrors.program_studi = "Program studi wajib diisi";
+      const createdAt = skripsiFormInput.createdAt && !isNaN(Date.parse(skripsiFormInput.createdAt))
+        ? new Date(skripsiFormInput.createdAt).toISOString()
+        : new Date().toISOString();
+      const updatedAt = skripsiFormInput.updatedAt && !isNaN(Date.parse(skripsiFormInput.updatedAt))
+        ? new Date(skripsiFormInput.updatedAt).toISOString()
+        : new Date().toISOString();
       payload = {
         id: skripsiFormInput.id.trim(),
         judul: skripsiFormInput.judul.trim(),
         abstrak: skripsiFormInput.abstrak?.trim() || "",
-        jumlah: jumlahNum,
-        tersedia: tersediaNum,
-        dipinjam: dipinjamNum,
         tahun: skripsiFormInput.tahun?.trim() || "N/A",
         nim: skripsiFormInput.nim?.trim() || "N/A",
         nama_mahasiswa: skripsiFormInput.nama_mahasiswa?.trim() || "N/A",
         fakultas: skripsiFormInput.fakultas?.trim() || "N/A",
         program_studi: skripsiFormInput.program_studi?.trim() || "N/A",
         link: skripsiFormInput.link?.trim(),
-        createdAt: skripsiFormInput.createdAt,
-        updatedAt: skripsiFormInput.updatedAt,
+        createdAt,
+        updatedAt,
       };
+      delete payload.jumlah;
+      delete payload.tersedia;
+      delete payload.dipinjam;
       endpoint = "/api/thesis";
       isUpdating = items.some(
         (item) => item.id === skripsiFormInput.id && item.type === "skripsi",
@@ -351,9 +359,9 @@ export default function LibraryCollectionPage() {
         lokasi: (item as any).lokasi || "",
         sinopsis: (item as any).sinopsis || "",
         rak: (item as any).rak || "",
-        jumlah: item.jumlah.toString(),
-        tersedia: item.tersedia.toString(),
-        dipinjam: item.dipinjam.toString(),
+        jumlah: (item.jumlah ?? 0).toString(),
+        tersedia: (item.tersedia ?? 0).toString(),
+        dipinjam: (item.dipinjam ?? 0).toString(),
         penerbit_id: (item as any).penerbit_id,
         pengarang_id: (item as any).pengarang_id,
         pengarang_name: (item as any).pengarang?.name || "",
@@ -367,9 +375,9 @@ export default function LibraryCollectionPage() {
         id: item.id || "",
         judul: item.judul,
         abstrak: item.abstrak,
-        jumlah: item.jumlah.toString(),
-        tersedia: item.tersedia.toString(),
-        dipinjam: item.dipinjam.toString(),
+        // jumlah: item.jumlah.toString(),
+        // tersedia: item.tersedia.toString(),
+        // dipinjam: item.dipinjam.toString(),
         jurnal_id: (item as any).jurnal_id,
         publikasi_name: (item as any).publikasi?.name || "",
         publikasi_volume: (item as any).publikasi?.volume || "",
@@ -384,9 +392,9 @@ export default function LibraryCollectionPage() {
         id: item.id || "",
         judul: item.judul,
         abstrak: item.abstrak,
-        jumlah: item.jumlah.toString(),
-        tersedia: item.tersedia.toString(),
-        dipinjam: item.dipinjam.toString(),
+        // jumlah: item.jumlah.toString(),
+        // tersedia: item.tersedia.toString(),
+        // dipinjam: item.dipinjam.toString(),
         tahun: (item as any).tahun,
         nim: (item as any).nim,
         nama_mahasiswa: (item as any).nama_mahasiswa || "",

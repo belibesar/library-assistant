@@ -40,7 +40,7 @@ export async function POST(request: NextRequest) {
     const requestData = await request.json();
     const timestamp = new Date().toISOString();
 
-    const newThesis: Thesis = {
+    const newThesis: any = {
       id: requestData.id || +new Date(),
       judul: requestData.judul,
       abstrak: requestData.abstrak,
@@ -51,12 +51,19 @@ export async function POST(request: NextRequest) {
       program_studi: requestData.program_studi,
       tahun: requestData.tahun,
       link: requestData.link,
-      jumlah: Number(requestData.jumlah),
-      tersedia: Number(requestData.jumlah),
-      dipinjam: Number(requestData.dipinjam) || 0,
       createdAt: timestamp,
       updatedAt: timestamp,
     };
+    // Only add jumlah, tersedia, dipinjam if valid number
+    if (typeof requestData.jumlah === 'number' && !isNaN(requestData.jumlah)) {
+      newThesis.jumlah = requestData.jumlah;
+    }
+    if (typeof requestData.tersedia === 'number' && !isNaN(requestData.tersedia)) {
+      newThesis.tersedia = requestData.tersedia;
+    }
+    if (typeof requestData.dipinjam === 'number' && !isNaN(requestData.dipinjam)) {
+      newThesis.dipinjam = requestData.dipinjam;
+    }
     const thesisData = await thesisSchema.parseAsync(newThesis);
     const createdThesis = await ThesisModel.createThesis(thesisData);
 

@@ -6,11 +6,9 @@ const journalSchema = z.object({
     required_error: "Judul harus diisi!",
   }),
   abstrak: z.string().optional(),
-  jumlah: z.number({
-    required_error: "Jumlah harus diisi!",
-  }),
-  tersedia: z.number(),
-  dipinjam: z.number(),
+  jumlah: z.number().optional(),
+  tersedia: z.number().optional(),
+  dipinjam: z.number().optional(),
   jurnal_id: z.string().optional(),
   publikasi_name: z.string({
     required_error: "Nama publikasi harus diisi!",
