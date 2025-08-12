@@ -105,6 +105,9 @@ export const useLibraryItems = () => {
               nim: item.nim || "",
               link: item.link || "",
               type: "skripsi",
+              nama_mahasiswa: item.nama_mahasiswa || "",
+              fakultas: item.fakultas || "",
+              program_studi: item.program_studi || "",
               mahasiswa: item.mahasiswa,
             } as Skripsi;
           }

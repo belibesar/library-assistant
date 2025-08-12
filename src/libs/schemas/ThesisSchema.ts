@@ -9,6 +9,9 @@ const thesisSchema = z.object({
   nim: z.string({
     required_error: "NIM harus diisi!",
   }),
+  nama_mahasiswa: z.string().optional(),
+  fakultas: z.string().optional(),
+  program_studi: z.string().optional(),
   tahun: z.string({
     required_error: "Tahun harus diisi!",
   }),

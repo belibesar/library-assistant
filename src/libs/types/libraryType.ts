@@ -37,6 +37,9 @@ export interface Skripsi extends BaseItem {
   nim: string;
   link?: string;
   type: "skripsi";
+  nama_mahasiswa?: string;
+  fakultas?: string;
+  program_studi?: string;
   mahasiswa?: Mahasiswa;
 }
 
@@ -87,6 +90,9 @@ export interface SkripsiFormInput {
   dipinjam: number | string;
   tahun: string;
   nim: string;
+  nama_mahasiswa?: string;
+  fakultas?: string;
+  program_studi?: string;
   link?: string;
   createdAt?: string;
   updatedAt?: string;
