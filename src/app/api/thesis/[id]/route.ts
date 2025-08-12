@@ -63,7 +63,7 @@ export async function PUT(
       );
     }
     const existing = foundedThesis;
-    const newThesis: any = {
+    const newThesis: Thesis = {
       id: requestData.id || existing.id,
       judul: requestData.judul || existing.judul,
       abstrak: requestData.abstrak ?? existing.abstrak,

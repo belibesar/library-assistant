@@ -2,13 +2,7 @@ import { LibraryItem, Book, Journal, Skripsi } from "../../libs/types/libraryTyp
 import { formatDateForInput, getItemTypeLabel } from "@/utils/libraryUtil";
 import { useModalAnimation } from "@/hooks/useModalAnimation";
 import { useEffect, useState } from "react";
-
-interface LibraryDetailModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  item: LibraryItem | null;
-}
-
+import { LibraryDetailModalProps } from "@/libs/types";
 export const LibraryDetailModal = ({
   isOpen,
   onClose,

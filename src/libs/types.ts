@@ -80,6 +80,12 @@ export type CustomError = {
   message: string;
   status: number;
 };
+// modal
+export interface LibraryDetailModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  item: LibraryItem | null;
+}
 export interface Buku {
   id: string;
   judul: string;
