@@ -5,9 +5,9 @@ export interface BaseItem {
   id: string;
   judul: string;
   abstrak: string;
-  jumlah: number;
-  tersedia: number;
-  dipinjam: number;
+  jumlah?: number;
+  tersedia?: number;
+  dipinjam?: number;
   createdAt?: string;
   updatedAt?: string;
   count?: number;
@@ -41,6 +41,9 @@ export interface Skripsi extends BaseItem {
   fakultas?: string;
   program_studi?: string;
   mahasiswa?: Mahasiswa;
+  // jumlah?: number;
+  // tersedia?: number;
+  // dipinjam?: number;
 }
 
 export type LibraryItem = Book | Journal | Skripsi;
@@ -85,9 +88,9 @@ export interface SkripsiFormInput {
   id: string;
   judul: string;
   abstrak: string;
-  jumlah: number | string;
-  tersedia: number | string;
-  dipinjam: number | string;
+  jumlah?: number | string;
+  tersedia?: number | string;
+  dipinjam?: number | string;
   tahun: string;
   nim: string;
   nama_mahasiswa?: string;

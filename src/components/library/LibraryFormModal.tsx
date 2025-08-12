@@ -459,91 +459,93 @@ export const LibraryFormModal = ({
               </>
             )}
 
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-              <div>
-                <label
-                  htmlFor={`${category}-jumlah-input`}
-                  className="mb-1 block text-sm font-medium text-gray-700"
-                >
-                  Total Eksemplar <span className="text-red-500">*</span>
-                </label>
-                <input
-                  id={`${category}-jumlah-input`}
-                  type="number"
-                  name="jumlah"
-                  value={formInput.jumlah}
-                  onChange={onChange}
-                  min="1"
-                  className={`w-full rounded-md border px-3 py-2 focus:border-transparent focus:ring-2 focus:ring-blue-500 focus:outline-none ${
-                    formErrors.jumlah
-                      ? "border-red-500 bg-red-50"
-                      : "border-gray-300"
-                  }`}
-                  placeholder="1"
-                />
-                {formErrors.jumlah && (
-                  <p className="mt-1 text-xs text-red-500">
-                    {formErrors.jumlah}
-                  </p>
-                )}
-              </div>
+            {category === "book" && (
+              <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+                <div>
+                  <label
+                    htmlFor={`${category}-jumlah-input`}
+                    className="mb-1 block text-sm font-medium text-gray-700"
+                  >
+                    Total Eksemplar <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    id={`${category}-jumlah-input`}
+                    type="number"
+                    name="jumlah"
+                    value={formInput.jumlah}
+                    onChange={onChange}
+                    min="1"
+                    className={`w-full rounded-md border px-3 py-2 focus:border-transparent focus:ring-2 focus:ring-blue-500 focus:outline-none ${
+                      formErrors.jumlah
+                        ? "border-red-500 bg-red-50"
+                        : "border-gray-300"
+                    }`}
+                    placeholder="1"
+                  />
+                  {formErrors.jumlah && (
+                    <p className="mt-1 text-xs text-red-500">
+                      {formErrors.jumlah}
+                    </p>
+                  )}
+                </div>
 
-              <div>
-                <label
-                  htmlFor={`${category}-tersedia-input`}
-                  className="mb-1 block text-sm font-medium text-gray-700"
-                >
-                  Tersedia <span className="text-red-500">*</span>
-                </label>
-                <input
-                  id={`${category}-tersedia-input`}
-                  type="number"
-                  name="tersedia"
-                  value={formInput.tersedia}
-                  onChange={onChange}
-                  min="0"
-                  className={`w-full rounded-md border px-3 py-2 focus:border-transparent focus:ring-2 focus:ring-blue-500 focus:outline-none ${
-                    formErrors.tersedia
-                      ? "border-red-500 bg-red-50"
-                      : "border-gray-300"
-                  }`}
-                  placeholder="1"
-                />
-                {formErrors.tersedia && (
-                  <p className="mt-1 text-xs text-red-500">
-                    {formErrors.tersedia}
-                  </p>
-                )}
-              </div>
+                <div>
+                  <label
+                    htmlFor={`${category}-tersedia-input`}
+                    className="mb-1 block text-sm font-medium text-gray-700"
+                  >
+                    Tersedia <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    id={`${category}-tersedia-input`}
+                    type="number"
+                    name="tersedia"
+                    value={formInput.tersedia}
+                    onChange={onChange}
+                    min="0"
+                    className={`w-full rounded-md border px-3 py-2 focus:border-transparent focus:ring-2 focus:ring-blue-500 focus:outline-none ${
+                      formErrors.tersedia
+                        ? "border-red-500 bg-red-50"
+                        : "border-gray-300"
+                    }`}
+                    placeholder="1"
+                  />
+                  {formErrors.tersedia && (
+                    <p className="mt-1 text-xs text-red-500">
+                      {formErrors.tersedia}
+                    </p>
+                  )}
+                </div>
 
-              <div>
-                <label
-                  htmlFor={`${category}-dipinjam-input`}
-                  className="mb-1 block text-sm font-medium text-gray-700"
-                >
-                  Dipinjam <span className="text-red-500">*</span>
-                </label>
-                <input
-                  id={`${category}-dipinjam-input`}
-                  type="number"
-                  name="dipinjam"
-                  value={formInput.dipinjam}
-                  onChange={onChange}
-                  min="0"
-                  className={`w-full rounded-md border px-3 py-2 focus:border-transparent focus:ring-2 focus:ring-blue-500 focus:outline-none ${
-                    formErrors.dipinjam
-                      ? "border-red-500 bg-red-50"
-                      : "border-gray-300"
-                  }`}
-                  placeholder="0"
-                />
-                {formErrors.dipinjam && (
-                  <p className="mt-1 text-xs text-red-500">
-                    {formErrors.dipinjam}
-                  </p>
-                )}
+                <div>
+                  <label
+                    htmlFor={`${category}-dipinjam-input`}
+                    className="mb-1 block text-sm font-medium text-gray-700"
+                  >
+                    Dipinjam <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    id={`${category}-dipinjam-input`}
+                    type="number"
+                    name="dipinjam"
+                    value={formInput.dipinjam}
+                    onChange={onChange}
+                    min="0"
+                    className={`w-full rounded-md border px-3 py-2 focus:border-transparent focus:ring-2 focus:ring-blue-500 focus:outline-none ${
+                      formErrors.dipinjam
+                        ? "border-red-500 bg-red-50"
+                        : "border-gray-300"
+                    }`}
+                    placeholder="0"
+                  />
+                  {formErrors.dipinjam && (
+                    <p className="mt-1 text-xs text-red-500">
+                      {formErrors.dipinjam}
+                    </p>
+                  )}
+                </div>
               </div>
-            </div>
+            )}
 
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
               <div>

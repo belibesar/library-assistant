@@ -59,13 +59,10 @@ export async function PUT(
     const requestData = await request.json();
     const timestamp = new Date().toISOString();
 
-    const newData: Journal = {
+    const newData: any = {
       id: requestData.id || currentJournal.id,
       judul: requestData.judul || currentJournal.judul,
       abstrak: requestData.abstrak ?? currentJournal.abstrak,
-      jumlah: Number(requestData.jumlah) || currentJournal.jumlah,
-      tersedia: Number(requestData.tersedia) || currentJournal.tersedia,
-      dipinjam: Number(requestData.dipinjam) || currentJournal.dipinjam,
       jurnal_id: requestData.jurnal_id || currentJournal.jurnal_id,
       publikasi_name: requestData.publikasi_name,
       publikasi_volume: requestData.publikasi_volume,
@@ -76,6 +73,21 @@ export async function PUT(
       createdAt: currentJournal.createdAt,
       updatedAt: timestamp,
     };
+    if (typeof requestData.jumlah === 'number' && !isNaN(requestData.jumlah)) {
+      newData.jumlah = requestData.jumlah;
+    } else if (typeof currentJournal.jumlah === 'number' && !isNaN(currentJournal.jumlah)) {
+      newData.jumlah = currentJournal.jumlah;
+    }
+    if (typeof requestData.tersedia === 'number' && !isNaN(requestData.tersedia)) {
+      newData.tersedia = requestData.tersedia;
+    } else if (typeof currentJournal.tersedia === 'number' && !isNaN(currentJournal.tersedia)) {
+      newData.tersedia = currentJournal.tersedia;
+    }
+    if (typeof requestData.dipinjam === 'number' && !isNaN(requestData.dipinjam)) {
+      newData.dipinjam = requestData.dipinjam;
+    } else if (typeof currentJournal.dipinjam === 'number' && !isNaN(currentJournal.dipinjam)) {
+      newData.dipinjam = currentJournal.dipinjam;
+    }
 
     const journalData = await journalSchema.parseAsync(newData);
     const updatedJournal = await JournalModel.updateJournal(id, journalData);

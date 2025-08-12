@@ -9,9 +9,9 @@ export type Thesis = {
   program_studi?: string;
   tahun: string;
   link?: string;
-  jumlah: number;
-  tersedia: number;
-  dipinjam: number;
+  jumlah?: number;
+  tersedia?: number;
+  dipinjam?: number;
   updatedAt?: string;
   createdAt?: string;
 };
