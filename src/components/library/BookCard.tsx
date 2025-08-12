@@ -78,7 +78,7 @@ export const BookCard = ({
             </span>
             <div className="min-h-20">
               <p className="line-clamp-3 text-base leading-relaxed text-gray-600 transition-colors duration-200 group-hover:text-gray-700">
-                Sinopsis: {book.abstrak || "Sinopsis belum tersedia"}
+                Sinopsis: {book.sinopsis || book.abstrak || "Sinopsis belum tersedia"}
               </p>
             </div>
           </div>
