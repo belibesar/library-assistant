@@ -103,7 +103,9 @@ export default function LibraryCollectionPage() {
       newErrors.id = "ID wajib diisi";
     if (!formInput.judul.trim()) newErrors.judul = "Judul wajib diisi";
 
-    let jumlahNum = 0, tersediaNum = 0, dipinjamNum = 0;
+    let jumlahNum = 0,
+      tersediaNum = 0,
+      dipinjamNum = 0;
     if (category === "book") {
       if (!formInput.jumlah || Number(formInput.jumlah) < 1)
         newErrors.jumlah = "Jumlah harus minimal 1";
@@ -177,17 +179,25 @@ export default function LibraryCollectionPage() {
       );
     } else if (category === "skripsi") {
       const skripsiFormInput = formInput as SkripsiFormInput;
-      if (!skripsiFormInput.tahun?.trim()) newErrors.tahun = "Tahun wajib diisi";
+      if (!skripsiFormInput.tahun?.trim())
+        newErrors.tahun = "Tahun wajib diisi";
       if (!skripsiFormInput.nim?.trim()) newErrors.nim = "NIM wajib diisi";
-      if (!skripsiFormInput.nama_mahasiswa?.trim()) newErrors.nama_mahasiswa = "Nama mahasiswa wajib diisi";
-      if (!skripsiFormInput.fakultas?.trim()) newErrors.fakultas = "Fakultas wajib diisi";
-      if (!skripsiFormInput.program_studi?.trim()) newErrors.program_studi = "Program studi wajib diisi";
-      const createdAt = skripsiFormInput.createdAt && !isNaN(Date.parse(skripsiFormInput.createdAt))
-        ? new Date(skripsiFormInput.createdAt).toISOString()
-        : new Date().toISOString();
-      const updatedAt = skripsiFormInput.updatedAt && !isNaN(Date.parse(skripsiFormInput.updatedAt))
-        ? new Date(skripsiFormInput.updatedAt).toISOString()
-        : new Date().toISOString();
+      if (!skripsiFormInput.nama_mahasiswa?.trim())
+        newErrors.nama_mahasiswa = "Nama mahasiswa wajib diisi";
+      if (!skripsiFormInput.fakultas?.trim())
+        newErrors.fakultas = "Fakultas wajib diisi";
+      if (!skripsiFormInput.program_studi?.trim())
+        newErrors.program_studi = "Program studi wajib diisi";
+      const createdAt =
+        skripsiFormInput.createdAt &&
+        !isNaN(Date.parse(skripsiFormInput.createdAt))
+          ? new Date(skripsiFormInput.createdAt).toISOString()
+          : new Date().toISOString();
+      const updatedAt =
+        skripsiFormInput.updatedAt &&
+        !isNaN(Date.parse(skripsiFormInput.updatedAt))
+          ? new Date(skripsiFormInput.updatedAt).toISOString()
+          : new Date().toISOString();
       payload = {
         id: skripsiFormInput.id.trim(),
         judul: skripsiFormInput.judul.trim(),
@@ -218,6 +228,7 @@ export default function LibraryCollectionPage() {
     }
 
     try {
+      console.log("trying...");
       const url = isUpdating ? `${endpoint}/${itemId}` : endpoint;
       const method = isUpdating ? "PUT" : "POST";
 
@@ -505,9 +516,9 @@ export default function LibraryCollectionPage() {
 
       <div className="grid grid-cols-1 gap-4 pt-4">
         {loading ? (
-          <LibrarySkeletonLoading 
-            count={3} 
-            type={category === 'book' ? undefined : category}
+          <LibrarySkeletonLoading
+            count={3}
+            type={category === "book" ? undefined : category}
           />
         ) : items.length > 0 ? (
           items.map((item) => {
