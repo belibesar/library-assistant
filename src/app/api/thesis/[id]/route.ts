@@ -73,13 +73,25 @@ export async function PUT(
       program_studi: requestData.program_studi || existing.program_studi,
       tahun: requestData.tahun || existing.tahun,
       link: requestData.link ?? existing.link,
-      jumlah: Number(requestData.jumlah) || existing.jumlah,
-      tersedia: Number(requestData.tersedia) || existing.tersedia,
-      dipinjam: Number(requestData.dipinjam) || existing.dipinjam,
       count: existing.count || 0,
       createdAt: existing.createdAt,
       updatedAt: timestamp,
     };
+    if (typeof requestData.jumlah === 'number' && !isNaN(requestData.jumlah)) {
+      newThesis.jumlah = requestData.jumlah;
+    } else if (typeof existing.jumlah === 'number' && !isNaN(existing.jumlah)) {
+      newThesis.jumlah = existing.jumlah;
+    }
+    if (typeof requestData.tersedia === 'number' && !isNaN(requestData.tersedia)) {
+      newThesis.tersedia = requestData.tersedia;
+    } else if (typeof existing.tersedia === 'number' && !isNaN(existing.tersedia)) {
+      newThesis.tersedia = existing.tersedia;
+    }
+    if (typeof requestData.dipinjam === 'number' && !isNaN(requestData.dipinjam)) {
+      newThesis.dipinjam = requestData.dipinjam;
+    } else if (typeof existing.dipinjam === 'number' && !isNaN(existing.dipinjam)) {
+      newThesis.dipinjam = existing.dipinjam;
+    }
 
     const thesisData = await thesisSchema.parseAsync(newThesis);
     const updatedThesis = await ThesisModel.updateThesis(id, thesisData);

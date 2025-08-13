@@ -15,11 +15,9 @@ const thesisSchema = z.object({
   tahun: z.string({
     required_error: "Tahun harus diisi!",
   }),
-  jumlah: z.number({
-    required_error: "Jumlah harus diisi!",
-  }),
-  tersedia: z.number(),
-  dipinjam: z.number(),
+  jumlah: z.number().optional(),
+  tersedia: z.number().optional(),
+  dipinjam: z.number().optional(),
   link: z.string().optional(),
   count: z.number().optional(),
   createdAt: z.string().optional(),
