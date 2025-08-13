@@ -94,62 +94,244 @@ export default function Collections() {
       });
     }
   };
+  // submitting issue
+  // const handleSubmit = async (e: React.FormEvent) => {
+  //   e.preventDefault();
+  //   setFormErrors({});
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  //   let newErrors: { [key: string]: string } = {};
+  //   let payload: any;
+  //   let endpoint = "";
+  //   let isUpdating = isEditMode && selectedItem;
+  //   let itemId = (formInput as any).id;
+
+  //   // Common validation
+  //   if (category !== "journal" && (!formInput.id || !formInput.id.trim())) {
+  //     newErrors.id = "ID wajib diisi";
+  //   }
+  //   if (!formInput.judul?.trim()) {
+  //     newErrors.judul = "Judul wajib diisi";
+  //   }
+  //   if (!formInput.jumlah || Number(formInput.jumlah) < 1) {
+  //     newErrors.jumlah = "Jumlah harus minimal 1";
+  //   }
+  //   if (formInput.tersedia === undefined || Number(formInput.tersedia) < 0) {
+  //     newErrors.tersedia = "Tersedia tidak boleh negatif";
+  //   }
+  //   if (formInput.dipinjam === undefined || Number(formInput.dipinjam) < 0) {
+  //     newErrors.dipinjam = "Dipinjam tidak boleh negatif";
+  //   }
+
+  //   const jumlahNum = Number(formInput.jumlah);
+  //   const tersediaNum = Number(formInput.tersedia);
+  //   const dipinjamNum = Number(formInput.dipinjam);
+
+  //   if (tersediaNum + dipinjamNum !== jumlahNum) {
+  //     newErrors.general =
+  //       "Jumlah tersedia + dipinjam harus sama dengan total jumlah";
+  //   }
+
+  //   if (!formInput.createdAt) {
+  //     newErrors.createdAt = "Tanggal dibuat wajib diisi";
+  //   }
+  //   if (!formInput.updatedAt) {
+  //     newErrors.updatedAt = "Tanggal diperbarui wajib diisi";
+  //   }
+
+  //   // Category specific validation and payload
+  //   if (category === "book") {
+  //     const bookFormInput = formInput as BookFormInput;
+  //     if (!bookFormInput.pengarang_name?.trim()) {
+  //       newErrors.pengarang_name = "Nama pengarang wajib diisi";
+  //     }
+  //     if (!bookFormInput.penerbit_name?.trim()) {
+  //       newErrors.penerbit_name = "Nama penerbit wajib diisi";
+  //     }
+  //     payload = {
+  //       id: bookFormInput.id?.trim(),
+  //       judul: bookFormInput.judul?.trim(),
+  //       abstrak: "karena buku hanya ada sinopsis",
+  //       lokasi: bookFormInput.lokasi?.trim(),
+  //       sinopsis: bookFormInput.sinopsis?.trim(),
+  //       rak: bookFormInput.rak?.trim(),
+  //       jumlah: jumlahNum,
+  //       tersedia: tersediaNum,
+  //       dipinjam: dipinjamNum,
+  //       pengarang_name: bookFormInput.pengarang_name?.trim(),
+  //       pengarang_nationality: bookFormInput.pengarang_nationality?.trim(),
+  //       penerbit_name: bookFormInput.penerbit_name?.trim(),
+  //       createdAt: bookFormInput.createdAt,
+  //       updatedAt: bookFormInput.updatedAt,
+  //     };
+  //     endpoint = "/api/books";
+  //   } else if (category === "journal") {
+  //     const journalFormInput = formInput as JournalFormInput;
+  //     if (!journalFormInput.publikasi_name?.trim()) {
+  //       newErrors.publikasi_name = "Nama publikasi wajib diisi";
+  //     }
+  //     payload = {
+  //       id: journalFormInput.id?.trim() || undefined,
+  //       judul: journalFormInput.judul?.trim(),
+  //       abstrak: journalFormInput.abstrak?.trim(),
+  //       jumlah: jumlahNum,
+  //       tersedia: tersediaNum,
+  //       dipinjam: dipinjamNum,
+  //       jurnal_id: journalFormInput.jurnal_id?.trim() || undefined,
+  //       publikasi_name: journalFormInput.publikasi_name?.trim(),
+  //       publikasi_volume: journalFormInput.publikasi_volume?.trim(),
+  //       publikasi_tahun: journalFormInput.publikasi_tahun?.trim(),
+  //       authors: journalFormInput.authors?.trim(),
+  //       link: journalFormInput.link?.trim(),
+  //       createdAt: journalFormInput.createdAt,
+  //       updatedAt: journalFormInput.updatedAt,
+  //     };
+  //     endpoint = "/api/journals";
+  //   } else if (category === "skripsi") {
+  //     const skripsiFormInput = formInput as SkripsiFormInput;
+  //     if (!skripsiFormInput.tahun?.trim()) {
+  //       newErrors.tahun = "Tahun wajib diisi";
+  //     }
+  //     if (!skripsiFormInput.nim?.trim()) {
+  //       newErrors.nim = "NIM wajib diisi";
+  //     }
+  //     payload = {
+  //       id: skripsiFormInput.id?.trim(),
+  //       judul: skripsiFormInput.judul?.trim(),
+  //       abstrak: skripsiFormInput.abstrak?.trim() || "",
+  //       jumlah: jumlahNum,
+  //       tersedia: tersediaNum,
+  //       dipinjam: dipinjamNum,
+  //       tahun: skripsiFormInput.tahun?.trim(),
+  //       nim: skripsiFormInput.nim?.trim(),
+  //       link: skripsiFormInput.link?.trim(),
+  //       createdAt: skripsiFormInput.createdAt,
+  //       updatedAt: skripsiFormInput.updatedAt,
+  //     };
+  //     endpoint = "/api/thesis";
+  //   }
+
+  //   if (Object.keys(newErrors).length > 0) {
+  //     setFormErrors(newErrors);
+  //     return;
+  //   }
+
+  //   try {
+  //     console.log("trying....");
+
+  //     const url = isUpdating ? `${endpoint}/${itemId}` : endpoint;
+  //     const method = isUpdating ? "PUT" : "POST";
+
+  //     const res = await fetch(url, {
+  //       method,
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify(payload),
+  //     });
+
+  //     if (!res.ok) {
+  //       let errorMessage = `Gagal ${isUpdating ? "memperbarui" : "menambahkan"} ${category}`;
+  //       try {
+  //         const errorData = await res.json();
+  //         if (errorData.error && errorData.error.issues) {
+  //           const zodErrors: { [key: string]: string } = {};
+  //           errorData.error.issues.forEach((issue: any) => {
+  //             zodErrors[issue.path[0]] = issue.message;
+  //           });
+  //           setFormErrors(zodErrors);
+  //           showNotification("Validasi gagal: Periksa input Anda.", "error");
+  //           return;
+  //         }
+  //         errorMessage = errorData.message || errorMessage;
+  //       } catch (jsonParseError) {
+  //         console.error("Failed to parse error response:", jsonParseError);
+  //       }
+  //       showNotification(errorMessage, "error");
+  //       return;
+  //     }
+
+  //     const json = await res.json();
+
+  //     if (json.success) {
+  //       showNotification(
+  //         `${category} berhasil ${isUpdating ? "diperbarui" : "ditambahkan"}!`,
+  //         "success",
+  //       );
+  //       setIsFormModalOpen(false);
+  //       await fetchItems();
+  //       if (!isUpdating) {
+  //         setPage(1);
+  //       }
+  //     } else {
+  //       showNotification(
+  //         json.message ||
+  //           `Gagal ${isUpdating ? "memperbarui" : "menambahkan"} ${category}`,
+  //         "error",
+  //       );
+  //     }
+  //   } catch (error: any) {
+  //     console.error("Error saving item:", error);
+  //     if (error instanceof ZodError) {
+  //       const zodErrors: { [key: string]: string } = {};
+  //       error.errors.forEach((issue) => {
+  //         zodErrors[issue.path[0]] = issue.message;
+  //       });
+  //       setFormErrors(zodErrors);
+  //       showNotification("Validasi gagal. Periksa input Anda.", "error");
+  //     } else {
+  //       showNotification("Terjadi kesalahan yang tidak diketahui.", "error");
+  //     }
+  //   }
+  // };
+
+  // solution:
+  const handleAddItem = async (e: React.FormEvent) => {
     e.preventDefault();
     setFormErrors({});
 
     let newErrors: { [key: string]: string } = {};
     let payload: any;
     let endpoint = "";
-    let isUpdating = isEditMode && selectedItem;
+    let isUpdating = false;
     let itemId = (formInput as any).id;
 
-    // Common validation
-    if (category !== "journal" && (!formInput.id || !formInput.id.trim())) {
+    if (category !== "journal" && (!formInput.id || !formInput.id.trim()))
       newErrors.id = "ID wajib diisi";
-    }
-    if (!formInput.judul?.trim()) {
-      newErrors.judul = "Judul wajib diisi";
-    }
-    if (!formInput.jumlah || Number(formInput.jumlah) < 1) {
-      newErrors.jumlah = "Jumlah harus minimal 1";
-    }
-    if (formInput.tersedia === undefined || Number(formInput.tersedia) < 0) {
-      newErrors.tersedia = "Tersedia tidak boleh negatif";
-    }
-    if (formInput.dipinjam === undefined || Number(formInput.dipinjam) < 0) {
-      newErrors.dipinjam = "Dipinjam tidak boleh negatif";
+    if (!formInput.judul.trim()) newErrors.judul = "Judul wajib diisi";
+
+    let jumlahNum = 0,
+      tersediaNum = 0,
+      dipinjamNum = 0;
+    if (category === "book") {
+      if (!formInput.jumlah || Number(formInput.jumlah) < 1)
+        newErrors.jumlah = "Jumlah harus minimal 1";
+      if (!formInput.tersedia || Number(formInput.tersedia) < 0)
+        newErrors.tersedia = "Tersedia tidak boleh negatif";
+      if (!formInput.dipinjam || Number(formInput.dipinjam) < 0)
+        newErrors.dipinjam = "Dipinjam tidak boleh negatif";
+      jumlahNum = Number(formInput.jumlah);
+      tersediaNum = Number(formInput.tersedia);
+      dipinjamNum = Number(formInput.dipinjam);
+      if (tersediaNum + dipinjamNum !== jumlahNum) {
+        newErrors.general =
+          "Jumlah tersedia + dipinjam harus sama dengan total jumlah";
+      }
     }
 
-    const jumlahNum = Number(formInput.jumlah);
-    const tersediaNum = Number(formInput.tersedia);
-    const dipinjamNum = Number(formInput.dipinjam);
-
-    if (tersediaNum + dipinjamNum !== jumlahNum) {
-      newErrors.general =
-        "Jumlah tersedia + dipinjam harus sama dengan total jumlah";
-    }
-
-    if (!formInput.createdAt) {
+    if (!formInput.createdAt)
       newErrors.createdAt = "Tanggal dibuat wajib diisi";
-    }
-    if (!formInput.updatedAt) {
+    if (!formInput.updatedAt)
       newErrors.updatedAt = "Tanggal diperbarui wajib diisi";
-    }
 
-    // Category specific validation and payload
     if (category === "book") {
       const bookFormInput = formInput as BookFormInput;
-      if (!bookFormInput.pengarang_name?.trim()) {
+      if (!bookFormInput.pengarang_name?.trim())
         newErrors.pengarang_name = "Nama pengarang wajib diisi";
-      }
-      if (!bookFormInput.penerbit_name?.trim()) {
+      if (!bookFormInput.penerbit_name?.trim())
         newErrors.penerbit_name = "Nama penerbit wajib diisi";
-      }
       payload = {
-        id: bookFormInput.id?.trim(),
-        judul: bookFormInput.judul?.trim(),
+        id: bookFormInput.id.trim(),
+        judul: bookFormInput.judul.trim(),
         abstrak: "karena buku hanya ada sinopsis",
         lokasi: bookFormInput.lokasi?.trim(),
         sinopsis: bookFormInput.sinopsis?.trim(),
@@ -164,18 +346,17 @@ export default function Collections() {
         updatedAt: bookFormInput.updatedAt,
       };
       endpoint = "/api/books";
+      isUpdating = items.some(
+        (item) => item.id === bookFormInput.id && item.type === "book",
+      );
     } else if (category === "journal") {
       const journalFormInput = formInput as JournalFormInput;
-      if (!journalFormInput.publikasi_name?.trim()) {
+      if (!journalFormInput.publikasi_name?.trim())
         newErrors.publikasi_name = "Nama publikasi wajib diisi";
-      }
       payload = {
         id: journalFormInput.id?.trim() || undefined,
-        judul: journalFormInput.judul?.trim(),
+        judul: journalFormInput.judul.trim(),
         abstrak: journalFormInput.abstrak?.trim(),
-        jumlah: jumlahNum,
-        tersedia: tersediaNum,
-        dipinjam: dipinjamNum,
         jurnal_id: journalFormInput.jurnal_id?.trim() || undefined,
         publikasi_name: journalFormInput.publikasi_name?.trim(),
         publikasi_volume: journalFormInput.publikasi_volume?.trim(),
@@ -185,29 +366,56 @@ export default function Collections() {
         createdAt: journalFormInput.createdAt,
         updatedAt: journalFormInput.updatedAt,
       };
+      delete payload.jumlah;
+      delete payload.tersedia;
+      delete payload.dipinjam;
       endpoint = "/api/journals";
+      isUpdating = items.some(
+        (item) => item.id === journalFormInput.id && item.type === "journal",
+      );
     } else if (category === "skripsi") {
       const skripsiFormInput = formInput as SkripsiFormInput;
-      if (!skripsiFormInput.tahun?.trim()) {
+      if (!skripsiFormInput.tahun?.trim())
         newErrors.tahun = "Tahun wajib diisi";
-      }
-      if (!skripsiFormInput.nim?.trim()) {
-        newErrors.nim = "NIM wajib diisi";
-      }
+      if (!skripsiFormInput.nim?.trim()) newErrors.nim = "NIM wajib diisi";
+      if (!skripsiFormInput.nama_mahasiswa?.trim())
+        newErrors.nama_mahasiswa = "Nama mahasiswa wajib diisi";
+      if (!skripsiFormInput.fakultas?.trim())
+        newErrors.fakultas = "Fakultas wajib diisi";
+      if (!skripsiFormInput.program_studi?.trim())
+        newErrors.program_studi = "Program studi wajib diisi";
+      const createdAt =
+        skripsiFormInput.createdAt &&
+        !isNaN(Date.parse(skripsiFormInput.createdAt))
+          ? new Date(skripsiFormInput.createdAt).toISOString()
+          : new Date().toISOString();
+      const updatedAt =
+        skripsiFormInput.updatedAt &&
+        !isNaN(Date.parse(skripsiFormInput.updatedAt))
+          ? new Date(skripsiFormInput.updatedAt).toISOString()
+          : new Date().toISOString();
       payload = {
-        id: skripsiFormInput.id?.trim(),
-        judul: skripsiFormInput.judul?.trim(),
+        id: skripsiFormInput.id.trim(),
+        judul: skripsiFormInput.judul.trim(),
         abstrak: skripsiFormInput.abstrak?.trim() || "",
-        jumlah: jumlahNum,
-        tersedia: tersediaNum,
-        dipinjam: dipinjamNum,
-        tahun: skripsiFormInput.tahun?.trim(),
-        nim: skripsiFormInput.nim?.trim(),
+        tahun: skripsiFormInput.tahun?.trim() || "N/A",
+        nim: skripsiFormInput.nim?.trim() || "N/A",
+        nama_mahasiswa: skripsiFormInput.nama_mahasiswa?.trim() || "N/A",
+        fakultas: skripsiFormInput.fakultas?.trim() || "N/A",
+        program_studi: skripsiFormInput.program_studi?.trim() || "N/A",
         link: skripsiFormInput.link?.trim(),
-        createdAt: skripsiFormInput.createdAt,
-        updatedAt: skripsiFormInput.updatedAt,
+        createdAt,
+        updatedAt,
       };
+      delete payload.jumlah;
+      delete payload.tersedia;
+      delete payload.dipinjam;
       endpoint = "/api/thesis";
+      isUpdating = items.some(
+        (item) => item.id === skripsiFormInput.id && item.type === "skripsi",
+      );
+    } else {
+      newErrors.general = "Tipe kategori tidak valid.";
     }
 
     if (Object.keys(newErrors).length > 0) {
@@ -216,6 +424,7 @@ export default function Collections() {
     }
 
     try {
+      console.log("trying...");
       const url = isUpdating ? `${endpoint}/${itemId}` : endpoint;
       const method = isUpdating ? "PUT" : "POST";
 
@@ -287,6 +496,8 @@ export default function Collections() {
     setIsFormModalOpen(true);
     setIsEditMode(true);
 
+    console.log(item, "<----- item");
+
     if (item.type === "book") {
       setFormInput({
         id: item.id || "",
@@ -328,11 +539,14 @@ export default function Collections() {
         id: item.id || "",
         judul: item.judul,
         abstrak: item.abstrak,
-        jumlah: item.jumlah?.toString() || 0,
-        tersedia: item.tersedia?.toString() || 0,
-        dipinjam: item.dipinjam?.toString() || 0,
+        // jumlah: item.jumlah.toString(),
+        // tersedia: item.tersedia.toString(),
+        // dipinjam: item.dipinjam.toString(),
         tahun: (item as any).tahun,
         nim: (item as any).nim,
+        nama_mahasiswa: (item as any).nama_mahasiswa || "",
+        fakultas: (item as any).fakultas || "",
+        program_studi: (item as any).program_studi || "",
         link: (item as any).link || "",
         createdAt: item.createdAt,
         updatedAt: item.updatedAt,
@@ -606,7 +820,7 @@ export default function Collections() {
         formInput={formInput}
         formErrors={formErrors || {}} // Ensure it's never undefined
         onChange={handleFormChange}
-        onSubmit={handleSubmit}
+        onSubmit={handleAddItem} //handleSubmit
         isEditMode={isEditMode}
       />
 
