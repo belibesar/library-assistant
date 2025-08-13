@@ -62,7 +62,6 @@ export default function Collections() {
 
   const { role } = useAuth();
 
-
   const handleOpenFormModal = (itemType: LibraryItemType) => {
     setCategory(itemType);
     setFormInput(getInitialFormInput(itemType));
@@ -296,9 +295,9 @@ export default function Collections() {
         lokasi: (item as any).lokasi || "",
         sinopsis: (item as any).sinopsis || "",
         rak: (item as any).rak || "",
-        jumlah: item.jumlah.toString(),
-        tersedia: item.tersedia.toString(),
-        dipinjam: item.dipinjam.toString(),
+        jumlah: item.jumlah?.toString() || 0,
+        tersedia: item.tersedia?.toString() || 0,
+        dipinjam: item.dipinjam?.toString() || 0,
         penerbit_id: (item as any).penerbit_id,
         pengarang_id: (item as any).pengarang_id,
         pengarang_name: (item as any).pengarang?.name || "",
@@ -312,9 +311,9 @@ export default function Collections() {
         id: item.id || "",
         judul: item.judul,
         abstrak: item.abstrak,
-        jumlah: item.jumlah.toString(),
-        tersedia: item.tersedia.toString(),
-        dipinjam: item.dipinjam.toString(),
+        jumlah: item.jumlah?.toString() || 0,
+        tersedia: item.tersedia?.toString() || 0,
+        dipinjam: item.dipinjam?.toString() || 0,
         jurnal_id: (item as any).jurnal_id,
         publikasi_name: (item as any).publikasi?.name || "",
         publikasi_volume: (item as any).publikasi?.volume || "",
@@ -329,9 +328,9 @@ export default function Collections() {
         id: item.id || "",
         judul: item.judul,
         abstrak: item.abstrak,
-        jumlah: item.jumlah.toString(),
-        tersedia: item.tersedia.toString(),
-        dipinjam: item.dipinjam.toString(),
+        jumlah: item.jumlah?.toString() || 0,
+        tersedia: item.tersedia?.toString() || 0,
+        dipinjam: item.dipinjam?.toString() || 0,
         tahun: (item as any).tahun,
         nim: (item as any).nim,
         link: (item as any).link || "",
@@ -442,7 +441,6 @@ export default function Collections() {
       );
     }
   };
-  
 
   return (
     <div className="min-h-screen bg-gray-50 p-6">
