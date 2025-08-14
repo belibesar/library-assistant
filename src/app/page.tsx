@@ -10,12 +10,11 @@ export default function OnboardingPage() {
   return (
     <div>
       <ModernHero
-        heroTitle="Asisten Perpustakaan "
-        span="AI"
-        heroDescription="Sistem perpustakaan cerdas dengan teknologi AI untuk membantu Anda menemukan buku, mendapatkan rekomendasi,
-            dan mengelola koleksi dengan mudah."
-        buttonPrimary="Mulai Sekarang"
-        buttonSecondary="Pelajari Lebih Lanjut"
+  heroTitle="SADHARLib "
+  span="(Sanata Dharma Library Assistant)"
+  heroDescription="Sistem Perpustakaan dengan Teknologi Artificial Intelligence untuk memudahkan pencarian koleksi perpustakaan dengan fitur bersinopsis, analisis pengguna, dan deteksi kemiripan."
+  buttonPrimary="Mulai Sekarang"
+  buttonSecondary="Pelajari Lebih Lanjut"
       />
       <Divider
         headerTitle="Fitur Unggulan"

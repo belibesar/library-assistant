@@ -28,9 +28,9 @@ export default function CardsGroupFeature() {
         description="Periksa keaslian dokumen dengan teknologi AI untuk mendeteksi plagiarisme dan kemiripan teks"
       />
       <CardOnboardingFeature
-        icon={<BookOpen className={`${iconSizing} text-orange-600`} />}
-        cardTitle="Manajemen Koleksi"
-        description="Kelola koleksi buku dengan sistem CRUD lengkap, filter canggih, dan pagination yang efisien"
+  icon={<BookOpen className={`${iconSizing} text-orange-600`} />}
+  cardTitle="Manajemen Koleksi"
+  description="Kelola koleksi buku dengan sistem CRUD lengkap, filter canggih, dan penempatan koleksi yang efisien"
       />
       <CardOnboardingFeature
         icon={<Users className={`${iconSizing} text-red-600`} />}
