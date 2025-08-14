@@ -281,14 +281,14 @@ const UserManagementPage = () => {
             loading={loading}
           />
           <UserStatsCard
-            title="Mahasiswa"
+            title="Mahasiswa/Dosen"
             count={stats.students}
             icon={GraduationCap}
             color="bg-blue-50 border border-blue-100"
             loading={loading}
           />
           <UserStatsCard
-            title="Pegawai"
+            title="Pegawai/Pustakawan"
             count={stats.employees}
             icon={Shield}
             loading={loading}

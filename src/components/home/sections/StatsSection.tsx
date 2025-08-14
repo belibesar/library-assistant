@@ -67,35 +67,29 @@ export default function StatsSection() {
         </div>
 
         {/* Stats Grid */}
-        <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
+        {/* <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
           {stats.map((stat, index) => (
             <div key={index} className="group relative">
-              {/* Glow effect */}
+    
               <div className="absolute -inset-1 rounded-3xl bg-gradient-to-r from-blue-500/20 via-purple-500/20 to-cyan-500/20 opacity-0 blur-lg transition-opacity duration-500 group-hover:opacity-100"></div>
 
-              {/* Main card */}
               <div className="relative transform rounded-3xl border border-white/20 bg-white/10 p-8 shadow-2xl backdrop-blur-xl transition-all duration-300 hover:-translate-y-2 hover:scale-105 hover:shadow-blue-500/10">
-                {/* Background decoration */}
                 <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-white/5 to-transparent"></div>
 
-                {/* Icon */}
                 <div className="mb-4 transform text-4xl transition-transform duration-300 group-hover:scale-110">
                   {stat.icon}
                 </div>
 
-                {/* Number with counter animation effect */}
                 <div
                   className={`mb-3 bg-gradient-to-r text-5xl font-black md:text-6xl ${stat.gradient} transform bg-clip-text text-transparent transition-transform duration-300 group-hover:scale-110`}
                 >
                   {stat.number}
                 </div>
 
-                {/* Label */}
                 <div className="text-xl font-medium text-blue-100/90 transition-colors duration-300 group-hover:text-white">
                   {stat.label}
                 </div>
 
-                {/* Progress bar animation */}
                 <div className="mt-6 h-1 overflow-hidden rounded-full bg-white/20">
                   <div
                     className={`h-full bg-gradient-to-r ${stat.gradient} origin-left scale-x-0 transform rounded-full transition-transform delay-300 duration-1000 group-hover:scale-x-100`}
@@ -104,15 +98,15 @@ export default function StatsSection() {
               </div>
             </div>
           ))}
-        </div>
+        </div> */}
 
         {/* Bottom CTA */}
-        <div className="mt-16 text-center">
+        {/* <div className="mt-16 text-center">
           <div className="inline-flex items-center space-x-2 text-blue-200/80">
             <span className="h-2 w-2 animate-pulse rounded-full bg-green-400"></span>
             <span className="text-sm">Data diperbarui secara real-time</span>
           </div>
-        </div>
+        </div> */}
       </div>
     </section>
   );

@@ -6,13 +6,16 @@ export default function Footer() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 gap-8 md:grid-cols-4">
           <div>
-            <div className="mb-4 flex items-center">
-              <BookOpen className="h-8 w-8 text-blue-400" />
-              <span className="ml-2 text-xl font-bold">Perpustakaan USD</span>
+          <div className="mb-4 flex items-center">
+            <img src="logo.png" alt="Logo Perpustakaan USD" className="h-10 w-auto" />
+            <div className="ml-2 flex flex-col">
+              <span className="text-xl font-bold">Perpustakaan USD</span>
+              <span className="text-sm mt-1">NPP 3404072D2020617</span>
             </div>
-            <p className="text-gray-400">
-              Sistem perpustakaan AI untuk Universitas Sanata Dharma
-            </p>
+          </div>
+          <p className="text-gray-400">
+            Sistem Perpustakaan dengan Teknologi Artificial Intelligence untuk memudahkan pencarian koleksi perpustakaan dengan fitur bersinopsis, analisis pengguna, dan deteksi kemiripan.
+          </p>
           </div>
           <div>
             <h3 className="mb-4 text-lg font-semibold">Fitur</h3>

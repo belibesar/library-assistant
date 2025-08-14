@@ -28,14 +28,14 @@ export default function CardsGroupFeature() {
         description="Periksa keaslian dokumen dengan teknologi AI untuk mendeteksi plagiarisme dan kemiripan teks"
       />
       <CardOnboardingFeature
-  icon={<BookOpen className={`${iconSizing} text-orange-600`} />}
-  cardTitle="Manajemen Koleksi"
-  description="Kelola koleksi buku dengan sistem CRUD lengkap, filter canggih, dan penempatan koleksi yang efisien"
+        icon={<BookOpen className={`${iconSizing} text-orange-600`} />}
+        cardTitle="Manajemen Koleksi"
+        description="Kelola koleksi buku dengan sistem CRUD lengkap, filter canggih, dan pagination yang efisien"
       />
       <CardOnboardingFeature
         icon={<Users className={`${iconSizing} text-red-600`} />}
         cardTitle="Multi-Role System"
-        description="Sistem peran yang fleksibel untuk admin, pustakawan, dan mahasiswa dengan akses yang sesuai"
+        description="Sistem peran yang fleksibel untuk admin, pustakawan, dosen dan mahasiswa dengan akses yang sesuai"
       />
       <CardOnboardingFeature
         icon={<Shield className={`${iconSizing} text-indigo-600`} />}
