@@ -54,16 +54,23 @@ export default function Navbar() {
             <div className="group flex items-center">
               <div className="relative">
                 <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-blue-500 to-indigo-500 opacity-30 blur-lg transition-opacity duration-300 group-hover:opacity-50"></div>
-                <div className="relative rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-600 p-3 shadow-lg">
-                  <BookOpen className="h-6 w-6 text-white" />
+                <div className="relative">
+                    <img src="logo.png" alt="Logo Perpustakaan USD" className="h-12 w-auto max-h-14 align-middle" style={{objectFit: 'contain'}} />
                 </div>
               </div>
-              <div className="ml-4">
-                <span className="bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-2xl font-black text-transparent">
-                  Perpustakaan
-                </span>
-                <span className="ml-2 bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-2xl font-black text-transparent">
-                  USD
+              <div className="ml-4 flex flex-col">
+                <div className="flex items-center">
+                  <span className="bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-2xl font-black text-transparent">
+                    Perpustakaan
+                  </span>
+                  <span className="ml-2 bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-2xl font-black text-transparent">
+                    USD
+                  </span>
+                </div>
+                <span
+                  className={`text-sm mt-1 text-black`}
+                >
+                  NPP 3404072D2020617
                 </span>
               </div>
             </div>
