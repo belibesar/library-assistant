@@ -104,7 +104,7 @@ const UserFormModal = ({
                 id="id_number"
                 className="mb-1 block text-sm font-medium text-gray-700"
               >
-                NIM/NRP *
+                NIM/NPP *
               </label>
               <input
                 id="id_number"
@@ -115,7 +115,7 @@ const UserFormModal = ({
                 className={`w-full rounded-lg border px-3 py-2 focus:border-transparent focus:ring-2 focus:ring-blue-500 ${
                   errors.id_number ? "border-red-500" : "border-gray-300"
                 }`}
-                placeholder="Masukkan ID Number (NIM/NRP)"
+                placeholder="Masukkan ID Number (NIM/NPP)"
               />
               {errors.id_number && (
                 <p className="mt-1 text-xs text-red-500">{errors.id_number}</p>
@@ -160,7 +160,7 @@ const UserFormModal = ({
 
             <div>
               <label className="mb-1 block text-sm font-medium text-gray-700">
-                Status *
+                Role *
               </label>
               <select
                 name="role"
@@ -168,8 +168,8 @@ const UserFormModal = ({
                 onChange={onChange}
                 className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-transparent focus:ring-2 focus:ring-blue-500"
               >
-                <option value="user">Mahasiswa</option>
-                <option value="admin">Pegawai</option>
+                <option value="user">Mahasiswa/Dosen</option>
+                <option value="admin">Pegawai/Pustakawan</option>
               </select>
             </div>
             <div className="flex justify-end space-x-3 pt-4">
