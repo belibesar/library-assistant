@@ -169,7 +169,7 @@ const UserFormModal = ({
                 className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-transparent focus:ring-2 focus:ring-blue-500"
               >
                 <option value="user">Mahasiswa/Dosen</option>
-                <option value="admin">Pegawai/Pustakawan</option>
+                <option value="admin">Admin/Pemustaka</option>
               </select>
             </div>
             <div className="flex justify-end space-x-3 pt-4">
