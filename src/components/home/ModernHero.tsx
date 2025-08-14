@@ -39,12 +39,12 @@ export default function ModernHero({
       <div className="relative z-10 mx-auto flex min-h-screen max-w-7xl flex-col justify-center px-4 text-center sm:px-6 lg:px-8">
         {/* Badge */}
         <div className="mb-8 inline-flex items-center justify-center">
-          <div className="rounded-full border border-white/20 bg-white/10 px-6 py-2 text-sm text-white/90 shadow-lg backdrop-blur-md">
+          {/* <div className="rounded-full border border-white/20 bg-white/10 px-6 py-2 text-sm text-white/90 shadow-lg backdrop-blur-md">
             <span className="relative flex items-center">
               <span className="absolute -left-2 h-2 w-2 animate-pulse rounded-full bg-green-400"></span>
               🚀 Teknologi AI Terdepan
             </span>
-          </div>
+          </div> */}
         </div>
 
         {/* Main Title */}
@@ -79,7 +79,7 @@ export default function ModernHero({
         </div>
 
         {/* Stats/Features Preview */}
-        <div className="mx-auto grid max-w-4xl grid-cols-2 gap-8 md:grid-cols-3">
+        {/* <div className="mx-auto grid max-w-4xl grid-cols-2 gap-8 md:grid-cols-3">
           <div className="rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur-md transition-all duration-300 hover:bg-white/10">
             <div className="mb-2 text-3xl">📚</div>
             <div className="mb-1 text-2xl font-bold text-white">10K+</div>
@@ -95,7 +95,7 @@ export default function ModernHero({
             <div className="mb-1 text-2xl font-bold text-white">Instant</div>
             <div className="text-sm text-blue-200">Pencarian Real-time</div>
           </div>
-        </div>
+        </div> */}
       </div>
 
       {/* Scroll Indicator */}
