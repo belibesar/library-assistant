@@ -68,13 +68,19 @@ export default function ModernHero({
             <div className="absolute -inset-1 rounded-2xl bg-gradient-to-r from-blue-500 via-cyan-500 to-indigo-500 opacity-75 blur transition duration-300 group-hover:opacity-100"></div>
             <Button
               onClick={() => router.push("/login")}
-              className="relative transform rounded-xl border-0 bg-gradient-to-r from-blue-600 to-indigo-600 px-8 py-4 font-bold text-white shadow-2xl transition-all duration-300 hover:scale-105 hover:from-blue-700 hover:to-indigo-700"
+              className="relative w-full sm:w-auto transform rounded-xl border-0 bg-gradient-to-r from-blue-600 to-indigo-600 px-8 py-4 font-bold text-white shadow-2xl transition-all duration-300 hover:scale-105 hover:from-blue-700 hover:to-indigo-700"
               buttonName={buttonPrimary}
             />
           </div>
           <Button
             className="transform rounded-xl border border-white/20 bg-white/10 px-8 py-4 font-semibold text-white shadow-xl backdrop-blur-md transition-all duration-300 hover:scale-105 hover:bg-white/20 hover:shadow-2xl"
             buttonName={buttonSecondary}
+            onClick={() => {
+              const fiturSection = document.getElementById('fitur-unggulan');
+              if (fiturSection) {
+                fiturSection.scrollIntoView({ behavior: 'smooth' });
+              }
+            }}
           />
         </div>
 
