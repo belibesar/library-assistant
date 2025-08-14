@@ -2,13 +2,13 @@ import Hero from "@/components/home/Hero";
 import ModernHero from "@/components/home/ModernHero";
 import CardsGroupFeature from "@/components/home/sections/CardGroupOnboarding";
 import Divider from "@/components/home/sections/Divider";
-import StatsSection from "@/components/home/sections/StatsSection";
+// import StatsSection from "@/components/home/sections/StatsSection";
 import React from "react";
 
 // Onboarding Page
 export default function OnboardingPage() {
   return (
-    <div>
+    <div className="mb-6">
       <ModernHero
   heroTitle="SADHARLib "
   span="(Sanata Dharma Library Assistant)"
@@ -21,7 +21,7 @@ export default function OnboardingPage() {
         paragraph="Teknologi AI terdepan untuk pengalaman perpustakaan yang lebih baik"
       />
       <CardsGroupFeature />
-      <StatsSection />
+      {/* <StatsSection /> */}
     </div>
   );
 }
