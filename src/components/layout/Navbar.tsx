@@ -151,15 +151,17 @@ export default function Navbar() {
         </div>
       ) : (
         <div className="flex items-center space-x-4">
+           <div className="group relative">
+          <div className="absolute -inset-1 rounded-full bg-gradient-to-r from-blue-200 to-indigo-200 opacity-75 blur transition-opacity duration-300 group-hover:opacity-100"></div>
           <button
             onClick={handleLogin}
-            className="rounded-full border border-slate-200 bg-white/80 px-6 py-3 font-semibold text-slate-700 shadow-sm backdrop-blur-sm transition-all duration-300 hover:border-slate-300 hover:bg-white hover:text-slate-900 hover:shadow-md"
+            className="relative transform rounded-full bg-gradient-to-r from-blue-600 to-indigo-600 px-6 py-3 font-semibold text-white shadow-lg transition-all duration-300 hover:scale-105 hover:from-blue-700 hover:to-indigo-700 hover:shadow-xl"
           >
             Masuk
           </button>
-
+          </div>
           {/* Tombol Daftar */}
-          <div className="group relative">
+          {/* <div className="group relative">
             <div className="absolute -inset-1 rounded-full bg-gradient-to-r from-blue-200 to-indigo-200 opacity-75 blur transition-opacity duration-300 group-hover:opacity-100"></div>
             <button
               onClick={handleRegister}
@@ -167,7 +169,7 @@ export default function Navbar() {
             >
               Daftar Sekarang
             </button>
-          </div>
+          </div> */}
         </div>
       )}
     </div>

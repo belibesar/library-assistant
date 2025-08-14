@@ -84,7 +84,7 @@ export default function Login() {
 
       if (error.message === "Invalid id_number/password") {
         errorMessage =
-          "NIM/NRP atau password tidak valid. Mohon periksa kembali data Anda.";
+          "NIM/NPP atau password tidak valid. Mohon periksa kembali data Anda.";
       }
 
       Swal.fire({
@@ -128,10 +128,10 @@ export default function Login() {
                       <p className="mb-1 font-medium">Info Login:</p>
                       <div className="flex flex-wrap gap-x-4 gap-y-1">
                         <span>
-                          • <strong>NIM</strong> (mahasiswa)
+                          • <strong>NIM</strong> (mahasiswa/dosen)
                         </span>
                         <span>
-                          • <strong>NRP</strong> (pegawai)
+                          • <strong>NPP</strong> (admin/pemustaka)
                         </span>
                       </div>
                     </div>
@@ -160,7 +160,7 @@ export default function Login() {
                         htmlFor="id_number"
                         className="absolute -top-2.5 left-9 bg-white px-2 text-xs text-gray-600 transition-all peer-placeholder-shown:top-2.5 peer-placeholder-shown:left-9 peer-placeholder-shown:text-sm peer-placeholder-shown:text-gray-400 peer-focus:-top-2.5 peer-focus:left-9 peer-focus:text-xs peer-focus:font-medium peer-focus:text-sky-600"
                       >
-                        NIM/NRP
+                        NIM/NPP
                       </label>
                     </div>
 
@@ -206,7 +206,7 @@ export default function Login() {
                     </div>
 
                     {/* Register Link */}
-                    <div className="pt-2 text-center">
+                    {/* <div className="pt-2 text-center">
                       <p className="text-xs text-gray-600">
                         Belum memiliki akun?{" "}
                         <Link
@@ -216,7 +216,7 @@ export default function Login() {
                           Daftar di sini
                         </Link>
                       </p>
-                    </div>
+                    </div> */}
                     {/* Help Text */}
                     <div className="pt-2 text-center">
                       <p className="text-xs text-gray-500">
