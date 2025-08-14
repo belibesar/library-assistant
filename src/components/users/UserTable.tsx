@@ -78,7 +78,7 @@ const UserTable = ({
                         : "bg-blue-100 text-blue-800"
                     }`}
                   >
-                    {user.role === "user" ? "Mahasiswa/Dosen" : "Pegawai/Pustakawan"}
+                    {user.role === "user" ? "Mahasiswa/Dosen" : "Admin/Pemustaka"}
                   </span>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">

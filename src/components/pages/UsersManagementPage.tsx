@@ -288,7 +288,7 @@ const UserManagementPage = () => {
             loading={loading}
           />
           <UserStatsCard
-            title="Pegawai/Pustakawan"
+            title="Admin/Pemustaka"
             count={stats.employees}
             icon={Shield}
             loading={loading}
