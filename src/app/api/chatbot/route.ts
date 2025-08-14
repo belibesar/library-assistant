@@ -179,7 +179,6 @@ export async function POST(request: Request) {
    type Buku =  {
     id: string;
     judul: string;
-    abstrak?: string;
     jumlah: number;
     tersedia: number;
     dipinjam: number;
@@ -226,26 +225,35 @@ export async function POST(request: Request) {
     tahun: string;
   }
 , dan
-    type Skripsi = {
-    id: string;
-    judul: string;
-    abstrak?: string;
-    count?: number;
-    nim: string;
-    tahun: string;
-    updatedAt?: string;
-    createdAt?: string;
-    mahasiswa: Mahasiswa;
-}
-    type Mahasiswa = {
-    id: string;
-    name: string;
-    masuk: string;
-    lulus: string;
-    ipk: string;
-    fakultas?: string;
-    program_studi?: string;
-  }
+
+type Skripsi = {
+  id: string;
+  judul: string;
+  abstrak: string;
+  jumlah: number;
+  tersedia: number;
+  dipinjam: number;
+  tahun: string;
+  nim: string;
+  createdAt: string; // ISO date string
+  updatedAt: string; // ISO date string
+  count: number;
+  fakultas: string;
+  nama_mahasiswa: string;
+  program_studi: string;
+  link: string;
+  mahasiswa?: Mahasiswa;
+};
+
+export type Mahasiswa = {
+  id: string;
+  name: string;
+  masuk: string;
+  lulus: string;
+  ipk: string;
+  fakultas?: string;
+  program_studi?: string;
+};
 
       **TIDAK AKAN MENCARI DI INTERNET**.
       **JIKA DATA YANG DIMINTA TIDAK ADA, MAKA JANGAN CARI DATA DILUAR DATABASE LOKAL, 
