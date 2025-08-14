@@ -31,7 +31,6 @@ export interface Journal extends BaseItem {
   type: "journal";
   publikasi?: Publikasi;
 }
-
 export interface Skripsi extends BaseItem {
   tahun: string;
   nim: string;
@@ -41,9 +40,6 @@ export interface Skripsi extends BaseItem {
   fakultas?: string;
   program_studi?: string;
   mahasiswa?: Mahasiswa;
-  // jumlah?: number;
-  // tersedia?: number;
-  // dipinjam?: number;
 }
 
 export type LibraryItem = Book | Journal | Skripsi;

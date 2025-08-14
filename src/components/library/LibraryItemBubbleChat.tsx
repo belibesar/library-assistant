@@ -1,26 +1,32 @@
 import { LibraryBubbleItemType, Publikasi } from "@/libs/types";
 import { Book, Journal, LibraryItem, Skripsi } from "@/libs/types/libraryType";
+import { useEffect } from "react";
 
 const LibraryItemBubbleChat: React.FC<{
   item: LibraryItem | Publikasi;
   type: LibraryBubbleItemType | undefined;
 }> = ({ item, type }) => {
+  console.log({ item, type });
+
   return (
     <>
       {type === "buku" &&
-        (item as Book)?.hasOwnProperty("sinopsis") === true && (
+        ((item as Book)?.hasOwnProperty("penerbit") === true ||
+          (item as Book)?.hasOwnProperty("pengarang") === true) && (
           <BookItemBubbleChat item={item as Book} />
         )}
 
       {type === "jurnal" &&
-        (item as Journal)?.hasOwnProperty("publikasi") === true && (
+        ((item as Journal)?.hasOwnProperty("publikasi") === true ||
+          (item as Journal)?.hasOwnProperty("jurnal_id") === true) && (
           <JournalItemBubbleChat item={item as Journal} />
         )}
 
-      {type === "skripsi" &&
-        (item as Skripsi)?.hasOwnProperty("mahasiswa") === true && (
-          <SkripsiItemBubbleChat item={item as Skripsi} />
-        )}
+      {((type === "skripsi" &&
+        (item as Skripsi)?.hasOwnProperty("mahasiswa") === true) ||
+        (item as Skripsi).hasOwnProperty("nama_mahasiswa") === true) && (
+        <SkripsiItemBubbleChat item={item as Skripsi} />
+      )}
       {type === "publikasi" &&
         (item as Publikasi)?.hasOwnProperty("volume") === true && (
           <PublicationItemBubbleChat item={item as Publikasi} />
@@ -55,7 +61,12 @@ const SkripsiItemBubbleChat: React.FC<{
         <span className="font-bold">{(item as Skripsi)?.judul || ""}</span>{" "}
       </h3>
       <p>Sinopsis: {(item as Skripsi)?.abstrak || ""}</p>
-      <p>Nama Mahasiswa: {(item as Skripsi)?.mahasiswa?.name || ""} </p>
+      <p>
+        Nama Mahasiswa:{" "}
+        {(item as Skripsi)?.mahasiswa?.name ||
+          (item as Skripsi)?.nama_mahasiswa ||
+          ""}{" "}
+      </p>
       <p>Tahun Skripsi: {(item as Skripsi)?.tahun || ""}</p>
     </div>
   );
