@@ -20,10 +20,10 @@ import {
   SkripsiFormInput,
 } from "@/libs/types/libraryType";
 import { getInitialFormInput, endpointMap } from "@/utils/libraryUtil";
-import { useLibraryItems } from "@/hooks/useLibraryItems";
 import LibrarySkeletonLoading from "../library/LibrarySkeletonLoading";
 import { ZodError } from "zod";
 import { useAuth } from "@/contexts/AuthContext";
+import { useAllLibraryItems } from "@/hooks/useAllLibraryItems";
 
 export default function LibraryCollectionPage() {
   const {
@@ -35,6 +35,7 @@ export default function LibraryCollectionPage() {
     setPage,
     total,
     setTotal,
+    totalCollections,
     loading,
     notification,
     totalPages,
@@ -45,7 +46,7 @@ export default function LibraryCollectionPage() {
     handleNext,
     fetchItems,
     showNotification,
-  } = useLibraryItems();
+  } = useAllLibraryItems();
 
   const [isEditMode, setIsEditMode] = useState(false);
   const [isFormModalOpen, setIsFormModalOpen] = useState(false);
@@ -386,9 +387,6 @@ export default function LibraryCollectionPage() {
         id: item.id || "",
         judul: item.judul,
         abstrak: item.abstrak,
-        // jumlah: item.jumlah.toString(),
-        // tersedia: item.tersedia.toString(),
-        // dipinjam: item.dipinjam.toString(),
         jurnal_id: (item as any).jurnal_id,
         publikasi_name: (item as any).publikasi?.name || "",
         publikasi_volume: (item as any).publikasi?.volume || "",
@@ -403,9 +401,6 @@ export default function LibraryCollectionPage() {
         id: item.id || "",
         judul: item.judul,
         abstrak: item.abstrak,
-        // jumlah: item.jumlah.toString(),
-        // tersedia: item.tersedia.toString(),
-        // dipinjam: item.dipinjam.toString(),
         tahun: (item as any).tahun,
         nim: (item as any).nim,
         nama_mahasiswa: (item as any).nama_mahasiswa || "",
@@ -453,7 +448,14 @@ export default function LibraryCollectionPage() {
     }
   };
 
-  console.log(selectedItem);
+  // Get category display text
+  const getCategoryDisplayText = () => {
+    if (category === "all") return "semua koleksi";
+    if (category === "book") return "buku";
+    if (category === "journal") return "jurnal";
+    if (category === "skripsi") return "skripsi";
+    return "";
+  };
 
   return (
     <div className="bg-base-100 mt-[-20px] h-full w-full">
@@ -464,15 +466,8 @@ export default function LibraryCollectionPage() {
               Koleksi Perpustakaan
             </h1>
             <p className="mt-1 text-gray-600">
-              Kelola koleksi{" "}
-              {category === "book"
-                ? "buku"
-                : category === "journal"
-                  ? "jurnal"
-                  : category === "skripsi"
-                    ? "skripsi"
-                    : ""}{" "}
-              ({total} total item)
+              Kelola koleksi {getCategoryDisplayText()} ({total} dari{" "}
+              {totalCollections} total item)
             </p>
           </div>
           {role === "admin" && (
@@ -518,7 +513,7 @@ export default function LibraryCollectionPage() {
         {loading ? (
           <LibrarySkeletonLoading
             count={3}
-            type={category === "book" ? undefined : category}
+            type={category === "all" ? undefined : category}
           />
         ) : items.length > 0 ? (
           items.map((item) => {
@@ -559,19 +554,12 @@ export default function LibraryCollectionPage() {
           <div className="col-span-full py-16 text-center">
             <BookOpen className="mx-auto h-12 w-12 text-gray-400" />
             <h3 className="mt-2 text-sm font-medium text-gray-900">
-              Tidak ada{" "}
-              {category === "book"
-                ? "buku"
-                : category === "journal"
-                  ? "jurnal"
-                  : category === "skripsi"
-                    ? "skripsi"
-                    : "item"}
+              Tidak ada {getCategoryDisplayText()}
             </h3>
             <p className="mt-1 text-sm text-gray-500">
               {search
                 ? "Tidak ada item yang sesuai dengan pencarian."
-                : `Mulai dengan menambahkan ${category}.`}
+                : `Mulai dengan menambahkan ${getCategoryDisplayText()}.`}
             </p>
           </div>
         )}

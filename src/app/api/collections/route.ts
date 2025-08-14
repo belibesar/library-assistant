@@ -6,41 +6,58 @@ import { NextRequest, NextResponse } from "next/server";
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
   const page = Number(searchParams.get("page") || 1);
-  const limit = Number(searchParams.get("limit") || 5);
+  const limit = Number(searchParams.get("limit") || 3);
   const search = searchParams.get("search") || "";
 
   try {
+    const fetchLimit = limit * 3; 
     const [books, journals, thesis] = await Promise.all([
-      BookModel.getAllBook(page, limit, search),
-      JournalModel.getAllJournal(page, limit, search),
-      ThesisModel.getAllThesis(page, limit, search),
+      BookModel.getAllBook(1, fetchLimit, search),
+      JournalModel.getAllJournal(1, fetchLimit, search),
+      ThesisModel.getAllThesis(1, fetchLimit, search),
     ]);
+
     const bookTotal = await BookModel.getCountBooks();
-    const JournalTotal = await JournalModel.getCountJournals();
-    const ThesisTotal = await ThesisModel.getCountThesis();
-    const totalAllCollections = bookTotal + JournalTotal + ThesisTotal;
+    const journalTotal = await JournalModel.getCountJournals();
+    const thesisTotal = await ThesisModel.getCountThesis();
+    const totalAllCollections = bookTotal + journalTotal + thesisTotal;
 
-    const combined = [
-      ...books.books.map((b: any) => ({ ...b, type: "book" })),
-      ...journals.journals.map((j: any) => ({ ...j, type: "journal" })),
-      ...thesis.thesis.map((t: any) => ({ ...t, type: "thesis" })),
-    ];
+    const booksData = books.books.map((b: any) => ({ ...b, type: "book" }));
+    const journalsData = journals.journals.map((j: any) => ({
+      ...j,
+      type: "journal",
+    }));
+    const thesisData = thesis.thesis.map((t: any) => ({
+      ...t,
+      type: "thesis",
+    }));
 
-    // optional: sorting by createdAt or title
-    combined.sort(
-      (a, b) =>
-        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+    // Interleaving
+    const maxLength = Math.max(
+      booksData.length,
+      journalsData.length,
+      thesisData.length,
     );
+    const interleaved: any[] = [];
+    for (let i = 0; i < maxLength; i++) {
+      if (booksData[i]) interleaved.push(booksData[i]);
+      if (journalsData[i]) interleaved.push(journalsData[i]);
+      if (thesisData[i]) interleaved.push(thesisData[i]);
+    }
+
+    // Pagination global
+    const startIndex = (page - 1) * limit;
+    const paginatedData = interleaved.slice(startIndex, startIndex + limit);
 
     return NextResponse.json({
       success: true,
       message: "Success!",
-      data: combined,
+      data: paginatedData,
       pagination: {
         page,
         limit,
-        total: combined.length,
-        totalCollections: totalAllCollections,
+        total: totalAllCollections,
+        totalPages: Math.ceil(totalAllCollections / limit),
       },
     });
   } catch (error) {

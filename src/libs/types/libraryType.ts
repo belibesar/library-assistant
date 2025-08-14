@@ -14,9 +14,9 @@ export interface BaseItem {
 }
 
 export interface Book extends BaseItem {
-  rak?: string; //field baru
-  sinopsis?: string; //field baru
-  lokasi?: string; //field baru
+  rak?: string;
+  sinopsis?: string;
+  lokasi?: string;
   penerbit_id: string;
   pengarang_id: string;
   penerbit?: Penerbit;
@@ -31,6 +31,7 @@ export interface Journal extends BaseItem {
   type: "journal";
   publikasi?: Publikasi;
 }
+
 export interface Skripsi extends BaseItem {
   tahun: string;
   nim: string;
@@ -67,9 +68,9 @@ export interface JournalFormInput {
   id?: string;
   judul: string;
   abstrak?: string;
-  jumlah: number | string;
-  tersedia: number | string;
-  dipinjam: number | string;
+  jumlah?: number | string;
+  tersedia?: number | string;
+  dipinjam?: number | string;
   jurnal_id?: string;
   publikasi_name?: string;
   publikasi_volume?: string;
@@ -98,7 +99,7 @@ export interface SkripsiFormInput {
 }
 
 export type FormInput = BookFormInput | JournalFormInput | SkripsiFormInput;
-export type LibraryItemType = "book" | "journal" | "skripsi";
+export type LibraryItemType = "all" | "book" | "journal" | "skripsi";
 
 export interface Notification {
   message: string;

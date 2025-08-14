@@ -22,7 +22,17 @@ export const LibraryFilter = ({
         />
         <input
           type="text"
-          placeholder={`Cari ${category}...`}
+          placeholder={`Cari ${
+            category === "all"
+              ? "semua koleksi"
+              : category === "book"
+                ? "buku"
+                : category === "journal"
+                  ? "jurnal"
+                  : category === "skripsi"
+                    ? "skripsi"
+                    : "koleksi"
+          }...`}
           value={search}
           onChange={onSearchChange}
           className="w-full rounded-md border border-gray-300 bg-gray-50 py-2 pr-3 pl-10 text-sm transition outline-none focus:bg-white focus:ring-2 focus:ring-blue-500"
@@ -39,6 +49,7 @@ export const LibraryFilter = ({
           onChange={onCategoryChange}
           className="w-full appearance-none rounded-md border border-gray-300 bg-gray-50 py-2 pr-8 pl-10 text-sm transition outline-none focus:bg-white focus:ring-2 focus:ring-blue-500"
         >
+          <option value="all">Semua Koleksi</option>
           <option value="book">Buku</option>
           <option value="journal">Jurnal</option>
           <option value="skripsi">Skripsi</option>
