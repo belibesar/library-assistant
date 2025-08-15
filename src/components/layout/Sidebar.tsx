@@ -40,7 +40,14 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, toggleSidebar }) => {
       >
         <div className="mb-8 flex items-center justify-between lg:justify-start">
           <div className="flex items-center gap-2">
-            <BookOpen size={30} color="#113FF7" />
+            <div className="relative">
+              <img
+                src="logo.png"
+                alt="Logo Perpustakaan USD"
+                className="h-12 max-h-14 w-auto align-middle"
+                style={{ objectFit: "contain" }}
+              />
+            </div>
             <div className="flex items-center">
               <span className="bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-2xl font-black text-transparent transition-all duration-300 group-hover:from-slate-900 group-hover:to-slate-700">
                 Sadhar
