@@ -63,9 +63,9 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, toggleSidebar }) => {
         <nav className="menu text-base-content w-full flex-grow">
           <ul className="space-y-1">
             {/* === Bagian Umum === */}
-            <li className="px-3 py-1 text-sm font-semibold text-gray-500 uppercase">
+            {/* <li className="px-3 py-1 text-sm font-semibold text-gray-500 uppercase">
               Umum
-            </li>
+            </li> */}
             <li>
               <Link
                 href="/dashboard"
@@ -97,9 +97,9 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, toggleSidebar }) => {
             {/* === Bagian Admin === */}
             {role === "admin" && (
               <>
-                <li className="mt-4 px-3 py-1 text-sm font-semibold text-gray-500 uppercase">
+                {/* <li className="mt-4 px-3 py-1 text-sm font-semibold text-gray-500 uppercase">
                   Kontrol Admin
-                </li>
+                </li> */}
                 <li>
                   <Link
                     href="/dashboard/admin/collections"

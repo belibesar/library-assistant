@@ -36,9 +36,23 @@ export const getInitialFormInput = (itemType: LibraryItemType): FormInput => {
       ...commonFields,
       penerbit_id: "",
       pengarang_id: "",
+      lokasi: "",
+      sinopsis: "",
+      rak: "",
+      pengarang_name: "",
+      pengarang_nationality: "",
+      penerbit_name: "",
     } as BookFormInput;
   } else if (itemType === "journal") {
-    return { ...commonFields, jurnal_id: "" } as JournalFormInput;
+    return {
+      ...commonFields,
+      jurnal_id: "",
+      publikasi_name: "",
+      publikasi_volume: "",
+      publikasi_tahun: "",
+      authors: "",
+      link: "",
+    } as JournalFormInput;
   } else if (itemType === "skripsi") {
     return {
       ...commonFields,
@@ -46,13 +60,14 @@ export const getInitialFormInput = (itemType: LibraryItemType): FormInput => {
       nim: "",
       nama_mahasiswa: "",
       fakultas: "",
-      program_studi: ""
+      program_studi: "",
+      link: "",
     } as SkripsiFormInput;
   }
   return commonFields as FormInput;
 };
 
-export const getItemTypeLabel = (type: LibraryItemType): string => {
+export const getItemTypeLabel = (type: LibraryItemType | "all"): string => {
   switch (type) {
     case "book":
       return "Buku";
@@ -60,6 +75,8 @@ export const getItemTypeLabel = (type: LibraryItemType): string => {
       return "Jurnal";
     case "skripsi":
       return "Skripsi";
+    case "all":
+      return "Semua Koleksi";
     default:
       return "";
   }

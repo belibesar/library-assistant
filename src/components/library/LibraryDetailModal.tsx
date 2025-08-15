@@ -122,10 +122,10 @@ export const LibraryDetailModal = ({
                     <span className="w-2 h-2 bg-green-500 rounded-full"></span>
                     <span>Call Number: <span className="font-semibold text-gray-800">{item.id}</span></span>
                   </div>
-                  <div className="flex items-center space-x-2">
+                  {/* <div className="flex items-center space-x-2">
                     <span className="w-2 h-2 bg-purple-500 rounded-full"></span>
                     <span>Rak: <span className="font-semibold text-gray-800">{(item as Book).rak}</span></span>
-                  </div>
+                  </div> */}
                 </>
               ) : (
                 <div className="flex items-center space-x-2">

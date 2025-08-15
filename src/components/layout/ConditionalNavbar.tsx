@@ -7,7 +7,7 @@ const ConditionalNavbar = () => {
   const pathname = usePathname();
 
   // Daftar halaman yang tidak menampilkan navbar
-  const hiddenNavbarPages = ["/dashboard"];
+  const hiddenNavbarPages = ["/dashboard", "/login"];
 
   // Jika halaman saat ini ada dalam daftar hiddenNavbarPages, jangan render navbar
   // Atau jika halaman dimulai dengan /dashboard (untuk nested routes)

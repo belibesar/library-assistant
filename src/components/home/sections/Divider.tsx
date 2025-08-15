@@ -2,7 +2,7 @@ import { DividerElements } from "@/libs/types";
 
 export default function Divider({ headerTitle, paragraph }: DividerElements) {
   return (
-    <section className="relative overflow-hidden bg-gradient-to-b from-slate-50 to-white py-24">
+    <section id="fitur-unggulan" className="relative overflow-hidden bg-gradient-to-b from-slate-50 to-white py-24">
       {/* Background Decorative Elements */}
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute top-10 left-1/4 h-32 w-32 rounded-full bg-blue-100 opacity-60 blur-2xl"></div>

@@ -32,7 +32,7 @@ const UserTable = ({
               Email
             </th>
             <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase">
-              NIM/NRP
+              NIM/NPP
             </th>
             <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase">
               Role
@@ -78,7 +78,7 @@ const UserTable = ({
                         : "bg-blue-100 text-blue-800"
                     }`}
                   >
-                    {user.role === "user" ? "Mahasiswa" : "Admin"}
+                    {user.role === "user" ? "Mahasiswa/Dosen" : "Admin/Pemustaka"}
                   </span>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
