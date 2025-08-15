@@ -123,11 +123,11 @@ export default function Navbar() {
                     Lib
                   </span>
                 </div>
-                {/* <span
+                <span
                   className={`mt-1 text-sm ${isScrolled ? "text-black" : "text-white"}`}
                 >
                   NPP 3404072D2020617
-                </span> */}
+                </span>
               </div>
             </div>
           </div>
