@@ -220,6 +220,7 @@ export const useAllLibraryItems = () => {
     setItems,
     setPage,
     setTotal,
+    limit,
     items,
     page,
     total,
