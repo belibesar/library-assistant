@@ -142,7 +142,10 @@ export const useAllLibraryItems = () => {
 
         // Set total dan totalCollections
         if (category === "all") {
-          setTotal(json.data.length);
+          console.log(json, "<-----json");
+
+          // setTotal(json.data.length);
+          setTotal(json?.pagination?.total); //fix
           setTotalCollections(json.pagination?.totalCollections || 0);
         } else {
           setTotal(
@@ -180,7 +183,7 @@ export const useAllLibraryItems = () => {
 
   const fetchTotalCollections = async () => {
     try {
-      const res = await fetch("/api/collections?page=1&limit=1");
+      const res = await fetch(`/api/collections?page=${page}&limit=${limit}`);
       if (res.ok) {
         const json = await res.json();
         if (json.success && json.pagination?.totalCollections) {
@@ -217,6 +220,7 @@ export const useAllLibraryItems = () => {
     setItems,
     setPage,
     setTotal,
+    limit,
     items,
     page,
     total,

@@ -40,8 +40,27 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, toggleSidebar }) => {
       >
         <div className="mb-8 flex items-center justify-between lg:justify-start">
           <div className="flex items-center gap-2">
-            <BookOpen size={30} color="#113FF7" />
-            <h1 className="text-xl font-semibold">Perpustakaan USD</h1>
+            <div className="relative">
+              <img
+                src="logo.png"
+                alt="Logo Perpustakaan USD"
+                className="h-12 max-h-14 w-auto align-middle"
+                style={{ objectFit: "contain" }}
+              />
+            </div>
+            <div className="flex flex-col items-start">
+              <div className="flex items-center">
+                <span className="bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-2xl font-black text-transparent transition-all duration-300 group-hover:from-slate-900 group-hover:to-slate-700">
+                  Sadhar
+                </span>
+                <span className="ml-2 bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-2xl font-black text-transparent transition-all duration-300 group-hover:from-blue-700 group-hover:to-indigo-700">
+                  Lib
+                </span>
+              </div>
+              <p className="mt-1 text-sm font-semibold text-gray-500">
+                NPP 3404072D2020617
+              </p>
+            </div>
           </div>
           <button className="btn btn-ghost lg:hidden" onClick={toggleSidebar}>
             <svg

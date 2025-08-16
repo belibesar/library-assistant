@@ -14,10 +14,8 @@ const ChatbotSection: React.FC = () => {
       Selamat datang di Perpustakaan USD! 👋
       <ul>
         <li>Saya siap membantu Anda mencari buku dan koleksi perpustakaan. Berikut beberapa contoh yang bisa Anda tanyakan:</li>
-        <li>"Rekomendasikan skripsi tentang teknik, dong!"</li>
+        <li>"Rekomendasikan skripsi tentang pendidikan, dong!"</li>
         <li>"Rekomendasikan saya buku tentang psikologi"</li>
-        <li>"Apakah buku "Bayesian Reasoning and Machine Learning" masih tersedia untuk dipinjam?"</li>
-        <li>"Rekomendasikan saya jurnal terkait teknik"</li>
         <li>"Dimana letak buku The Strength in Our Scars?"</li>
       </ul>
       Silakan ketik pertanyaan Anda!`,

@@ -33,6 +33,7 @@ export default function LibraryCollectionPage() {
     setItems,
     page,
     setPage,
+    limit,
     total,
     setTotal,
     totalCollections,
@@ -230,6 +231,8 @@ export default function LibraryCollectionPage() {
 
     try {
       console.log("trying...");
+      console.log(payload, "<----- submittedData");
+
       const url = isUpdating ? `${endpoint}/${itemId}` : endpoint;
       const method = isUpdating ? "PUT" : "POST";
 
@@ -465,10 +468,17 @@ export default function LibraryCollectionPage() {
             <h1 className="text-3xl font-bold text-gray-900">
               Koleksi Perpustakaan
             </h1>
-            <p className="mt-1 text-gray-600">
+            {/* <p className="mt-1 text-gray-600">
               Kelola koleksi {getCategoryDisplayText()} ({total} dari{" "}
               {totalCollections} total item)
-            </p>
+            </p> */}{" "}
+            {/* //sebelum revisi */}
+            <p className="mt-1 text-gray-600">
+              Kelola koleksi {getCategoryDisplayText()} ({limit * page} dari{" "}
+              {total} total item)
+            </p>{" "}
+            {/* //revisi */}
+            {/* potential bug item / total item */}
           </div>
           {role === "admin" && (
             <div className="flex gap-2">
