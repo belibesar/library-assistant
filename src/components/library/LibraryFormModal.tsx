@@ -29,10 +29,10 @@ export const LibraryFormModal = ({
   isEditMode,
 }: LibraryFormModalProps) => {
   const [isClosing, setIsClosing] = useState(false);
-  
+
   const { shouldRender, animationState } = useModalAnimation({
     isOpen,
-    duration: 300
+    duration: 300,
   });
 
   const handleClose = () => {
@@ -45,42 +45,42 @@ export const LibraryFormModal = ({
 
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
-      if (e.key === 'Escape' && isOpen) {
+      if (e.key === "Escape" && isOpen) {
         handleClose();
       }
     };
 
     if (isOpen) {
-      document.addEventListener('keydown', handleEscape);
-      document.body.style.overflow = 'hidden';
+      document.addEventListener("keydown", handleEscape);
+      document.body.style.overflow = "hidden";
     }
 
     return () => {
-      document.removeEventListener('keydown', handleEscape);
-      document.body.style.overflow = 'unset';
+      document.removeEventListener("keydown", handleEscape);
+      document.body.style.overflow = "unset";
     };
   }, [isOpen]);
 
   if (!shouldRender) return null;
 
   return (
-    <div 
+    <div
       className={`fixed inset-0 z-50 flex items-center justify-center p-4 transition-all duration-300 ${
-        animationState === 'entering' 
-          ? 'backdrop-fade-in bg-black/30' 
-          : animationState === 'entered'
-          ? 'bg-black/30 backdrop-blur-sm'
-          : 'backdrop-fade-out bg-black/30'
+        animationState === "entering"
+          ? "backdrop-fade-in bg-black/30"
+          : animationState === "entered"
+            ? "bg-black/30 backdrop-blur-sm"
+            : "backdrop-fade-out bg-black/30"
       }`}
       onClick={handleClose}
     >
-      <div 
+      <div
         className={`max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-xl border border-gray-100 bg-white shadow-[0_20px_50px_rgba(8,_112,_184,_0.7)] transition-all duration-300 ${
-          animationState === 'entering' || isClosing
-            ? 'modal-slide-in opacity-0 scale-90 translate-y-8' 
-            : animationState === 'entered' 
-            ? 'modal-slide-in opacity-100 scale-100 translate-y-0'
-            : 'modal-slide-out opacity-0 scale-90 translate-y-8'
+          animationState === "entering" || isClosing
+            ? "modal-slide-in translate-y-8 scale-90 opacity-0"
+            : animationState === "entered"
+              ? "modal-slide-in translate-y-0 scale-100 opacity-100"
+              : "modal-slide-out translate-y-8 scale-90 opacity-0"
         }`}
         onClick={(e) => e.stopPropagation()}
       >
@@ -92,7 +92,7 @@ export const LibraryFormModal = ({
           </h2>
           <button
             onClick={handleClose}
-            className="close-button text-gray-400 transition-all duration-200 hover:text-red-500 hover:rotate-90 hover:scale-110 rounded-full p-1"
+            className="close-button rounded-full p-1 text-gray-400 transition-all duration-200 hover:scale-110 hover:rotate-90 hover:text-red-500"
           >
             <svg
               className="h-6 w-6"
@@ -117,31 +117,34 @@ export const LibraryFormModal = ({
                 <div className="text-sm text-red-800">{formErrors.general}</div>
               </div>
             )}
-
-            <div>
-              <label
-                htmlFor={`${category}-id-input`}
-                className="mb-2 block text-sm font-medium text-gray-700"
-              >
-                ID {getItemTypeLabel(category)}{" "}
-                <span className="text-red-500">*</span>
-              </label>
-              <input
-                id={`${category}-id-input`}
-                type="text"
-                name="id"
-                value={formInput.id}
-                onChange={onChange}
-                className={`w-full rounded-md border px-3 py-2 focus:border-transparent focus:ring-2 focus:ring-blue-500 focus:outline-none ${
-                  formErrors.id ? "border-red-500 bg-red-50" : "border-gray-300"
-                }`}
-                placeholder={`Masukkan ID unik untuk ${category}`}
-              />
-              {formErrors.id && (
-                <p className="mt-1 text-xs text-red-500">{formErrors.id}</p>
-              )}
-            </div>
-
+            {/* field id ada ketika tambah item saja */}
+            {isEditMode === false && (
+              <div>
+                <label
+                  htmlFor={`${category}-id-input`}
+                  className="mb-2 block text-sm font-medium text-gray-700"
+                >
+                  ID {getItemTypeLabel(category)}{" "}
+                  <span className="text-red-500">*</span>
+                </label>
+                <input
+                  id={`${category}-id-input`}
+                  type="text"
+                  name="id"
+                  value={formInput.id}
+                  onChange={onChange}
+                  className={`w-full rounded-md border px-3 py-2 focus:border-transparent focus:ring-2 focus:ring-blue-500 focus:outline-none ${
+                    formErrors.id
+                      ? "border-red-500 bg-red-50"
+                      : "border-gray-300"
+                  }`}
+                  placeholder={`Masukkan ID unik untuk ${category}`}
+                />
+                {formErrors.id && (
+                  <p className="mt-1 text-xs text-red-500">{formErrors.id}</p>
+                )}
+              </div>
+            )}
             <div>
               <label
                 htmlFor={`${category}-judul-input`}
@@ -167,7 +170,6 @@ export const LibraryFormModal = ({
                 <p className="mt-1 text-xs text-red-500">{formErrors.judul}</p>
               )}
             </div>
-
             {category === "book" && (
               <div className="space-y-4">
                 <div>
@@ -299,7 +301,6 @@ export const LibraryFormModal = ({
                 </div>
               </div>
             )}
-
             {category === "journal" && (
               <div className="space-y-4">
                 <div>
@@ -408,7 +409,10 @@ export const LibraryFormModal = ({
                     htmlFor="journal-jurnalid-input"
                     className="mb-2 block text-sm font-medium text-gray-700"
                   >
-                    Jurnal ID <span className="text-xs text-gray-500">(Opsional - akan di-generate otomatis)</span>
+                    Jurnal ID{" "}
+                    <span className="text-xs text-gray-500">
+                      (Opsional - akan di-generate otomatis)
+                    </span>
                   </label>
                   <input
                     id="journal-jurnalid-input"
@@ -422,43 +426,139 @@ export const LibraryFormModal = ({
                 </div>
               </div>
             )}
-
             {category === "skripsi" && (
               <>
                 <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                   <div>
-                    <label htmlFor="skripsi-nim-input" className="mb-2 block text-sm font-medium text-gray-700">NIM<span className="text-red-500">*</span></label>
-                    <input id="skripsi-nim-input" type="text" name="nim" value={(formInput as any).nim || ""} onChange={onChange} className={`w-full rounded-md border px-3 py-2 focus:border-transparent focus:ring-2 focus:ring-blue-500 focus:outline-none ${formErrors.nim ? "border-red-500 bg-red-50" : "border-gray-300"}`} placeholder="Masukkan NIM mahasiswa" />
-                    {formErrors.nim && (<p className="mt-1 text-xs text-red-500">{formErrors.nim}</p>)}
+                    <label
+                      htmlFor="skripsi-nim-input"
+                      className="mb-2 block text-sm font-medium text-gray-700"
+                    >
+                      NIM<span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      id="skripsi-nim-input"
+                      type="text"
+                      name="nim"
+                      value={(formInput as any).nim || ""}
+                      onChange={onChange}
+                      className={`w-full rounded-md border px-3 py-2 focus:border-transparent focus:ring-2 focus:ring-blue-500 focus:outline-none ${formErrors.nim ? "border-red-500 bg-red-50" : "border-gray-300"}`}
+                      placeholder="Masukkan NIM mahasiswa"
+                    />
+                    {formErrors.nim && (
+                      <p className="mt-1 text-xs text-red-500">
+                        {formErrors.nim}
+                      </p>
+                    )}
                   </div>
                   <div>
-                    <label htmlFor="skripsi-nama-mahasiswa-input" className="mb-2 block text-sm font-medium text-gray-700">Nama Mahasiswa <span className="text-red-500">*</span></label>
-                    <input id="skripsi-nama-mahasiswa-input" type="text" name="nama_mahasiswa" value={(formInput as any).nama_mahasiswa || ""} onChange={onChange} className={`w-full rounded-md border px-3 py-2 focus:border-transparent focus:ring-2 focus:ring-blue-500 focus:outline-none ${formErrors.nama_mahasiswa ? "border-red-500 bg-red-50" : "border-gray-300"}`} placeholder="Masukkan nama mahasiswa" />
-                    {formErrors.nama_mahasiswa && (<p className="mt-1 text-xs text-red-500">{formErrors.nama_mahasiswa}</p>)}
+                    <label
+                      htmlFor="skripsi-nama-mahasiswa-input"
+                      className="mb-2 block text-sm font-medium text-gray-700"
+                    >
+                      Nama Mahasiswa <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      id="skripsi-nama-mahasiswa-input"
+                      type="text"
+                      name="nama_mahasiswa"
+                      value={(formInput as any).nama_mahasiswa || ""}
+                      onChange={onChange}
+                      className={`w-full rounded-md border px-3 py-2 focus:border-transparent focus:ring-2 focus:ring-blue-500 focus:outline-none ${formErrors.nama_mahasiswa ? "border-red-500 bg-red-50" : "border-gray-300"}`}
+                      placeholder="Masukkan nama mahasiswa"
+                    />
+                    {formErrors.nama_mahasiswa && (
+                      <p className="mt-1 text-xs text-red-500">
+                        {formErrors.nama_mahasiswa}
+                      </p>
+                    )}
                   </div>
                   <div>
-                    <label htmlFor="skripsi-fakultas-input" className="mb-2 block text-sm font-medium text-gray-700">Fakultas <span className="text-red-500">*</span></label>
-                    <input id="skripsi-fakultas-input" type="text" name="fakultas" value={(formInput as any).fakultas || ""} onChange={onChange} className={`w-full rounded-md border px-3 py-2 focus:border-transparent focus:ring-2 focus:ring-blue-500 focus:outline-none ${formErrors.fakultas ? "border-red-500 bg-red-50" : "border-gray-300"}`} placeholder="Masukkan fakultas" />
-                    {formErrors.fakultas && (<p className="mt-1 text-xs text-red-500">{formErrors.fakultas}</p>)}
+                    <label
+                      htmlFor="skripsi-fakultas-input"
+                      className="mb-2 block text-sm font-medium text-gray-700"
+                    >
+                      Fakultas <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      id="skripsi-fakultas-input"
+                      type="text"
+                      name="fakultas"
+                      value={(formInput as any).fakultas || ""}
+                      onChange={onChange}
+                      className={`w-full rounded-md border px-3 py-2 focus:border-transparent focus:ring-2 focus:ring-blue-500 focus:outline-none ${formErrors.fakultas ? "border-red-500 bg-red-50" : "border-gray-300"}`}
+                      placeholder="Masukkan fakultas"
+                    />
+                    {formErrors.fakultas && (
+                      <p className="mt-1 text-xs text-red-500">
+                        {formErrors.fakultas}
+                      </p>
+                    )}
                   </div>
                   <div>
-                    <label htmlFor="skripsi-prodi-input" className="mb-2 block text-sm font-medium text-gray-700">Program Studi <span className="text-red-500">*</span></label>
-                    <input id="skripsi-prodi-input" type="text" name="program_studi" value={(formInput as any).program_studi || ""} onChange={onChange} className={`w-full rounded-md border px-3 py-2 focus:border-transparent focus:ring-2 focus:ring-blue-500 focus:outline-none ${formErrors.program_studi ? "border-red-500 bg-red-50" : "border-gray-300"}`} placeholder="Masukkan program studi" />
-                    {formErrors.program_studi && (<p className="mt-1 text-xs text-red-500">{formErrors.program_studi}</p>)}
+                    <label
+                      htmlFor="skripsi-prodi-input"
+                      className="mb-2 block text-sm font-medium text-gray-700"
+                    >
+                      Program Studi <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      id="skripsi-prodi-input"
+                      type="text"
+                      name="program_studi"
+                      value={(formInput as any).program_studi || ""}
+                      onChange={onChange}
+                      className={`w-full rounded-md border px-3 py-2 focus:border-transparent focus:ring-2 focus:ring-blue-500 focus:outline-none ${formErrors.program_studi ? "border-red-500 bg-red-50" : "border-gray-300"}`}
+                      placeholder="Masukkan program studi"
+                    />
+                    {formErrors.program_studi && (
+                      <p className="mt-1 text-xs text-red-500">
+                        {formErrors.program_studi}
+                      </p>
+                    )}
                   </div>
                 </div>
                 <div>
-                  <label htmlFor="skripsi-tahun-input" className="mb-2 block text-sm font-medium text-gray-700">Tahun <span className="text-red-500">*</span></label>
-                  <input id="skripsi-tahun-input" type="text" name="tahun" value={(formInput as any).tahun || ""} onChange={onChange} className={`w-full rounded-md border px-3 py-2 focus:border-transparent focus:ring-2 focus:ring-blue-500 focus:outline-none ${formErrors.tahun ? "border-red-500 bg-red-50" : "border-gray-300"}`} placeholder="Masukkan tahun skripsi" />
-                  {formErrors.tahun && (<p className="mt-1 text-xs text-red-500">{formErrors.tahun}</p>)}
+                  <label
+                    htmlFor="skripsi-tahun-input"
+                    className="mb-2 block text-sm font-medium text-gray-700"
+                  >
+                    Tahun <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    id="skripsi-tahun-input"
+                    type="text"
+                    name="tahun"
+                    value={(formInput as any).tahun || ""}
+                    onChange={onChange}
+                    className={`w-full rounded-md border px-3 py-2 focus:border-transparent focus:ring-2 focus:ring-blue-500 focus:outline-none ${formErrors.tahun ? "border-red-500 bg-red-50" : "border-gray-300"}`}
+                    placeholder="Masukkan tahun skripsi"
+                  />
+                  {formErrors.tahun && (
+                    <p className="mt-1 text-xs text-red-500">
+                      {formErrors.tahun}
+                    </p>
+                  )}
                 </div>
                 <div>
-                  <label htmlFor="skripsi-link-input" className="mb-2 block text-sm font-medium text-gray-700">Link Skripsi</label>
-                  <input id="skripsi-link-input" type="url" name="link" value={(formInput as any).link || ""} onChange={onChange} className="w-full rounded-md border border-gray-300 px-3 py-2 focus:border-transparent focus:ring-2 focus:ring-blue-500 focus:outline-none" placeholder="https://drive.google.com/... atau link lainnya" />
+                  <label
+                    htmlFor="skripsi-link-input"
+                    className="mb-2 block text-sm font-medium text-gray-700"
+                  >
+                    Link Skripsi
+                  </label>
+                  <input
+                    id="skripsi-link-input"
+                    type="url"
+                    name="link"
+                    value={(formInput as any).link || ""}
+                    onChange={onChange}
+                    className="w-full rounded-md border border-gray-300 px-3 py-2 focus:border-transparent focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                    placeholder="https://drive.google.com/... atau link lainnya"
+                  />
                 </div>
               </>
             )}
-
             {category === "book" && (
               <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
                 <div>
@@ -546,7 +646,6 @@ export const LibraryFormModal = ({
                 </div>
               </div>
             )}
-
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
               <div>
                 <label
@@ -600,7 +699,6 @@ export const LibraryFormModal = ({
                 )}
               </div>
             </div>
-
             {/* dijadikan opsional sementara */}
             {category !== "book" && (
               <div>
@@ -630,18 +728,17 @@ export const LibraryFormModal = ({
                 )}
               </div>
             )}
-
             <div className="mt-2 flex justify-end gap-3">
               <button
                 type="button"
                 onClick={handleClose}
-                className="modal-button rounded-md border border-gray-300 px-4 py-2 text-gray-700 transition-all duration-200 hover:bg-gray-50 hover:shadow-md hover:-translate-y-0.5"
+                className="modal-button rounded-md border border-gray-300 px-4 py-2 text-gray-700 transition-all duration-200 hover:-translate-y-0.5 hover:bg-gray-50 hover:shadow-md"
               >
                 Batal
               </button>
               <button
                 type="submit"
-                className="modal-button rounded-md bg-blue-600 px-4 py-2 text-white transition-all duration-200 hover:bg-blue-700 hover:shadow-md hover:-translate-y-0.5"
+                className="modal-button rounded-md bg-blue-600 px-4 py-2 text-white transition-all duration-200 hover:-translate-y-0.5 hover:bg-blue-700 hover:shadow-md"
               >
                 {isEditMode ? "Update" : "Simpan"}
               </button>

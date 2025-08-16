@@ -231,6 +231,8 @@ export default function LibraryCollectionPage() {
 
     try {
       console.log("trying...");
+      console.log(payload, "<----- submittedData");
+
       const url = isUpdating ? `${endpoint}/${itemId}` : endpoint;
       const method = isUpdating ? "PUT" : "POST";
 
