@@ -11,6 +11,8 @@ export const LibraryPagination = ({
   onPrev,
   onNext,
 }: LibraryPaginationProps) => {
+  console.log({ page, totalPages });
+
   if (totalPages <= 1) return null;
 
   return (
