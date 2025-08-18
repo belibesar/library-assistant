@@ -85,7 +85,7 @@ class BookModel {
     const book = await collection
       .aggregate([
         {
-          $match: { id: id },
+          $match: { _id: new ObjectId(id) },
         },
         {
           $lookup: {
@@ -152,7 +152,7 @@ class BookModel {
 
   static async updateBook(id: string, data: Book) {
     const collection = await this.collection();
-    const identifier = { id: id };
+    const identifier = { _id: new ObjectId(id) };
     const currentBook = await collection.findOne(identifier);
     if (!currentBook) {
       throw new Error("Book not found");
@@ -189,10 +189,10 @@ class BookModel {
 
   static async deleteBook(id: string) {
     const collection = await this.collection();
-    const query = { id: id };
+    const query = { _id: new ObjectId(id) };
     const currentBook = await collection.findOne(query);
     if (!currentBook) {
-      throw new Error("Book not found");
+      throw { message: "Book not found!", status: 404 };
     }
     return await collection.deleteOne(query);
   }
