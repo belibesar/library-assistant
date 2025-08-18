@@ -214,7 +214,7 @@ class JournalModel {
 
   static async countJournal(id: string) {
     const collection = await this.collection();
-    const identifier = { id: id };
+    const identifier = { _id: new ObjectId(id) };
     const currentJournal = await collection.findOne(identifier);
     const journalCount = currentJournal?.count || 0;
     if (!currentJournal) {
