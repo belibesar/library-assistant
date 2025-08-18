@@ -20,7 +20,7 @@ export const BookCard = ({
   return (
     <div
       key={book.id}
-      className="group cursor-pointer overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm transition-all duration-300 hover:border-blue-300 hover:shadow-xl hover:shadow-blue-100 hover:-translate-y-1 hover:scale-[1.02] card-hover"
+      className="group card-hover cursor-pointer overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:scale-[1.02] hover:border-blue-300 hover:shadow-xl hover:shadow-blue-100"
       onClick={() => onViewDetail(book)}
     >
       <div className="flex flex-col">
@@ -37,7 +37,7 @@ export const BookCard = ({
                     e.stopPropagation();
                     onEdit(book);
                   }}
-                  className="rounded-lg p-2 text-gray-400 transition-all duration-200 hover:bg-blue-50 hover:text-blue-600 modal-button hover:scale-110"
+                  className="modal-button rounded-lg p-2 text-gray-400 transition-all duration-200 hover:scale-110 hover:bg-blue-50 hover:text-blue-600"
                   title="Edit buku"
                 >
                   <Edit3 size={16} />
@@ -45,9 +45,9 @@ export const BookCard = ({
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
-                    onDelete(book.id, "book");
+                    onDelete(book?._id as string, "book");
                   }}
-                  className="rounded-lg p-2 text-gray-400 transition-all duration-200 hover:bg-red-50 hover:text-red-600 modal-button hover:scale-110"
+                  className="modal-button rounded-lg p-2 text-gray-400 transition-all duration-200 hover:scale-110 hover:bg-red-50 hover:text-red-600"
                   title="Hapus buku"
                 >
                   <Trash2 size={16} />
@@ -58,7 +58,7 @@ export const BookCard = ({
 
           <div className="space-y-3">
             <div className="min-h-10">
-              <h3 className="line-clamp-2 text-xl leading-tight font-bold text-gray-900 group-hover:text-blue-700 transition-colors duration-200">
+              <h3 className="line-clamp-2 text-xl leading-tight font-bold text-gray-900 transition-colors duration-200 group-hover:text-blue-700">
                 {book.judul}
               </h3>
             </div>
@@ -78,7 +78,8 @@ export const BookCard = ({
             </span>
             <div className="min-h-20">
               <p className="line-clamp-3 text-base leading-relaxed text-gray-600 transition-colors duration-200 group-hover:text-gray-700">
-                Sinopsis: {book.sinopsis || book.abstrak || "Sinopsis belum tersedia"}
+                Sinopsis:{" "}
+                {book.sinopsis || book.abstrak || "Sinopsis belum tersedia"}
               </p>
             </div>
           </div>
@@ -90,10 +91,10 @@ export const BookCard = ({
               Total: {book.jumlah}
             </span>
             <div className="flex gap-2">
-              <span className="rounded-md bg-green-50 px-2 py-1 text-base font-semibold text-green-600 transition-all duration-200 group-hover:bg-green-100 group-hover:scale-105">
+              <span className="rounded-md bg-green-50 px-2 py-1 text-base font-semibold text-green-600 transition-all duration-200 group-hover:scale-105 group-hover:bg-green-100">
                 Tersedia: {book.tersedia}
               </span>
-              <span className="rounded-md bg-yellow-50 px-2 py-1 text-base font-semibold text-yellow-600 transition-all duration-200 group-hover:bg-yellow-100 group-hover:scale-105">
+              <span className="rounded-md bg-yellow-50 px-2 py-1 text-base font-semibold text-yellow-600 transition-all duration-200 group-hover:scale-105 group-hover:bg-yellow-100">
                 Dipinjam: {book.dipinjam}
               </span>
             </div>

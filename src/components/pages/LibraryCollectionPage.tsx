@@ -306,8 +306,10 @@ export default function LibraryCollectionPage() {
     }
 
     const itemToDelete = items.find(
-      (item: LibraryItem) => item.id === id && item.type === itemType,
+      (item: LibraryItem) => item._id === id && item.type === itemType,
     );
+    console.log(itemToDelete, "<---- item yang dihapus");
+
     const itemTitle = itemToDelete ? itemToDelete.judul : "item ini";
 
     if (
@@ -332,13 +334,13 @@ export default function LibraryCollectionPage() {
         showNotification(`${itemType} berhasil dihapus!`, "success");
         setItems((prevItems: LibraryItem[]) =>
           prevItems.filter(
-            (item: LibraryItem) => !(item.id === id && item.type === itemType),
+            (item: LibraryItem) => !(item._id === id && item.type === itemType),
           ),
         );
         setTotal((prevTotal: number) => prevTotal - 1);
 
         const remainingItemsOnPage = items.filter(
-          (item: LibraryItem) => !(item.id === id && item.type === itemType),
+          (item: LibraryItem) => !(item._id === id && item.type === itemType),
         ).length;
         if (remainingItemsOnPage === 0 && page > 1) {
           setPage(page - 1);
