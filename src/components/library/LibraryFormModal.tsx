@@ -117,34 +117,31 @@ export const LibraryFormModal = ({
                 <div className="text-sm text-red-800">{formErrors.general}</div>
               </div>
             )}
-            {/* field id ada ketika tambah item saja */}
-            {isEditMode === false && (
-              <div>
-                <label
-                  htmlFor={`${category}-id-input`}
-                  className="mb-2 block text-sm font-medium text-gray-700"
-                >
-                  ID {getItemTypeLabel(category)}{" "}
-                  <span className="text-red-500">*</span>
-                </label>
-                <input
-                  id={`${category}-id-input`}
-                  type="text"
-                  name="id"
-                  value={formInput.id}
-                  onChange={onChange}
-                  className={`w-full rounded-md border px-3 py-2 focus:border-transparent focus:ring-2 focus:ring-blue-500 focus:outline-none ${
-                    formErrors.id
-                      ? "border-red-500 bg-red-50"
-                      : "border-gray-300"
-                  }`}
-                  placeholder={`Masukkan ID unik untuk ${category}`}
-                />
-                {formErrors.id && (
-                  <p className="mt-1 text-xs text-red-500">{formErrors.id}</p>
-                )}
-              </div>
-            )}
+
+            <div>
+              <label
+                htmlFor={`${category}-id-input`}
+                className="mb-2 block text-sm font-medium text-gray-700"
+              >
+                ID {getItemTypeLabel(category)}{" "}
+                <span className="text-red-500">*</span>
+              </label>
+              <input
+                id={`${category}-id-input`}
+                type="text"
+                name="id"
+                value={formInput.id}
+                onChange={onChange}
+                className={`w-full rounded-md border px-3 py-2 focus:border-transparent focus:ring-2 focus:ring-blue-500 focus:outline-none ${
+                  formErrors.id ? "border-red-500 bg-red-50" : "border-gray-300"
+                }`}
+                placeholder={`Masukkan ID unik untuk ${category}`}
+              />
+              {formErrors.id && (
+                <p className="mt-1 text-xs text-red-500">{formErrors.id}</p>
+              )}
+            </div>
+
             <div>
               <label
                 htmlFor={`${category}-judul-input`}

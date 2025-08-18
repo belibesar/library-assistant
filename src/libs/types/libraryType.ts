@@ -46,6 +46,7 @@ export interface Skripsi extends BaseItem {
 export type LibraryItem = Book | Journal | Skripsi;
 
 export interface BookFormInput {
+  _id: string;
   id: string;
   judul: string;
   abstrak?: string;
@@ -65,6 +66,7 @@ export interface BookFormInput {
 }
 
 export interface JournalFormInput {
+  _id: string;
   id?: string;
   judul: string;
   abstrak?: string;
@@ -82,6 +84,7 @@ export interface JournalFormInput {
 }
 
 export interface SkripsiFormInput {
+  _id: string;
   id: string;
   judul: string;
   abstrak: string;

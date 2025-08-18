@@ -12,11 +12,12 @@ import { endpointMap } from "@/utils/libraryUtil";
 
 export const useLibraryItems = () => {
   const [search, setSearch] = useState("");
-  const [category, setCategory] = useState<LibraryItemType>("book");
+  const [category, setCategory] = useState<LibraryItemType | "all">("all");
   const [items, setItems] = useState<LibraryItem[]>([]);
   const [page, setPage] = useState(1);
   const [limit] = useState(3);
   const [total, setTotal] = useState(0);
+  const [totalCollections, setTotalCollections] = useState(0);
   const [loading, setLoading] = useState(false);
   const [notification, setNotification] = useState<Notification | null>(null);
 
@@ -28,12 +29,6 @@ export const useLibraryItems = () => {
   };
 
   const fetchItems = async () => {
-    if (!category) {
-      setItems([]);
-      setTotal(0);
-      return;
-    }
-
     setLoading(true);
     try {
       const params = new URLSearchParams({
@@ -42,11 +37,18 @@ export const useLibraryItems = () => {
       });
       if (search) params.append("search", search);
 
-      const url = `/api/${endpointMap[category]}?${params.toString()}`;
+      // Tentukan URL berdasarkan kategori
+      let url: string;
+      if (category === "all") {
+        url = `/api/collections?${params.toString()}`;
+      } else {
+        url = `/api/${endpointMap[category]}?${params.toString()}`;
+      }
+
       const res = await fetch(url);
 
       if (!res.ok) {
-        let errorMessage = `Gagal mengambil data ${category} (Status: ${res.status})`;
+        let errorMessage = `Gagal mengambil data ${category === "all" ? "koleksi" : category} (Status: ${res.status})`;
         try {
           const errorData = await res.json();
           errorMessage = errorData.message || errorMessage;
@@ -56,6 +58,7 @@ export const useLibraryItems = () => {
         showNotification(errorMessage, "error");
         setItems([]);
         setTotal(0);
+        setTotalCollections(0);
         return;
       }
 
@@ -63,7 +66,6 @@ export const useLibraryItems = () => {
 
       if (json.success && Array.isArray(json.data)) {
         const mappedItems: LibraryItem[] = json.data.map((item: any) => {
-
           const base: BaseItem = {
             _id: String(item._id),
             id: item.id || item._id,
@@ -77,28 +79,49 @@ export const useLibraryItems = () => {
             count: Number(item.count) || 0,
           };
 
-          if (item.penerbit_id || item.pengarang_id) {
+          // Deteksi tipe berdasarkan kategori yang dipilih atau field yang ada
+          if (
+            category === "book" ||
+            item.type === "book" ||
+            item.penerbit_id ||
+            item.pengarang_id ||
+            item.lokasi ||
+            item.rak ||
+            item.sinopsis
+          ) {
             return {
               ...base,
               penerbit_id: item.penerbit_id || "",
               pengarang_id: item.pengarang_id || "",
-              pengarang: item.pengarang || "",
-              penerbit: item.penerbit || "",
+              pengarang: item.pengarang || null,
+              penerbit: item.penerbit || null,
               lokasi: item.lokasi || "",
               rak: item.rak || "",
               sinopsis: item.sinopsis || "",
               type: "book",
             } as Book;
-          } else if (item.jurnal_id || item.publikasi || item.authors || (category === "journal")) {
+          } else if (
+            category === "journal" ||
+            item.type === "journal" ||
+            item.jurnal_id ||
+            item.publikasi ||
+            item.authors
+          ) {
             return {
               ...base,
               jurnal_id: item.jurnal_id || "",
               authors: item.authors || "",
               link: item.link || "",
               type: "journal",
-              publikasi: item.publikasi,
+              publikasi: item.publikasi || null,
             } as Journal;
-          } else if (item.tahun || item.nim) {
+          } else if (
+            category === "skripsi" ||
+            item.type === "thesis" ||
+            item.type === "skripsi" ||
+            item.tahun ||
+            item.nim
+          ) {
             return {
               ...base,
               tahun: item.tahun || "",
@@ -108,33 +131,67 @@ export const useLibraryItems = () => {
               nama_mahasiswa: item.nama_mahasiswa || "",
               fakultas: item.fakultas || "",
               program_studi: item.program_studi || "",
-              mahasiswa: item.mahasiswa,
+              mahasiswa: item.mahasiswa || null,
             } as Skripsi;
           }
+
           return base as LibraryItem;
         });
+
         setItems(mappedItems);
-        setTotal(
-          json.pagination?.totalItems || json.total || mappedItems.length,
-        );
+
+        // Set total dan totalCollections
+        if (category === "all") {
+          console.log(json, "<-----json");
+
+          // setTotal(json.data.length);
+          setTotal(json?.pagination?.total); //fix
+          setTotalCollections(json.pagination?.totalCollections || 0);
+        } else {
+          setTotal(
+            json.pagination?.totalItems || json.total || json.data.length,
+          );
+          // Untuk kategori spesifik, ambil total collections dari endpoint collections
+          fetchTotalCollections();
+        }
       } else {
         setItems([]);
         setTotal(0);
+        setTotalCollections(0);
         showNotification(
-          json.message || `Gagal mengambil data ${category}.`,
+          json.message ||
+            `Gagal mengambil data ${category === "all" ? "koleksi" : category}.`,
           "error",
         );
       }
     } catch (e: any) {
-      console.error(`Error fetching ${category}s:`, e);
+      console.error(
+        `Error fetching ${category === "all" ? "collections" : category}:`,
+        e,
+      );
       setItems([]);
       setTotal(0);
+      setTotalCollections(0);
       showNotification(
-        `Terjadi kesalahan jaringan saat mengambil ${category}.`,
+        `Terjadi kesalahan jaringan saat mengambil ${category === "all" ? "koleksi" : category}.`,
         "error",
       );
     } finally {
       setLoading(false);
+    }
+  };
+
+  const fetchTotalCollections = async () => {
+    try {
+      const res = await fetch(`/api/collections?page=${page}&limit=${limit}`);
+      if (res.ok) {
+        const json = await res.json();
+        if (json.success && json.pagination?.totalCollections) {
+          setTotalCollections(json.pagination.totalCollections);
+        }
+      }
+    } catch (error) {
+      console.error("Error fetching total collections:", error);
     }
   };
 
@@ -168,6 +225,7 @@ export const useLibraryItems = () => {
     total,
     loading,
     notification,
+    totalCollections,
     totalPages,
     setCategory,
     handleSearchChange,

@@ -80,7 +80,7 @@ class ThesisModel {
       const thesis = await collection
         .aggregate([
           {
-            $match: { id: id },
+            $match: { _id: new ObjectId(id) },
           },
           {
             $lookup: {
@@ -98,6 +98,8 @@ class ThesisModel {
           },
         ])
         .toArray();
+      console.log(thesis, "<--- foundedThesis");
+
       return thesis[0] || null;
     } catch (error) {
       throw error;
@@ -117,7 +119,7 @@ class ThesisModel {
   static async updateThesis(id: string, data: Thesis) {
     try {
       const collection = await this.collection();
-      const identifier = { id: id };
+      const identifier = { _id: new ObjectId(id) };
 
       return await collection.updateOne(identifier, { $set: data });
     } catch (error) {
@@ -129,7 +131,7 @@ class ThesisModel {
     try {
       const collection = await this.collection();
 
-      return await collection.deleteOne({ id });
+      return await collection.deleteOne({ _id: new ObjectId(id) });
     } catch (error) {
       throw error;
     }
@@ -137,7 +139,7 @@ class ThesisModel {
 
   static async countThesis(id: string) {
     const collection = await this.collection();
-    const identifier = { id: id };
+    const identifier = { _id: new ObjectId(id) };
     const currentThesis = await collection.findOne(identifier);
     const thesisCount = currentThesis?.count || 0;
     if (!currentThesis) {

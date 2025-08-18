@@ -99,7 +99,7 @@ export default function LibraryCollectionPage() {
     let payload: any;
     let endpoint = "";
     let isUpdating = false;
-    let itemId = (formInput as any).id;
+    let itemId = (formInput as any)._id;
 
     if (category !== "journal" && (!formInput.id || !formInput.id.trim()))
       newErrors.id = "ID wajib diisi";
@@ -153,7 +153,7 @@ export default function LibraryCollectionPage() {
       };
       endpoint = "/api/books";
       isUpdating = items.some(
-        (item) => item.id === bookFormInput.id && item.type === "book",
+        (item) => item._id === bookFormInput._id && item.type === "book",
       );
     } else if (category === "journal") {
       const journalFormInput = formInput as JournalFormInput;
@@ -177,7 +177,7 @@ export default function LibraryCollectionPage() {
       delete payload.dipinjam;
       endpoint = "/api/journals";
       isUpdating = items.some(
-        (item) => item.id === journalFormInput.id && item.type === "journal",
+        (item) => item._id === journalFormInput._id && item.type === "journal",
       );
     } else if (category === "skripsi") {
       const skripsiFormInput = formInput as SkripsiFormInput;
@@ -218,7 +218,7 @@ export default function LibraryCollectionPage() {
       delete payload.dipinjam;
       endpoint = "/api/thesis";
       isUpdating = items.some(
-        (item) => item.id === skripsiFormInput.id && item.type === "skripsi",
+        (item) => item._id === skripsiFormInput._id && item.type === "skripsi",
       );
     } else {
       newErrors.general = "Tipe kategori tidak valid.";
@@ -235,6 +235,11 @@ export default function LibraryCollectionPage() {
 
       const url = isUpdating ? `${endpoint}/${itemId}` : endpoint;
       const method = isUpdating ? "PUT" : "POST";
+
+      console.log(
+        { payload, url, method, isUpdating },
+        "<------ keluar masuk data",
+      );
 
       const res = await fetch(url, {
         method,
@@ -300,14 +305,18 @@ export default function LibraryCollectionPage() {
   };
 
   const handleDeleteItem = async (id: string, itemType: LibraryItemType) => {
+    console.log({ items, id, itemType }, "<----- deleteData");
+
     if (!id || !itemType) {
       showNotification("ID atau tipe item tidak valid", "error");
       return;
     }
 
     const itemToDelete = items.find(
-      (item: LibraryItem) => item.id === id && item.type === itemType,
+      (item: LibraryItem) => item._id === id && item.type === itemType,
     );
+    console.log(itemToDelete, "<---- item yang dihapus");
+
     const itemTitle = itemToDelete ? itemToDelete.judul : "item ini";
 
     if (
@@ -332,13 +341,13 @@ export default function LibraryCollectionPage() {
         showNotification(`${itemType} berhasil dihapus!`, "success");
         setItems((prevItems: LibraryItem[]) =>
           prevItems.filter(
-            (item: LibraryItem) => !(item.id === id && item.type === itemType),
+            (item: LibraryItem) => !(item._id === id && item.type === itemType),
           ),
         );
         setTotal((prevTotal: number) => prevTotal - 1);
 
         const remainingItemsOnPage = items.filter(
-          (item: LibraryItem) => !(item.id === id && item.type === itemType),
+          (item: LibraryItem) => !(item._id === id && item.type === itemType),
         ).length;
         if (remainingItemsOnPage === 0 && page > 1) {
           setPage(page - 1);
@@ -368,6 +377,7 @@ export default function LibraryCollectionPage() {
     setIsEditMode(true);
     if (item.type === "book") {
       setFormInput({
+        _id: item._id,
         id: item.id || "",
         judul: item.judul,
         abstrak: "karena buku hanya ada sinopsis",
@@ -387,6 +397,7 @@ export default function LibraryCollectionPage() {
       } as any);
     } else if (item.type === "journal") {
       setFormInput({
+        _id: item._id,
         id: item.id || "",
         judul: item.judul,
         abstrak: item.abstrak,
@@ -401,6 +412,7 @@ export default function LibraryCollectionPage() {
       } as any);
     } else if (item.type === "skripsi") {
       setFormInput({
+        _id: item._id,
         id: item.id || "",
         judul: item.judul,
         abstrak: item.abstrak,
@@ -424,7 +436,7 @@ export default function LibraryCollectionPage() {
 
     setItems((prevItems: LibraryItem[]) =>
       prevItems.map((i: LibraryItem) =>
-        i.id === item.id && i.type === item.type
+        i._id === item._id && i.type === item.type
           ? { ...i, count: (i.count || 0) + 1 }
           : i,
       ),
@@ -432,7 +444,7 @@ export default function LibraryCollectionPage() {
 
     try {
       const res = await fetch(
-        `/api/${endpointMap[item.type]}/${item.id}/view`,
+        `/api/${endpointMap[item.type]}/${item._id}/view`,
         {
           method: "PATCH",
           headers: { "Content-Type": "application/json" },
@@ -440,12 +452,12 @@ export default function LibraryCollectionPage() {
       );
       if (!res.ok) {
         console.error(
-          `Failed to increment view count for ${item.type} ${item.id}`,
+          `Failed to increment view count for ${item.type} ${item._id}`,
         );
       }
     } catch (error) {
       console.error(
-        `Error calling view API for ${item.type} ${item.id}:`,
+        `Error calling view API for ${item.type} ${item._id}:`,
         error,
       );
     }
