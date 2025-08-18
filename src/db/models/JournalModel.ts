@@ -79,7 +79,7 @@ class JournalModel {
     const journal = await collection
       .aggregate([
         {
-          $match: { id: id },
+          $match: { _id: new ObjectId(id) },
         },
         {
           $lookup: {
@@ -97,6 +97,8 @@ class JournalModel {
         },
       ])
       .toArray();
+    console.log(journal, "<----founded journal");
+
     return journal[0] || null;
   }
 
@@ -170,7 +172,7 @@ class JournalModel {
 
   static async updateJournal(id: string, data: Journal) {
     const collection = await this.collection();
-    const identifier = { id: id };
+    const identifier = { _id: new ObjectId(id) };
     const currentJournal = await collection.findOne(identifier);
     if (!currentJournal) {
       throw new Error("Journal not found");
@@ -202,10 +204,10 @@ class JournalModel {
 
   static async deleteJournal(id: string) {
     const collection = await this.collection();
-    const query = { id };
+    const query = { _id: new ObjectId(id) };
     const currentJournal = await collection.findOne(query);
     if (!currentJournal) {
-      throw new Error("Book not found");
+      throw { message: "Journal not found!", status: 404 };
     }
     return await collection.deleteOne(query);
   }

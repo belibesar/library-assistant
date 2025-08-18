@@ -3,6 +3,7 @@ import JournalModel from "@/db/models/JournalModel";
 import journalSchema from "@/libs/schemas/JournalSchema";
 import { Journal } from "@/libs/types/JournalType";
 import { CachingService } from "@/utils/caching";
+import errHandler from "@/utils/errHandler";
 
 export async function GET(
   request: NextRequest,
@@ -12,15 +13,7 @@ export async function GET(
     const { id } = await params;
     const data = await JournalModel.getJournalById(id);
     if (!data) {
-      return NextResponse.json(
-        {
-          success: false,
-          message: "Data not found!",
-        },
-        {
-          status: 404,
-        },
-      );
+      throw { message: "Journal not found!", status: 404 };
     }
     return NextResponse.json({
       success: true,
@@ -29,10 +22,7 @@ export async function GET(
     });
   } catch (error) {
     console.log(error);
-    return NextResponse.json({
-      success: false,
-      error,
-    });
+    return errHandler(error);
   }
 }
 
@@ -73,19 +63,34 @@ export async function PUT(
       createdAt: currentJournal.createdAt,
       updatedAt: timestamp,
     };
-    if (typeof requestData.jumlah === 'number' && !isNaN(requestData.jumlah)) {
+    if (typeof requestData.jumlah === "number" && !isNaN(requestData.jumlah)) {
       newData.jumlah = requestData.jumlah;
-    } else if (typeof currentJournal.jumlah === 'number' && !isNaN(currentJournal.jumlah)) {
+    } else if (
+      typeof currentJournal.jumlah === "number" &&
+      !isNaN(currentJournal.jumlah)
+    ) {
       newData.jumlah = currentJournal.jumlah;
     }
-    if (typeof requestData.tersedia === 'number' && !isNaN(requestData.tersedia)) {
+    if (
+      typeof requestData.tersedia === "number" &&
+      !isNaN(requestData.tersedia)
+    ) {
       newData.tersedia = requestData.tersedia;
-    } else if (typeof currentJournal.tersedia === 'number' && !isNaN(currentJournal.tersedia)) {
+    } else if (
+      typeof currentJournal.tersedia === "number" &&
+      !isNaN(currentJournal.tersedia)
+    ) {
       newData.tersedia = currentJournal.tersedia;
     }
-    if (typeof requestData.dipinjam === 'number' && !isNaN(requestData.dipinjam)) {
+    if (
+      typeof requestData.dipinjam === "number" &&
+      !isNaN(requestData.dipinjam)
+    ) {
       newData.dipinjam = requestData.dipinjam;
-    } else if (typeof currentJournal.dipinjam === 'number' && !isNaN(currentJournal.dipinjam)) {
+    } else if (
+      typeof currentJournal.dipinjam === "number" &&
+      !isNaN(currentJournal.dipinjam)
+    ) {
       newData.dipinjam = currentJournal.dipinjam;
     }
 
@@ -120,7 +125,7 @@ export async function DELETE(
     const currentJournal = await JournalModel.getJournalById(id);
     console.log("current journal", currentJournal);
     if (!currentJournal) {
-      throw new Error(`Journal not found!`);
+      throw { message: "Journal not found!", status: 404 };
     }
 
     const deleteJournal = await JournalModel.deleteJournal(id);
@@ -140,10 +145,7 @@ export async function DELETE(
     );
   } catch (error) {
     console.log(error);
-    return NextResponse.json({
-      success: false,
-      error,
-    });
+    return errHandler(error);
   }
 }
 
