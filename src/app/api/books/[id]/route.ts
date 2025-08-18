@@ -3,6 +3,7 @@ import BookModel from "@/db/models/BookModel";
 import bookSchema from "@/libs/schemas/BookSchema";
 import { Book } from "@/libs/types/BookType";
 import { CachingService } from "@/utils/caching";
+import errHandler from "@/utils/errHandler";
 
 export async function GET(
   request: NextRequest,
@@ -11,28 +12,19 @@ export async function GET(
   try {
     const { id } = await params;
     const data = await BookModel.getBookById(id);
-    if (!data[0]) {
-      return NextResponse.json(
-        {
-          success: false,
-          message: "Data not found!",
-        },
-        {
-          status: 404,
-        },
-      );
+    console.log(data, "<----foundedData");
+
+    if (!data) {
+      throw { message: "Book not found", status: 404 };
     }
     return NextResponse.json({
       success: true,
       message: `Data for Book ID ${id}`,
-      data: data[0],
+      data: data,
     });
   } catch (error) {
     console.log(error);
-    return NextResponse.json({
-      success: false,
-      error,
-    });
+    return errHandler(error);
   }
 }
 
@@ -45,7 +37,7 @@ export async function PUT(
     const currentBook = await BookModel.getBookById(id);
 
     if (!currentBook) {
-      throw new Error(`Book not found!`);
+      throw { message: "Book not found!", status: 404 };
     }
 
     const requestData = await request.json();
@@ -84,10 +76,7 @@ export async function PUT(
     });
   } catch (error) {
     console.log(error);
-    return NextResponse.json({
-      success: false,
-      error,
-    });
+    return errHandler(error);
   }
 }
 
@@ -100,7 +89,7 @@ export async function DELETE(
     const currentBook = await BookModel.getBookById(id);
     console.log("current book", currentBook);
     if (!currentBook) {
-      throw new Error(`Book not found!`);
+      throw { message: "Book not found!", status: 404 };
     }
 
     const deleteBook = await BookModel.deleteBook(id);
@@ -120,10 +109,7 @@ export async function DELETE(
     );
   } catch (error) {
     console.log(error);
-    return NextResponse.json({
-      success: false,
-      error,
-    });
+    return errHandler(error);
   }
 }
 

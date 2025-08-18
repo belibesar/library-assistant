@@ -10,9 +10,11 @@ const journalSchema = z.object({
   tersedia: z.number().optional(),
   dipinjam: z.number().optional(),
   jurnal_id: z.string().optional(),
-  publikasi_name: z.string({
-    required_error: "Nama publikasi harus diisi!",
-  }).optional(),
+  publikasi_name: z
+    .string({
+      required_error: "Nama publikasi harus diisi!",
+    })
+    .optional(),
   publikasi_volume: z.string().optional(),
   publikasi_tahun: z.string().optional(),
   authors: z.string().optional(),

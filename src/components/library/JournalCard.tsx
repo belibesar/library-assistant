@@ -19,7 +19,7 @@ export const JournalCard = ({
   return (
     <div
       key={journal.id}
-      className="group cursor-pointer overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm transition-all duration-300 hover:border-purple-300 hover:shadow-xl hover:shadow-purple-100 hover:-translate-y-1 hover:scale-[1.02] card-hover"
+      className="group card-hover cursor-pointer overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:scale-[1.02] hover:border-purple-300 hover:shadow-xl hover:shadow-purple-100"
       onClick={() => onViewDetail(journal)}
     >
       <div className="p-4 pb-3">
@@ -35,7 +35,7 @@ export const JournalCard = ({
                   e.stopPropagation();
                   onEdit(journal);
                 }}
-                className="rounded-lg p-2 text-gray-400 transition-all duration-200 hover:bg-purple-50 hover:text-purple-600 modal-button hover:scale-110"
+                className="modal-button rounded-lg p-2 text-gray-400 transition-all duration-200 hover:scale-110 hover:bg-purple-50 hover:text-purple-600"
                 title="Edit jurnal"
               >
                 <Edit3 size={16} />
@@ -43,9 +43,9 @@ export const JournalCard = ({
               <button
                 onClick={(e) => {
                   e.stopPropagation();
-                  onDelete(journal.id, "journal");
+                  onDelete(journal._id as string, "journal");
                 }}
-                className="rounded-lg p-2 text-gray-400 transition-all duration-200 hover:bg-red-50 hover:text-red-600 modal-button hover:scale-110"
+                className="modal-button rounded-lg p-2 text-gray-400 transition-all duration-200 hover:scale-110 hover:bg-red-50 hover:text-red-600"
                 title="Hapus jurnal"
               >
                 <Trash2 size={16} />
@@ -55,7 +55,7 @@ export const JournalCard = ({
         </div>
 
         <div className="space-y-3">
-          <h3 className="line-clamp-2 text-xl leading-tight font-bold text-gray-900 group-hover:text-purple-700 transition-colors duration-200">
+          <h3 className="line-clamp-2 text-xl leading-tight font-bold text-gray-900 transition-colors duration-200 group-hover:text-purple-700">
             {journal.judul}
           </h3>
           <p className="line-clamp-3 text-base leading-relaxed text-gray-600 transition-colors duration-200 group-hover:text-gray-700">
@@ -64,14 +64,14 @@ export const JournalCard = ({
 
           {journal.publikasi && (
             <div className="space-y-1">
-              <span className="inline-block rounded-full bg-gray-100 px-3 py-1 text-sm font-medium text-gray-700 transition-all duration-200 group-hover:bg-purple-100 group-hover:text-purple-700 group-hover:scale-105">
+              <span className="inline-block rounded-full bg-gray-100 px-3 py-1 text-sm font-medium text-gray-700 transition-all duration-200 group-hover:scale-105 group-hover:bg-purple-100 group-hover:text-purple-700">
                 {journal.publikasi.name}
               </span>
               <div className="flex gap-2">
-                <span className="inline-block rounded-full bg-gray-100 px-2 py-1 text-sm font-medium text-gray-700 transition-all duration-200 group-hover:bg-purple-100 group-hover:text-purple-700 group-hover:scale-105">
+                <span className="inline-block rounded-full bg-gray-100 px-2 py-1 text-sm font-medium text-gray-700 transition-all duration-200 group-hover:scale-105 group-hover:bg-purple-100 group-hover:text-purple-700">
                   Vol: {journal.publikasi.volume}
                 </span>
-                <span className="inline-block rounded-full bg-gray-100 px-2 py-1 text-sm font-medium text-gray-700 transition-all duration-200 group-hover:bg-purple-100 group-hover:text-purple-700 group-hover:scale-105">
+                <span className="inline-block rounded-full bg-gray-100 px-2 py-1 text-sm font-medium text-gray-700 transition-all duration-200 group-hover:scale-105 group-hover:bg-purple-100 group-hover:text-purple-700">
                   Tahun: {journal.publikasi.tahun}
                 </span>
               </div>

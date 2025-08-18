@@ -39,15 +39,19 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, toggleSidebar }) => {
         } bg-base-100 z-50 flex h-screen w-64 flex-col border border-gray-200 p-4 transition-transform duration-300 ease-in-out lg:relative lg:h-full lg:flex-shrink-0 lg:translate-x-0`}
       >
         <div className="mb-8 flex items-center justify-between lg:justify-start">
+          {/* Header and Logo Sidebar */}
           <div className="flex items-center gap-2">
-            <div className="relative">
+            {/* Logo SadharLib on Sidebar */}
+            {/* status: nonaktif */}
+            {/* <div className="relative">
               <img
                 src="logo.png"
                 alt="Logo Perpustakaan USD"
                 className="h-12 max-h-14 w-auto align-middle"
                 style={{ objectFit: "contain" }}
               />
-            </div>
+            </div> */}
+            {/* Text "SadharLIB on Sidebar" */}
             <div className="flex flex-col items-start">
               <div className="flex items-center">
                 <span className="bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-2xl font-black text-transparent transition-all duration-300 group-hover:from-slate-900 group-hover:to-slate-700">

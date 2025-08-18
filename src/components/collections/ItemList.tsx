@@ -48,10 +48,13 @@ export const ItemsList = ({
 
       <div className="p-6">
         {loading ? (
-          <LibrarySkeletonLoading 
-            count={4} 
-            type={selectedViewMode === 'overview' ? undefined : 
-                  (selectedViewMode as 'book' | 'journal' | 'skripsi')}
+          <LibrarySkeletonLoading
+            count={4}
+            type={
+              selectedViewMode === "overview"
+                ? undefined
+                : (selectedViewMode as "book" | "journal" | "skripsi")
+            }
           />
         ) : filteredItems.length > 0 ? (
           <div className="grid grid-cols-1 gap-4">
@@ -59,7 +62,7 @@ export const ItemsList = ({
               if (item.type === "book") {
                 return (
                   <BookCard
-                    key={`book-${item.id || item._id}`}
+                    key={`book-${item._id}`}
                     book={item}
                     onViewDetail={onViewDetail}
                     onEdit={onEditItem}
@@ -69,7 +72,7 @@ export const ItemsList = ({
               } else if (item.type === "journal") {
                 return (
                   <JournalCard
-                    key={`journal-${item.id || item._id}`}
+                    key={`journal-${item._id}`}
                     journal={item}
                     onViewDetail={onViewDetail}
                     onEdit={onEditItem}
@@ -79,7 +82,7 @@ export const ItemsList = ({
               } else if (item.type === "skripsi") {
                 return (
                   <SkripsiCard
-                    key={`skripsi-${item.id || item._id}`}
+                    key={`skripsi-${item._id}`}
                     skripsi={item}
                     onViewDetail={onViewDetail}
                     onEdit={onEditItem}
