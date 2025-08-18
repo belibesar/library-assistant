@@ -305,6 +305,8 @@ export default function LibraryCollectionPage() {
   };
 
   const handleDeleteItem = async (id: string, itemType: LibraryItemType) => {
+    console.log({ items, id, itemType }, "<----- deleteData");
+
     if (!id || !itemType) {
       showNotification("ID atau tipe item tidak valid", "error");
       return;
