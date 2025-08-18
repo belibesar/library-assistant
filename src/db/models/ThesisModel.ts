@@ -139,7 +139,7 @@ class ThesisModel {
 
   static async countThesis(id: string) {
     const collection = await this.collection();
-    const identifier = { id: id };
+    const identifier = { _id: new ObjectId(id) };
     const currentThesis = await collection.findOne(identifier);
     const thesisCount = currentThesis?.count || 0;
     if (!currentThesis) {
