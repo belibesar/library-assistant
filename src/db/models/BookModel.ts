@@ -199,7 +199,7 @@ class BookModel {
 
   static async countBook(id: string) {
     const collection = await this.collection();
-    const identifier = { id: id };
+    const identifier = { _id: new ObjectId(id) };
     const currentBook = await collection.findOne(identifier);
     const bookCount = currentBook?.count || 0;
     if (!currentBook) {
