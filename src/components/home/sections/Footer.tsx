@@ -9,7 +9,7 @@ export default function Footer() {
           <div className="mb-4 flex items-center">
             <img src="logo.png" alt="Logo Perpustakaan USD" className="h-10 w-auto" />
             <div className="ml-2 flex flex-col">
-              <span className="text-xl font-bold">Perpustakaan USD</span>
+              <span className="text-xl font-bold">SadharLib</span>
               <span className="text-sm mt-1">NPP 3404072D2020617</span>
             </div>
           </div>
