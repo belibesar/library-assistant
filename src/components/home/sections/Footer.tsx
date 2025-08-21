@@ -9,7 +9,7 @@ export default function Footer() {
           <div className="mb-4 flex items-center">
             <img src="logo.png" alt="Logo Perpustakaan USD" className="h-10 w-auto" />
             <div className="ml-2 flex flex-col">
-              <span className="text-xl font-bold">Perpustakaan USD</span>
+              <span className="text-xl font-bold">SadharLib</span>
               <span className="text-sm mt-1">NPP 3404072D2020617</span>
             </div>
           </div>
@@ -45,7 +45,7 @@ export default function Footer() {
           </div>
         </div>
         <div className="mt-8 border-t border-gray-800 pt-8 text-center text-gray-400">
-          <p>&copy; 2024 Universitas Sanata Dharma. All rights reserved.</p>
+          <p>&copy; {new Date().getFullYear()} Universitas Sanata Dharma. All rights reserved.</p>
         </div>
       </div>
     </footer>

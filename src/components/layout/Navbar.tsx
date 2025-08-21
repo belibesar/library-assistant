@@ -66,11 +66,11 @@ export default function Navbar() {
               <div className="ml-4 flex flex-col">
                 <div className="flex items-center">
                   <span className="bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-2xl font-black text-transparent">
-                    Perpustakaan
+                    Sadhar<span className="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-2xl font-black text-transparent transition-all duration-300 group-hover:from-blue-700 group-hover:to-indigo-700">Lib</span>
                   </span>
-                  <span className="ml-2 bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-2xl font-black text-transparent">
+                  {/* <span className="ml-2 bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-2xl font-black text-transparent">
                     USD
-                  </span>
+                  </span> */}
                 </div>
                 <span className={`mt-1 text-sm text-black`}>
                   NPP 3404072D2020617
@@ -117,11 +117,11 @@ export default function Navbar() {
                   <span
                     className={`bg-clip-text text-2xl font-black transition-all duration-300 group-hover:from-slate-900 group-hover:to-slate-700 ${isScrolled ? "bg-gradient-to-r from-slate-800 to-slate-600 text-transparent" : "text-white"}`}
                   >
-                    Sadhar
+                    Sadhar<span className="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-2xl font-black text-transparent transition-all duration-300 group-hover:from-blue-700 group-hover:to-indigo-700">Lib</span>
                   </span>
-                  <span className="ml-2 bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-2xl font-black text-transparent transition-all duration-300 group-hover:from-blue-700 group-hover:to-indigo-700">
+                  {/* <span className="ml-2 bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-2xl font-black text-transparent transition-all duration-300 group-hover:from-blue-700 group-hover:to-indigo-700">
                     Lib
-                  </span>
+                  </span> */}
                 </div>
                 <span
                   className={`mt-1 text-sm ${isScrolled ? "text-black" : "text-white"}`}

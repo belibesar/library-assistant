@@ -1,0 +1,121 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600">
+  <!-- Background -->
+  <rect width="800" height="600" fill="#f8f9fa" />
+  
+  <!-- Title -->
+  <text x="400" y="40" font-family="Arial" font-size="24" font-weight="bold" text-anchor="middle" fill="#333">Alur Data SADHARLib</text>
+  
+  <!-- Client -->
+  <rect x="50" y="100" width="150" height="80" rx="10" ry="10" fill="#e3f2fd" stroke="#2196f3" stroke-width="2" />
+  <text x="125" y="145" font-family="Arial" font-size="16" font-weight="bold" text-anchor="middle" fill="#1565c0">Client</text>
+  
+  <!-- API Layer -->
+  <rect x="300" y="100" width="200" height="80" rx="10" ry="10" fill="#e8f5e9" stroke="#4caf50" stroke-width="2" />
+  <text x="400" y="145" font-family="Arial" font-size="16" font-weight="bold" text-anchor="middle" fill="#2e7d32">Next.js API Routes</text>
+  
+  <!-- Database -->
+  <rect x="600" y="100" width="150" height="80" rx="10" ry="10" fill="#fff3e0" stroke="#ff9800" stroke-width="2" />
+  <text x="675" y="145" font-family="Arial" font-size="16" font-weight="bold" text-anchor="middle" fill="#e65100">MongoDB</text>
+  
+  <!-- Authentication Flow -->
+  <rect x="50" y="250" width="700" height="100" rx="10" ry="10" fill="#f3e5f5" stroke="#9c27b0" stroke-width="2" />
+  <text x="400" y="275" font-family="Arial" font-size="16" font-weight="bold" text-anchor="middle" fill="#6a1b9a">Authentication Flow</text>
+  
+  <!-- Auth Steps -->
+  <rect x="80" y="300" width="120" height="30" rx="5" ry="5" fill="#e1bee7" stroke="#9c27b0" stroke-width="1" />
+  <text x="140" y="320" font-family="Arial" font-size="12" text-anchor="middle" fill="#333">Login Request</text>
+  
+  <rect x="230" y="300" width="120" height="30" rx="5" ry="5" fill="#e1bee7" stroke="#9c27b0" stroke-width="1" />
+  <text x="290" y="320" font-family="Arial" font-size="12" text-anchor="middle" fill="#333">Verify Credentials</text>
+  
+  <rect x="380" y="300" width="120" height="30" rx="5" ry="5" fill="#e1bee7" stroke="#9c27b0" stroke-width="1" />
+  <text x="440" y="320" font-family="Arial" font-size="12" text-anchor="middle" fill="#333">Generate JWT</text>
+  
+  <rect x="530" y="300" width="120" height="30" rx="5" ry="5" fill="#e1bee7" stroke="#9c27b0" stroke-width="1" />
+  <text x="590" y="320" font-family="Arial" font-size="12" text-anchor="middle" fill="#333">Return Token</text>
+  
+  <!-- Library Management Flow -->
+  <rect x="50" y="380" width="700" height="100" rx="10" ry="10" fill="#e1f5fe" stroke="#03a9f4" stroke-width="2" />
+  <text x="400" y="405" font-family="Arial" font-size="16" font-weight="bold" text-anchor="middle" fill="#0277bd">Library Management Flow</text>
+  
+  <!-- Library Steps -->
+  <rect x="80" y="430" width="120" height="30" rx="5" ry="5" fill="#b3e5fc" stroke="#03a9f4" stroke-width="1" />
+  <text x="140" y="450" font-family="Arial" font-size="12" text-anchor="middle" fill="#333">CRUD Request</text>
+  
+  <rect x="230" y="430" width="120" height="30" rx="5" ry="5" fill="#b3e5fc" stroke="#03a9f4" stroke-width="1" />
+  <text x="290" y="450" font-family="Arial" font-size="12" text-anchor="middle" fill="#333">Validate Data</text>
+  
+  <rect x="380" y="430" width="120" height="30" rx="5" ry="5" fill="#b3e5fc" stroke="#03a9f4" stroke-width="1" />
+  <text x="440" y="450" font-family="Arial" font-size="12" text-anchor="middle" fill="#333">Update Database</text>
+  
+  <rect x="530" y="430" width="120" height="30" rx="5" ry="5" fill="#b3e5fc" stroke="#03a9f4" stroke-width="1" />
+  <text x="590" y="450" font-family="Arial" font-size="12" text-anchor="middle" fill="#333">Return Response</text>
+  
+  <!-- AI Services Flow -->
+  <rect x="50" y="510" width="700" height="70" rx="10" ry="10" fill="#fffde7" stroke="#ffc107" stroke-width="2" />
+  <text x="400" y="535" font-family="Arial" font-size="16" font-weight="bold" text-anchor="middle" fill="#ff6f00">AI Services Flow</text>
+  
+  <!-- AI Steps -->
+  <rect x="80" y="550" width="150" height="20" rx="5" ry="5" fill="#fff9c4" stroke="#ffc107" stroke-width="1" />
+  <text x="155" y="565" font-family="Arial" font-size="10" text-anchor="middle" fill="#333">User Query</text>
+  
+  <rect x="260" y="550" width="150" height="20" rx="5" ry="5" fill="#fff9c4" stroke="#ffc107" stroke-width="1" />
+  <text x="335" y="565" font-family="Arial" font-size="10" text-anchor="middle" fill="#333">Process with Google AI</text>
+  
+  <rect x="440" y="550" width="150" height="20" rx="5" ry="5" fill="#fff9c4" stroke="#ffc107" stroke-width="1" />
+  <text x="515" y="565" font-family="Arial" font-size="10" text-anchor="middle" fill="#333">Fetch Relevant Data</text>
+  
+  <rect x="620" y="550" width="100" height="20" rx="5" ry="5" fill="#fff9c4" stroke="#ffc107" stroke-width="1" />
+  <text x="670" y="565" font-family="Arial" font-size="10" text-anchor="middle" fill="#333">Return Answer</text>
+  
+  <!-- Arrows -->
+  <!-- Client to API -->
+  <line x1="200" y1="140" x2="300" y2="140" stroke="#757575" stroke-width="2" />
+  <polygon points="300,140 290,135 290,145" fill="#757575" />
+  <text x="250" y="130" font-family="Arial" font-size="12" text-anchor="middle" fill="#333">HTTP Request</text>
+  
+  <!-- API to Database -->
+  <line x1="500" y1="140" x2="600" y2="140" stroke="#757575" stroke-width="2" />
+  <polygon points="600,140 590,135 590,145" fill="#757575" />
+  <text x="550" y="130" font-family="Arial" font-size="12" text-anchor="middle" fill="#333">Query</text>
+  
+  <!-- Database to API -->
+  <line x1="600" y1="160" x2="500" y2="160" stroke="#757575" stroke-width="2" />
+  <polygon points="500,160 510,155 510,165" fill="#757575" />
+  <text x="550" y="180" font-family="Arial" font-size="12" text-anchor="middle" fill="#333">Results</text>
+  
+  <!-- API to Client -->
+  <line x1="300" y1="160" x2="200" y2="160" stroke="#757575" stroke-width="2" />
+  <polygon points="200,160 210,155 210,165" fill="#757575" />
+  <text x="250" y="180" font-family="Arial" font-size="12" text-anchor="middle" fill="#333">HTTP Response</text>
+  
+  <!-- Auth Flow Arrows -->
+  <line x1="200" y1="315" x2="230" y2="315" stroke="#757575" stroke-width="2" />
+  <polygon points="230,315 220,310 220,320" fill="#757575" />
+  
+  <line x1="350" y1="315" x2="380" y2="315" stroke="#757575" stroke-width="2" />
+  <polygon points="380,315 370,310 370,320" fill="#757575" />
+  
+  <line x1="500" y1="315" x2="530" y2="315" stroke="#757575" stroke-width="2" />
+  <polygon points="530,315 520,310 520,320" fill="#757575" />
+  
+  <!-- Library Flow Arrows -->
+  <line x1="200" y1="445" x2="230" y2="445" stroke="#757575" stroke-width="2" />
+  <polygon points="230,445 220,440 220,450" fill="#757575" />
+  
+  <line x1="350" y1="445" x2="380" y2="445" stroke="#757575" stroke-width="2" />
+  <polygon points="380,445 370,440 370,450" fill="#757575" />
+  
+  <line x1="500" y1="445" x2="530" y2="445" stroke="#757575" stroke-width="2" />
+  <polygon points="530,445 520,440 520,450" fill="#757575" />
+  
+  <!-- AI Flow Arrows -->
+  <line x1="230" y1="560" x2="260" y2="560" stroke="#757575" stroke-width="2" />
+  <polygon points="260,560 250,555 250,565" fill="#757575" />
+  
+  <line x1="410" y1="560" x2="440" y2="560" stroke="#757575" stroke-width="2" />
+  <polygon points="440,560 430,555 430,565" fill="#757575" />
+  
+  <line x1="590" y1="560" x2="620" y2="560" stroke="#757575" stroke-width="2" />
+  <polygon points="620,560 610,555 610,565" fill="#757575" />
+</svg>
