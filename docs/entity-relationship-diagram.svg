@@ -1,0 +1,134 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="700" viewBox="0 0 800 700">
+  <!-- Background -->
+  <rect width="800" height="700" fill="#f8f9fa" />
+  
+  <!-- Title -->
+  <text x="400" y="40" font-family="Arial" font-size="24" font-weight="bold" text-anchor="middle" fill="#333">Entity Relationship Diagram SADHARLib</text>
+  
+  <!-- User Entity -->
+  <rect x="50" y="100" width="180" height="120" rx="5" ry="5" fill="#e3f2fd" stroke="#2196f3" stroke-width="2" />
+  <text x="140" y="125" font-family="Arial" font-size="16" font-weight="bold" text-anchor="middle" fill="#1565c0">User</text>
+  <line x1="50" y1="135" x2="230" y2="135" stroke="#2196f3" stroke-width="1" />
+  <text x="60" y="155" font-family="Arial" font-size="12" fill="#333">_id (PK)</text>
+  <text x="60" y="175" font-family="Arial" font-size="12" fill="#333">username</text>
+  <text x="60" y="195" font-family="Arial" font-size="12" fill="#333">email</text>
+  <text x="60" y="215" font-family="Arial" font-size="12" fill="#333">role</text>
+  
+  <!-- Book Entity -->
+  <rect x="300" y="100" width="180" height="180" rx="5" ry="5" fill="#e8f5e9" stroke="#4caf50" stroke-width="2" />
+  <text x="390" y="125" font-family="Arial" font-size="16" font-weight="bold" text-anchor="middle" fill="#2e7d32">Book</text>
+  <line x1="300" y1="135" x2="480" y2="135" stroke="#4caf50" stroke-width="1" />
+  <text x="310" y="155" font-family="Arial" font-size="12" fill="#333">_id (PK)</text>
+  <text x="310" y="175" font-family="Arial" font-size="12" fill="#333">judul</text>
+  <text x="310" y="195" font-family="Arial" font-size="12" fill="#333">sinopsis</text>
+  <text x="310" y="215" font-family="Arial" font-size="12" fill="#333">jumlah</text>
+  <text x="310" y="235" font-family="Arial" font-size="12" fill="#333">tersedia</text>
+  <text x="310" y="255" font-family="Arial" font-size="12" fill="#333">dipinjam</text>
+  <text x="310" y="275" font-family="Arial" font-size="12" fill="#333">pengarang_id (FK)</text>
+  
+  <!-- Journal Entity -->
+  <rect x="550" y="100" width="180" height="160" rx="5" ry="5" fill="#fff3e0" stroke="#ff9800" stroke-width="2" />
+  <text x="640" y="125" font-family="Arial" font-size="16" font-weight="bold" text-anchor="middle" fill="#e65100">Journal</text>
+  <line x1="550" y1="135" x2="730" y2="135" stroke="#ff9800" stroke-width="1" />
+  <text x="560" y="155" font-family="Arial" font-size="12" fill="#333">_id (PK)</text>
+  <text x="560" y="175" font-family="Arial" font-size="12" fill="#333">judul</text>
+  <text x="560" y="195" font-family="Arial" font-size="12" fill="#333">abstrak</text>
+  <text x="560" y="215" font-family="Arial" font-size="12" fill="#333">volume</text>
+  <text x="560" y="235" font-family="Arial" font-size="12" fill="#333">issue</text>
+  <text x="560" y="255" font-family="Arial" font-size="12" fill="#333">pengarang_id (FK)</text>
+  
+  <!-- Thesis Entity -->
+  <rect x="50" y="300" width="180" height="160" rx="5" ry="5" fill="#e1f5fe" stroke="#03a9f4" stroke-width="2" />
+  <text x="140" y="325" font-family="Arial" font-size="16" font-weight="bold" text-anchor="middle" fill="#0277bd">Thesis</text>
+  <line x1="50" y1="335" x2="230" y2="335" stroke="#03a9f4" stroke-width="1" />
+  <text x="60" y="355" font-family="Arial" font-size="12" fill="#333">_id (PK)</text>
+  <text x="60" y="375" font-family="Arial" font-size="12" fill="#333">judul</text>
+  <text x="60" y="395" font-family="Arial" font-size="12" fill="#333">abstrak</text>
+  <text x="60" y="415" font-family="Arial" font-size="12" fill="#333">tahun</text>
+  <text x="60" y="435" font-family="Arial" font-size="12" fill="#333">jenis</text>
+  <text x="60" y="455" font-family="Arial" font-size="12" fill="#333">pengarang_id (FK)</text>
+  
+  <!-- Pengarang Entity -->
+  <rect x="300" y="350" width="180" height="120" rx="5" ry="5" fill="#f3e5f5" stroke="#9c27b0" stroke-width="2" />
+  <text x="390" y="375" font-family="Arial" font-size="16" font-weight="bold" text-anchor="middle" fill="#6a1b9a">Pengarang</text>
+  <line x1="300" y1="385" x2="480" y2="385" stroke="#9c27b0" stroke-width="1" />
+  <text x="310" y="405" font-family="Arial" font-size="12" fill="#333">id (PK)</text>
+  <text x="310" y="425" font-family="Arial" font-size="12" fill="#333">name</text>
+  <text x="310" y="445" font-family="Arial" font-size="12" fill="#333">email</text>
+  <text x="310" y="465" font-family="Arial" font-size="12" fill="#333">institusi</text>
+  
+  <!-- Penerbit Entity -->
+  <rect x="550" y="350" width="180" height="100" rx="5" ry="5" fill="#fce4ec" stroke="#e91e63" stroke-width="2" />
+  <text x="640" y="375" font-family="Arial" font-size="16" font-weight="bold" text-anchor="middle" fill="#c2185b">Penerbit</text>
+  <line x1="550" y1="385" x2="730" y2="385" stroke="#e91e63" stroke-width="1" />
+  <text x="560" y="405" font-family="Arial" font-size="12" fill="#333">id (PK)</text>
+  <text x="560" y="425" font-family="Arial" font-size="12" fill="#333">name</text>
+  <text x="560" y="445" font-family="Arial" font-size="12" fill="#333">alamat</text>
+  
+  <!-- Publikasi Entity -->
+  <rect x="300" y="520" width="180" height="120" rx="5" ry="5" fill="#fffde7" stroke="#ffc107" stroke-width="2" />
+  <text x="390" y="545" font-family="Arial" font-size="16" font-weight="bold" text-anchor="middle" fill="#ff6f00">Publikasi</text>
+  <line x1="300" y1="555" x2="480" y2="555" stroke="#ffc107" stroke-width="1" />
+  <text x="310" y="575" font-family="Arial" font-size="12" fill="#333">id (PK)</text>
+  <text x="310" y="595" font-family="Arial" font-size="12" fill="#333">item_id (FK)</text>
+  <text x="310" y="615" font-family="Arial" font-size="12" fill="#333">item_type</text>
+  <text x="310" y="635" font-family="Arial" font-size="12" fill="#333">tanggal_publikasi</text>
+  
+  <!-- Relationships -->
+  <!-- Book to Pengarang -->
+  <line x1="390" y1="280" x2="390" y2="350" stroke="#757575" stroke-width="2" />
+  <circle cx="390" cy="350" r="5" fill="#757575" />
+  <circle cx="390" cy="280" r="5" fill="#757575" />
+  <text x="400" y="320" font-family="Arial" font-size="12" fill="#333">has</text>
+  <text x="370" y="300" font-family="Arial" font-size="12" fill="#333">1</text>
+  <text x="370" y="340" font-family="Arial" font-size="12" fill="#333">N</text>
+  
+  <!-- Journal to Pengarang -->
+  <line x1="640" y1="260" x2="640" y2="300" stroke="#757575" stroke-width="2" />
+  <line x1="640" y1="300" x2="480" y2="400" stroke="#757575" stroke-width="2" />
+  <circle cx="480" cy="400" r="5" fill="#757575" />
+  <circle cx="640" cy="260" r="5" fill="#757575" />
+  <text x="560" y="320" font-family="Arial" font-size="12" fill="#333">has</text>
+  <text x="650" y="280" font-family="Arial" font-size="12" fill="#333">1</text>
+  <text x="500" y="390" font-family="Arial" font-size="12" fill="#333">N</text>
+  
+  <!-- Thesis to Pengarang -->
+  <line x1="230" y1="400" x2="300" y2="400" stroke="#757575" stroke-width="2" />
+  <circle cx="300" cy="400" r="5" fill="#757575" />
+  <circle cx="230" cy="400" r="5" fill="#757575" />
+  <text x="265" y="390" font-family="Arial" font-size="12" fill="#333">has</text>
+  <text x="240" y="420" font-family="Arial" font-size="12" fill="#333">1</text>
+  <text x="290" y="420" font-family="Arial" font-size="12" fill="#333">N</text>
+  
+  <!-- Book to Penerbit -->
+  <line x1="480" y1="190" x2="550" y2="190" stroke="#757575" stroke-width="2" />
+  <line x1="550" y1="190" x2="640" y2="190" stroke="#757575" stroke-width="2" />
+  <line x1="640" y1="190" x2="640" y2="350" stroke="#757575" stroke-width="2" />
+  <circle cx="640" cy="350" r="5" fill="#757575" />
+  <circle cx="480" cy="190" r="5" fill="#757575" />
+  <text x="550" y="180" font-family="Arial" font-size="12" fill="#333">published by</text>
+  <text x="490" y="210" font-family="Arial" font-size="12" fill="#333">N</text>
+  <text x="650" y="340" font-family="Arial" font-size="12" fill="#333">1</text>
+  
+  <!-- Publikasi to Items -->
+  <line x1="390" y1="520" x2="390" y2="500" stroke="#757575" stroke-width="2" />
+  <line x1="390" y1="500" x2="140" y2="500" stroke="#757575" stroke-width="2" />
+  <line x1="140" y1="500" x2="140" y2="460" stroke="#757575" stroke-width="2" />
+  <circle cx="140" cy="460" r="5" fill="#757575" />
+  <circle cx="390" cy="520" r="5" fill="#757575" />
+  <text x="250" y="490" font-family="Arial" font-size="12" fill="#333">tracks</text>
+  <text x="150" y="480" font-family="Arial" font-size="12" fill="#333">1</text>
+  <text x="400" y="510" font-family="Arial" font-size="12" fill="#333">1</text>
+  
+  <line x1="390" y1="520" x2="390" y2="500" stroke="#757575" stroke-width="2" />
+  <line x1="390" y1="500" x2="640" y2="500" stroke="#757575" stroke-width="2" />
+  <line x1="640" y1="500" x2="640" y2="450" stroke="#757575" stroke-width="2" />
+  <circle cx="640" cy="450" r="5" fill="#757575" />
+  <text x="530" y="490" font-family="Arial" font-size="12" fill="#333">tracks</text>
+  <text x="650" y="470" font-family="Arial" font-size="12" fill="#333">1</text>
+  
+  <line x1="390" y1="520" x2="390" y2="470" stroke="#757575" stroke-width="2" />
+  <circle cx="390" cy="470" r="5" fill="#757575" />
+  <text x="400" y="490" font-family="Arial" font-size="12" fill="#333">tracks</text>
+  <text x="380" y="480" font-family="Arial" font-size="12" fill="#333">1</text>
+</svg>
