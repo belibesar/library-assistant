@@ -19,18 +19,22 @@ export async function POST(req: Request) {
   const allResults = [
     ...books.map((item: any) => ({
       title: item.judul,
+      abstrak: item.abstrak,
+      sinopsis: item.sinopsis,
       score: item.score,
       sourceType: "buku",
       sourceId: item._id?.toString() ?? undefined,
     })),
     ...skripsi.map((item: any) => ({
       title: item.judul,
+      abstrak: item.abstrak,
       score: item.score,
       sourceType: "skripsi",
       sourceId: item._id?.toString() ?? undefined,
     })),
     ...jurnal.map((item: any) => ({
       title: item.judul,
+      abstrak: item.abstrak,
       score: item.score,
       sourceType: "jurnal",
       sourceId: item._id?.toString() ?? undefined,
