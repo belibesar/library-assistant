@@ -24,8 +24,24 @@ function SourceCard({ source }: { source: PlagiarismSource }) {
           </span>
         </div>
       </div>
-      <div className="rounded border-l-4 border-blue-400 bg-blue-50 p-3">
-        <p className="text-sm text-blue-800 italic">{source.quote}</p>
+
+      <div className="mb-3">
+        <div className="mb-2 flex justify-between text-sm">
+          <span className="text-gray-600">Tingkat Kesamaan</span>
+          <span className="font-medium text-gray-900">{source.score}%</span>
+        </div>
+        <div className="h-3 w-full rounded-full bg-gray-200">
+          <div
+            className={`h-full rounded-full transition-all duration-500 ease-out ${
+              source.score >= 80
+                ? "bg-red-500"
+                : source.score >= 50
+                  ? "bg-yellow-500"
+                  : "bg-green-500"
+            }`}
+            style={{ width: `${source.score}%` }}
+          />
+        </div>
       </div>
     </div>
   );
