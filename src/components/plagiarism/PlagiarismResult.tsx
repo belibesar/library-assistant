@@ -33,9 +33,9 @@ function SourceCard({ source }: { source: PlagiarismSource }) {
         <div className="h-3 w-full rounded-full bg-gray-200">
           <div
             className={`h-full rounded-full transition-all duration-500 ease-out ${
-              source.score >= 80
+              source.score >= 70
                 ? "bg-red-500"
-                : source.score >= 50
+                : source.score >= 30
                   ? "bg-yellow-500"
                   : "bg-green-500"
             }`}
