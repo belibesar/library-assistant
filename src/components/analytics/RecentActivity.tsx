@@ -21,7 +21,7 @@ export default function RecentActivity() {
       title: "Pemrograman JavaScript Modern",
       action: "borrow",
       timestamp: new Date(Date.now() - 1000 * 60 * 5), // 5 minutes ago
-      user: "Ahmad Fauzi",
+      user: "mahasiswa satu",
     },
     {
       id: "2",
@@ -29,7 +29,7 @@ export default function RecentActivity() {
       title: "Jurnal Teknologi Pendidikan Vol. 12",
       action: "view",
       timestamp: new Date(Date.now() - 1000 * 60 * 30), // 30 minutes ago
-      user: "Siti Rahayu",
+      user: "mahasiswa tiga",
     },
     {
       id: "3",
@@ -37,6 +37,7 @@ export default function RecentActivity() {
       title: "Analisis Sentimen Media Sosial",
       action: "view",
       timestamp: new Date(Date.now() - 1000 * 60 * 120), // 2 hours ago
+      user:"mahasiswa dua",
     },
     {
       id: "4",
@@ -44,6 +45,7 @@ export default function RecentActivity() {
       title: "Admin Login",
       action: "login",
       timestamp: new Date(Date.now() - 1000 * 60 * 180), // 3 hours ago
+      user:"Admin Satu"
     },
     {
       id: "5",
@@ -51,7 +53,7 @@ export default function RecentActivity() {
       title: "Sistem Basis Data",
       action: "return",
       timestamp: new Date(Date.now() - 1000 * 60 * 240), // 4 hours ago
-      user: "Budi Santoso",
+      user: "mahasiswa dua",
     },
   ];
 
