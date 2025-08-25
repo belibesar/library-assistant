@@ -475,7 +475,7 @@ export default function LibraryCollectionPage() {
   return (
     <div className="bg-base-100 mt-[-20px] h-full w-full">
       <div className="bg-white">
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between">
           <div>
             <h1 className="text-3xl font-bold text-gray-900">
               Koleksi Perpustakaan

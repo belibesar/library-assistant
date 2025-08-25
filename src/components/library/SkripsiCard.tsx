@@ -64,16 +64,16 @@ export const SkripsiCard = ({
 
           <div className="flex flex-col gap-1">
             <p className="text-base text-gray-600 transition-colors duration-200 group-hover:text-gray-700">
-              Nama Mahasiswa:{" "}
+              Pengarang:{" "}
               {skripsi.nama_mahasiswa ? skripsi.nama_mahasiswa : "N/A"}
             </p>
-            <p className="text-base text-gray-600 transition-colors duration-200 group-hover:text-gray-700">
+            {/* <p className="text-base text-gray-600 transition-colors duration-200 group-hover:text-gray-700">
               Fakultas: {skripsi.fakultas ? skripsi.fakultas : "N/A"}
             </p>
             <p className="text-base text-gray-600 transition-colors duration-200 group-hover:text-gray-700">
               Program Studi:{" "}
               {skripsi.program_studi ? skripsi.program_studi : "N/A"}
-            </p>
+            </p> */}
           </div>
 
           <span className="inline-block rounded-full bg-gray-100 px-3 py-1 text-sm font-medium text-gray-700 transition-all duration-200 group-hover:scale-105 group-hover:bg-orange-100 group-hover:text-orange-700">
